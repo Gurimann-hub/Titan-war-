@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Host Authentication Gate // Titan War Intelligence Materials</title>
+  <meta name="description" content="Secure executive host authentication gate with automated programmatic redirection to protected materials repository.">
+  <meta name="theme-color" content="#58111a">
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="alternate icon" href="assets/insignia.webp">
+
+  <!-- Local Self-Hosted Fonts: Cinzel & Plus Jakarta Sans (Zero Third-Party CDNs) -->
+  <link rel="stylesheet" href="/fonts/fonts.css">
+  <link rel="stylesheet" href="portal.css">
+</head>
+<body class="portal-body">
+
+  <!-- Global Sticky Header -->
+  <header class="portal-nav" role="banner">
+    <div class="portal-nav-inner">
+      <a href="/" class="portal-brand" aria-label="Titan War Intelligence Home">
+        <img src="assets/insignia.webp" alt="Titan Insignia Crest" class="portal-crest" width="38" height="38">
+        <div class="portal-brand-text">
+          <span class="portal-brand-title">TITAN<span>WAR</span></span>
+          <span class="portal-brand-sub">Executive Materials Gate</span>
+        </div>
+      </a>
+
+      <!-- Breadcrumbs -->
+      <nav class="portal-breadcrumbs" aria-label="Breadcrumb Navigation">
+        <a href="/">Home</a>
+        <span class="sep">/</span>
+        <span class="current">Sign In Gate</span>
+      </nav>
+
+      <!-- Nav Actions Right -->
+      <div class="portal-nav-actions">
+        <a href="/" class="btn btn-sm btn-ghost" aria-label="Return to War Room">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>War Room</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Authentication Container -->
+  <main class="auth-wrapper" role="main">
+    <div class="auth-card" id="auth-portal-card">
+
+      <!-- Banner Container for Route Guards & Logout Feedback -->
+      <div id="banner-container" aria-live="polite"></div>
+
+      <!-- Card Header -->
+      <div class="auth-card-header">
+        <div class="auth-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <span>HOST ACCESS PROTOCOL</span>
+        </div>
+        <h1 class="auth-title">Sign In to Repository</h1>
+        <p class="auth-subtitle">Verify your host credentials to access executive intelligence materials, dossiers, and datasets.</p>
+      </div>
+
+      <!-- Quick Fill Host Identity Box -->
+      <div class="demo-preset-box" id="demo-preset-box">
+        <div class="demo-preset-text">
+          Host Account: <strong>Alex Mercer</strong><br>
+          <span style="font-size: 0.72rem; color: var(--text-muted);">alex.mercer@titan.corp &bull; Configured via HOST_PASSWORD</span>
+        </div>
+        <button type="button" class="btn-preset-action" id="quick-fill-btn" title="Click to pre-fill test host identity">
+          ⚡ Fill Identity
+        </button>
+      </div>
+
+      <!-- Sign In Form -->
+      <form id="login-form" novalidate autocomplete="on">
+        
+        <!-- Identity Field (Email or Username) -->
+        <div class="form-group">
+          <label for="identity-input" class="form-label">
+            <span>Host Identity / Email</span>
+            <span class="form-hint">RFC 5322 Validated</span>
+          </label>
+          <div class="input-container">
+            <input 
+              type="text" 
+              id="identity-input" 
+              name="identity" 
+              class="form-input" 
+              placeholder="e.g. alex.mercer@titan.corp" 
+              required 
+              autocomplete="username"
+              aria-describedby="identity-feedback"
+            >
+          </div>
+          <div id="identity-feedback" class="validation-feedback" role="status" aria-live="polite"></div>
+        </div>
+
+        <!-- Password Field with Masking/Unmasking Toggle -->
+        <div class="form-group">
+          <label for="password-input" class="form-label">
+            <span>Host Password</span>
+            <span class="form-hint">Min. 8 Characters</span>
+          </label>
+          <div class="input-container">
+            <input 
+              type="password" 
+              id="password-input" 
+              name="password" 
+              class="form-input" 
+              placeholder="••••••••••••" 
+              required 
+              autocomplete="current-password"
+              aria-describedby="password-feedback"
+            >
+            <button 
+              type="button" 
+              class="input-action-btn" 
+              id="toggle-password-btn" 
+              aria-label="Show password" 
+              tabindex="0"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          </div>
+          <div id="password-feedback" class="validation-feedback" role="status" aria-live="polite"></div>
+        </div>
+
+        <!-- Remember Me Checkbox -->
+        <div class="form-options-row">
+          <label class="checkbox-container">
+            <input type="checkbox" id="remember-me-checkbox" name="rememberMe" checked>
+            <span>Remember me (30-day persistent session)</span>
+          </label>
+        </div>
+
+        <!-- Submission Controller with 3 Distinct Lifecycle States -->
+        <button type="submit" class="btn btn-primary btn-submit-auth" id="submit-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
+          <span id="submit-text">Sign In to Repository</span>
+        </button>
+
+      </form>
+
+      <!-- =========================================================================
+           AUTOMATED REDIRECTION HANDLER ("AUTO LINK OPENER" ROUTER ENGINE)
+           Triggered automatically upon receipt of confirmed auth response
+           ========================================================================= -->
+      <section 
+        class="redirection-engine-card" 
+        id="redirection-engine" 
+        style="display: none;" 
+        aria-live="assertive"
+        aria-label="Automated Redirection Progress"
+      >
+        <div class="redirect-badge-success">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          <span>AUTHENTICATION CONFIRMED</span>
+        </div>
+
+        <h2 class="redirect-title">Preparing Host Workspace</h2>
+        <p class="redirect-desc">Automated link opener active. Transferring host session directly to the Materials Repository Hub...</p>
+
+        <!-- Circular Animated SVG Countdown Timer -->
+        <div class="circular-timer-container">
+          <svg class="circular-timer-svg" viewBox="0 0 100 100">
+            <circle class="circular-timer-bg" cx="50" cy="50" r="40" />
+            <circle class="circular-timer-progress" id="timer-circle-progress" cx="50" cy="50" r="40" />
+          </svg>
+          <div class="circular-timer-number" id="countdown-number">3</div>
+        </div>
+
+        <!-- Linear Progress Bar -->
+        <div class="redirect-progress-bar">
+          <div class="redirect-progress-fill" id="linear-progress-fill"></div>
+        </div>
+
+        <!-- Action Controls -->
+        <div class="redirect-actions">
+          <button type="button" class="btn btn-open-now" id="btn-open-now">
+            <span>Open Repository Now (Skip Countdown)</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+          
+          <p class="fallback-anchor-text">
+            If you are not redirected automatically in 3 seconds, 
+            <a id="manual-fallback-anchor" href="/materials" tabindex="0">click here</a>.
+          </p>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Accessible Toast Container -->
+  <div id="toast-container" class="toast-container" role="status" aria-live="polite"></div>
+
+  <!-- Client-Side Auth & Router Engine Script -->
+  <script src="auth.js"></script>
+</body>
+</html>

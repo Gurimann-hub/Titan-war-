@@ -1,0 +1,30 @@
+{
+  "name": "titan-war-big-tech",
+  "version": "1.0.0",
+  "description": "Executive war room intelligence tracking trillion-dollar corporate warfare among big tech giants.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "node --test tests/smoke.test.js",
+    "test:phases": "node --test tests/phase1.auth.test.js tests/phase2.hardening.test.js tests/phase3.news.test.js tests/phase4.bot.test.js tests/phase5.watchdog.test.js",
+    "test:all": "node --test tests/smoke.test.js tests/phase1.auth.test.js tests/phase2.hardening.test.js tests/phase3.news.test.js tests/phase4.bot.test.js tests/phase5.watchdog.test.js",
+    "test:playwright": "playwright test tests/playwright.smoke.spec.js"
+  },
+  "keywords": [
+    "business-war",
+    "big-tech",
+    "tech-giants",
+    "white-and-burgundy"
+  ],
+  "author": "Titan High Command",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "nodemailer": "^10.0.14",
+    "sharp": "^0.35.5"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0"
+  }
+}

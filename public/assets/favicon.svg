@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" rx="14" fill="#58111a"/>
+  <path d="M32 10 L52 24 L52 40 L32 54 L12 40 L12 24 Z" fill="none" stroke="#cfa856" stroke-width="3"/>
+  <path d="M32 18 L44 27 L44 37 L32 46 L20 37 L20 27 Z" fill="#721623"/>
+  <text x="32" y="38" font-family="sans-serif" font-weight="900" font-size="20" fill="#ffffff" text-anchor="middle">T</text>
+</svg>

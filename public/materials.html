@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Materials Repository // Titan War Intelligence Hub</title>
+  <meta name="description" content="Protected internal materials repository for cataloging, searching, and downloading strategic executive assets, datasets, and antitrust dossiers.">
+  <meta name="theme-color" content="#58111a">
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="alternate icon" href="assets/insignia.webp">
+
+  <!-- Local Self-Hosted Fonts: Cinzel & Plus Jakarta Sans (Zero Third-Party CDNs) -->
+  <link rel="stylesheet" href="/fonts/fonts.css">
+  <link rel="stylesheet" href="portal.css">
+</head>
+<body class="portal-body">
+
+  <!-- Global Sticky Navigation Header -->
+  <header class="portal-nav" role="banner">
+    <div class="portal-nav-inner">
+      <a href="/" class="portal-brand" aria-label="Titan War Intelligence Home">
+        <img src="assets/insignia.webp" alt="Titan Insignia Crest" class="portal-crest" width="38" height="38">
+        <div class="portal-brand-text">
+          <span class="portal-brand-title">TITAN<span>WAR</span></span>
+          <span class="portal-brand-sub">Materials Repository</span>
+        </div>
+      </a>
+
+      <!-- Breadcrumbs -->
+      <nav class="portal-breadcrumbs" aria-label="Breadcrumb Trail">
+        <a href="/">Home</a>
+        <span class="sep">/</span>
+        <a href="/">War Room</a>
+        <span class="sep">/</span>
+        <span class="current">Materials Repository</span>
+      </nav>
+
+      <!-- Host Profile & Nav Actions -->
+      <div class="portal-nav-actions">
+        <!-- Host Profile Pill -->
+        <div class="user-profile-badge" id="host-profile-badge" aria-label="Authenticated Host User">
+          <div class="user-avatar-circle" id="user-avatar-circle">AM</div>
+          <div class="user-details">
+            <span class="user-name" id="user-name-display">Alex Mercer</span>
+            <span class="user-role-tag" id="user-role-display">Host // Level 5</span>
+          </div>
+        </div>
+
+        <!-- Add Material Button -->
+        <button type="button" class="btn btn-sm btn-gold" id="btn-open-upload">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span>Register Asset</span>
+        </button>
+
+        <!-- Trading Assistant Workstation Link -->
+        <a href="/trading-assistant" class="btn btn-sm btn-cyan" id="nav-trading-assistant-btn" style="background: rgba(6, 182, 212, 0.15); border: 1px solid rgba(6, 182, 212, 0.4); color: #06b6d4; font-weight: 600; text-decoration: none;" title="Launch JARVIS Trading Intelligence Workstation">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          <span>Trading Assistant</span>
+        </a>
+
+        <!-- War Room Link -->
+        <a href="/" class="btn btn-sm btn-ghost" title="Return to Executive War Room">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>War Room</span>
+        </a>
+
+        <!-- Log Out Trigger -->
+        <button type="button" class="btn btn-sm btn-danger-ghost" id="logout-btn" aria-label="Sign out of host session">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+          <span>Log Out</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Materials Repository Hub Wrapper -->
+  <main class="materials-wrapper" role="main">
+
+    <!-- Section Heading -->
+    <div class="materials-header-section">
+      <div class="materials-title-block">
+        <h1>Materials Repository</h1>
+        <p>Protected internal repository hosting corporate warfare intelligence, antitrust litigation dockets, CapEx financial datasets, and executive video briefings.</p>
+      </div>
+      <div class="materials-header-actions">
+        <span class="badge-tag host-only" id="materials-count-badge" style="padding: 6px 14px; font-size: 0.8rem;">
+          Loading repository assets...
+        </span>
+      </div>
+    </div>
+
+    <!-- Trading Assistant Workstation Section (Direct Integration of New Folder 1 onto Materials Page) -->
+    <section class="trading-assistant-hub-card" id="trading-assistant-hub-card" aria-label="AI Trading Assistant Workstation" style="background: linear-gradient(135deg, rgba(13, 24, 40, 0.85) 0%, rgba(10, 16, 26, 0.95) 100%); border: 1px solid rgba(6, 182, 212, 0.3); border-radius: var(--radius-lg); padding: 22px; margin-bottom: 24px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);">
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 18px;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(6, 182, 212, 0.15); border: 1px solid rgba(6, 182, 212, 0.4); display: flex; align-items: center; justify-content: center; color: #06b6d4;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <h2 style="font-family: var(--font-heading); font-size: 1.25rem; color: #f8fafc; letter-spacing: 0.04em; margin: 0;">JARVIS Trading Assistant</h2>
+              <span style="font-size: 0.68rem; font-weight: 700; background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); padding: 2px 8px; border-radius: 4px; letter-spacing: 0.05em;">SIMULATION LIVE</span>
+              <span style="font-size: 0.68rem; font-weight: 700; background: rgba(6, 182, 212, 0.15); color: #06b6d4; border: 1px solid rgba(6, 182, 212, 0.3); padding: 2px 8px; border-radius: 4px;">ZERO-API POLICY</span>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 4px 0 0 0;">Triad multi-agent intelligence (Tracker &bull; Predictor &bull; Commander &bull; RiskGuard) with MarketOracle dialectical arbitration.</p>
+          </div>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <button type="button" class="btn btn-sm btn-ghost" id="toggle-embedded-assistant" style="border: 1px solid rgba(255, 255, 255, 0.15); color: #e2e8f0;">
+            <span id="toggle-assistant-text">Expand Embedded Workstation</span>
+          </button>
+          <a href="/trading-assistant" target="_blank" class="btn btn-sm" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: #fff; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+            <span>Full-Screen Workstation</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Simulation Regulatory Notice Banner & Bot Controls -->
+      <div class="simulation-disclaimer-banner" style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 0.8rem; color: #fca5a5; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+        <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 280px;">
+          <span style="font-weight: 700; color: #ef4444; display: inline-flex; align-items: center; gap: 4px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            SIMULATION ONLY:
+          </span>
+          <span>Zero real money transactions. Not financial advice. Triad Autonomous RiskGuard enforces 2% max drawdown and 10% position cap.</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span id="bot-status-pill" style="font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; background: rgba(148, 163, 184, 0.2); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.3);">BOT: STOPPED</span>
+          <button type="button" id="bot-start-btn" style="background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); color: #10b981; font-weight: 600; cursor: pointer; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem;">▶ Start Bot</button>
+          <button type="button" id="bot-stop-btn" style="background: rgba(148, 163, 184, 0.2); border: 1px solid rgba(148, 163, 184, 0.4); color: #cbd5e1; font-weight: 600; cursor: pointer; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; display: none;">⏸ Stop</button>
+          <button type="button" id="bot-kill-btn" style="background: #dc2626; border: 1px solid #b91c1c; color: #fff; font-weight: 700; cursor: pointer; padding: 4px 12px; border-radius: 4px; font-size: 0.75rem; box-shadow: 0 0 10px rgba(220, 38, 38, 0.4);" title="Physical Emergency Kill Switch - Immediately Halt Bot & Lock Trading">⚡ KILL SWITCH</button>
+          <button type="button" id="bot-reset-btn" style="background: rgba(245, 158, 11, 0.2); border: 1px solid rgba(245, 158, 11, 0.4); color: #fbbf24; font-weight: 600; cursor: pointer; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; display: none;">↺ Reset</button>
+        </div>
+      </div>
+
+      <!-- Quick Ticker Snapshot Ribbon -->
+      <div id="assistant-ticker-ribbon" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 14px;">
+        <!-- Populated dynamically via /api/market/snapshot -->
+      </div>
+
+      <!-- Embedded Workstation Container (Expandable) -->
+      <div id="embedded-assistant-container" style="display: none; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 16px;">
+        <div style="border-radius: 12px; overflow: hidden; border: 1px solid rgba(6, 182, 212, 0.25); background: #0a0e17; height: 680px; position: relative;">
+          <iframe id="assistant-iframe" src="about:blank" style="width: 100%; height: 100%; border: none;" title="Trading Assistant Workstation"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- Storage Metric Visualizer Widget (Section 5.A) -->
+    <section class="storage-metric-widget" aria-label="Cloud Storage Utilization">
+      <div class="storage-left">
+        <div class="storage-label-row">
+          <div class="storage-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
+            <span>Cloud Storage Quota</span>
+          </div>
+          <div class="storage-numbers" id="storage-numbers-text">
+            <strong>6.4 GB</strong> utilized of <strong>15.0 GB</strong> (42.7%)
+          </div>
+        </div>
+        <div class="storage-bar-outer" role="progressbar" aria-valuenow="42.7" aria-valuemin="0" aria-valuemax="100">
+          <div class="storage-bar-fill" id="storage-bar-fill" style="width: 42.7%;"></div>
+        </div>
+      </div>
+
+      <div class="storage-stats-grid">
+        <div class="stat-pill">
+          <div class="stat-pill-label">Documents</div>
+          <div class="stat-pill-val" style="color: #60a5fa;">31.3 MB</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-pill-label">Media</div>
+          <div class="stat-pill-val" style="color: #c084fc;">1.27 GB</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-pill-label">Archives</div>
+          <div class="stat-pill-val" style="color: #fbbf24;">1.84 GB</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-pill-label">Spreadsheets</div>
+          <div class="stat-pill-val" style="color: #34d399;">35.3 MB</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Control Bar (Search, Category Filters, Sort, Layout Toggle) -->
+    <section class="repository-controls" aria-label="Repository Controls & Filters">
+      <div class="controls-row-top">
+        <!-- Real-Time Debounced Search Input -->
+        <div class="search-container">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input 
+            type="search" 
+            class="search-input" 
+            id="search-input" 
+            placeholder="Search assets by filename, tags, or description..." 
+            aria-label="Search Materials"
+          >
+          <button type="button" class="search-clear-btn" id="search-clear-btn" aria-label="Clear Search">✕</button>
+        </div>
+
+        <!-- Sort Dropdown & Layout View Toggle -->
+        <div class="controls-right">
+          <div class="sort-select-wrapper">
+            <label for="sort-select">Sort by:</label>
+            <select class="sort-select" id="sort-select">
+              <option value="date-desc">Date Added (Newest)</option>
+              <option value="date-asc">Date Added (Oldest)</option>
+              <option value="size-desc">File Size (Largest)</option>
+              <option value="size-asc">File Size (Smallest)</option>
+              <option value="title-asc">Alphabetical (A - Z)</option>
+              <option value="popularity-desc">Popularity (Downloads)</option>
+            </select>
+          </div>
+
+          <!-- View Mode Toggle Buttons -->
+          <div class="view-toggle-group" role="group" aria-label="View Layout">
+            <button type="button" class="btn-view-toggle active" id="btn-view-grid" title="Grid View" aria-pressed="true">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+              <span>Grid</span>
+            </button>
+            <button type="button" class="btn-view-toggle" id="btn-view-table" title="Table View" aria-pressed="false">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+              <span>Table</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div class="category-pills-row" role="tablist" aria-label="Filter Materials by Category">
+        <button type="button" class="category-pill active" data-category="all" role="tab">
+          <span>All Items</span>
+          <span class="pill-count">12</span>
+        </button>
+        <button type="button" class="category-pill" data-category="document" role="tab">
+          <span>Documents</span>
+          <span class="pill-count">5</span>
+        </button>
+        <button type="button" class="category-pill" data-category="spreadsheet" role="tab">
+          <span>Spreadsheets</span>
+          <span class="pill-count">3</span>
+        </button>
+        <button type="button" class="category-pill" data-category="media" role="tab">
+          <span>Media Guides</span>
+          <span class="pill-count">2</span>
+        </button>
+        <button type="button" class="category-pill" data-category="archive" role="tab">
+          <span>Archives</span>
+          <span class="pill-count">2</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Materials Grid View -->
+    <section class="materials-grid" id="materials-grid" aria-label="Materials Grid">
+      <!-- Dynamically populated via materials.js -->
+    </section>
+
+    <!-- Materials Structured Data Table View -->
+    <section class="materials-table-container" id="materials-table-container" style="display: none;" aria-label="Materials Data Table">
+      <table class="materials-table">
+        <thead>
+          <tr>
+            <th scope="col">Asset Title & Type</th>
+            <th scope="col">Category</th>
+            <th scope="col">File Size</th>
+            <th scope="col">Access Level</th>
+            <th scope="col">Date Added</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="materials-table-body">
+          <!-- Dynamically populated via materials.js -->
+        </tbody>
+      </table>
+    </section>
+
+  </main>
+
+  <!-- =========================================================================
+       DOCUMENT PREVIEW MODAL DIALOG
+       ========================================================================= -->
+  <div class="portal-modal-backdrop" id="preview-modal" role="dialog" aria-modal="true" aria-labelledby="preview-modal-title">
+    <div class="portal-modal-box">
+      <div class="modal-header">
+        <div class="modal-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold-accent)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          <span id="preview-modal-title">Material Preview</span>
+        </div>
+        <button type="button" class="btn-modal-close" data-close-modal aria-label="Close Preview Dialog">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="preview-meta-grid">
+          <div class="preview-meta-item">
+            <span class="preview-meta-label">Category</span>
+            <span class="preview-meta-val" id="preview-modal-category">Document</span>
+          </div>
+          <div class="preview-meta-item">
+            <span class="preview-meta-label">File Size / Format</span>
+            <span class="preview-meta-val" id="preview-modal-size">14.2 MB (PDF)</span>
+          </div>
+          <div class="preview-meta-item">
+            <span class="preview-meta-label">Date Ingested</span>
+            <span class="preview-meta-val" id="preview-modal-date">2026-10-04</span>
+          </div>
+          <div class="preview-meta-item">
+            <span class="preview-meta-label">Access Clearance</span>
+            <span class="preview-meta-val" id="preview-modal-access">HOST ONLY</span>
+          </div>
+          <div class="preview-meta-item" style="grid-column: 1 / -1;">
+            <span class="preview-meta-label">Cryptographic Checksum (SHA-256)</span>
+            <span class="preview-checksum" id="preview-modal-checksum">e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855</span>
+          </div>
+        </div>
+
+        <div style="font-size: 0.76rem; font-weight: 700; text-transform: uppercase; color: var(--gold-accent); margin-bottom: 8px;">
+          Asset Content Telemetry Sample:
+        </div>
+        <div class="preview-content-box" id="preview-modal-content">
+          Loading asset preview telemetry...
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-ghost" data-close-modal>Close</button>
+        <button type="button" class="btn btn-primary" id="preview-btn-download">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          <span>Download Asset</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       REGISTER / UPLOAD MATERIAL MODAL DIALOG
+       ========================================================================= -->
+  <div class="portal-modal-backdrop" id="upload-modal" role="dialog" aria-modal="true" aria-labelledby="upload-modal-title">
+    <div class="portal-modal-box">
+      <div class="modal-header">
+        <div class="modal-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold-accent)" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span id="upload-modal-title">Register Strategic Intelligence Asset</span>
+        </div>
+        <button type="button" class="btn-modal-close" data-close-modal aria-label="Close Dialog">✕</button>
+      </div>
+
+      <form id="upload-form">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="upload-title" class="form-label">Asset Title</label>
+            <input type="text" id="upload-title" class="form-input" placeholder="e.g. Hyperscaler CapEx Amortization 2027" required>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div class="form-group">
+              <label for="upload-category" class="form-label">Category</label>
+              <select id="upload-category" class="form-input">
+                <option value="Document">Document</option>
+                <option value="Spreadsheet">Spreadsheet</option>
+                <option value="Media">Media Guide</option>
+                <option value="Archive">Archive</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="upload-filetype" class="form-label">File Extension</label>
+              <input type="text" id="upload-filetype" class="form-input" placeholder="PDF, XLSX, MP4, ZIP" required>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div class="form-group">
+              <label for="upload-filesize" class="form-label">File Size</label>
+              <input type="text" id="upload-filesize" class="form-input" placeholder="e.g. 5.4 MB" required>
+            </div>
+
+            <div class="form-group">
+              <label for="upload-access" class="form-label">Access Level</label>
+              <select id="upload-access" class="form-input">
+                <option value="host-only">Host Only</option>
+                <option value="restricted">Restricted</option>
+                <option value="public">Public</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="upload-desc" class="form-label">Executive Summary / Description</label>
+            <textarea id="upload-desc" class="form-input" rows="3" placeholder="Provide executive overview of dossier contents..."></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" data-close-modal>Cancel</button>
+          <button type="submit" class="btn btn-gold">
+            <span>Commit Asset to Repository</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Accessible Toast Container -->
+  <div id="toast-container" class="toast-container" role="status" aria-live="polite"></div>
+
+  <!-- Client-Side Materials Hub Script -->
+  <script src="materials.js"></script>
+</body>
+</html>

@@ -1,0 +1,281 @@
+{
+  "lastUpdated": "2026-10-04",
+  "dossiers": {
+    "intel-1": {
+      "id": "intel-1",
+      "tag": "SEMICONDUCTOR BLOCKADE // CLOUD ALLIANCE",
+      "title": "The $500 Billion Silicon Siege: Custom ASICs Strike Back",
+      "headline": "The $500 Billion Silicon Siege: Custom ASICs Strike Back",
+      "faction": "NVIDIA vs BIG TECH CLOUD",
+      "time": "4m ago",
+      "impact": "9.9 / 10",
+      "statusBadge": "CRITICAL BATTLE",
+      "statusType": "high-alert",
+      "lastVerified": "October 2026",
+      "primarySources": [
+        {
+          "type": "SEC Form 10-K",
+          "title": "NVIDIA Corporation Annual Report (Form 10-K)",
+          "citation": "SEC File No. 000-23985, Item 1: Business - Competition & Data Center Architecture",
+          "url": "https://www.sec.gov/edgar/browse/?CIK=0001045810"
+        },
+        {
+          "type": "SEC Form 10-K",
+          "title": "Amazon.com, Inc. Annual Report (Form 10-K)",
+          "citation": "SEC File No. 000-22513, AWS Infrastructure, Annapurna Labs & Trainium Custom Accelerators",
+          "url": "https://www.sec.gov/edgar/browse/?CIK=0001018724"
+        },
+        {
+          "type": "Industry Whitepaper",
+          "title": "Google Cloud Next Architecture Briefing",
+          "citation": "TPU v6 Trillium Optical Circuit Switching & Hardware Specifications",
+          "url": "https://cloud.google.com/tpu"
+        }
+      ],
+      "content": "<p><strong>TACTICAL BRIEFING:</strong> In an unprecedented coordinated offensive, Amazon Web Services (Annapurna Labs Trainium2), Google Cloud (TPU v6 Trillium), and Microsoft Azure (Maia 100) have mobilized in-house custom ASICs to erode Nvidia’s 75%+ gross margin hardware lock-in.</p><p>Jensen Huang’s counter-strategy leverages complete rack-scale liquid-cooled NVL72 architectures with proprietary NVLink 5 switch fabrics, making disaggregation difficult for hyperscalers operating mixed clusters.</p><p><strong>KEY TELEMETRY:</strong> TSMC 3nm and CoWoS advanced packaging disclosures reveal custom hyperscaler ASICs now represent over 35% of total high-performance compute silicon starts, reducing single-vendor dependency for model inference.</p>"
+    },
+    "intel-2": {
+      "id": "intel-2",
+      "tag": "ANTITRUST REMEDIES // WASHINGTON DC DOCKET",
+      "title": "DOJ Search Remedies Ruling: Chrome Preserved, Exclusive Defaults Enjoined",
+      "headline": "DOJ Search Remedies Ruling: Chrome Preserved, Exclusive Defaults Enjoined",
+      "faction": "DOJ vs ALPHABET",
+      "time": "12m ago",
+      "impact": "9.7 / 10",
+      "statusBadge": "ANTITRUST REMEDY",
+      "statusType": "antitrust",
+      "lastVerified": "October 2026",
+      "primarySources": [
+        {
+          "type": "Court Docket",
+          "title": "U.S. District Court for the District of Columbia — Final Judgment on Remedies",
+          "citation": "United States et al. v. Google LLC, Civil Action No. 1:20-cv-03010-APM, ECF No. 1033",
+          "url": "https://www.courtlistener.com/docket/18565538/united-states-v-google-llc/"
+        },
+        {
+          "type": "DOJ Antitrust Division",
+          "title": "Department of Justice Antitrust Division Case Filings",
+          "citation": "U.S. and Plaintiff States v. Google LLC (Search Monopolization Remedies)",
+          "url": "https://www.justice.gov/atr/case/us-and-plaintiff-states-v-google-llc"
+        },
+        {
+          "type": "SEC Form 10-Q",
+          "title": "Alphabet Inc. Quarterly Report (Form 10-Q)",
+          "citation": "SEC File No. 001-37580, Legal Proceedings: Antitrust Litigation & Partner Revenue Share",
+          "url": "https://www.sec.gov/edgar/browse/?CIK=0001652044"
+        }
+      ],
+      "content": "<p><strong>JUDICIAL RECORD:</strong> U.S. District Judge Amit P. Mehta has rendered his landmark remedies ruling in <em>United States v. Google LLC</em>. Crucially, the Court <strong>explicitly rejected the DOJ’s proposal to mandate a forced divestiture of the Chrome web browser or Android OS</strong>, ruling that forced asset breakups represent an unwarranted, high-risk intervention.</p><p>Instead, the Court entered a structural injunction <strong>prohibiting Google from maintaining or entering into exclusive search distribution agreements</strong> for six years, while upholding the legality of non-exclusive revenue-sharing arrangements with device manufacturers such as Apple.</p><p><strong>MARKET IMPACT:</strong> Apple and OEM partners retain the right to receive distribution compensation, but Google is barred from tying revenue shares to default exclusivity, opening browser search engines to competitive user choice screens across iOS and Android.</p>"
+    },
+    "intel-3": {
+      "id": "intel-3",
+      "tag": "FRONTIER AI RECRUITING // TALENT ATTRITION",
+      "title": "Frontier AI Talent Bidding War: Principal Researcher Compensation",
+      "headline": "Frontier AI Talent Bidding War: Principal Researcher Compensation",
+      "faction": "META vs OPENAI & GOOGLE",
+      "time": "28m ago",
+      "impact": "9.4 / 10",
+      "statusBadge": "TALENT WAR",
+      "statusType": "talent-war",
+      "lastVerified": "October 2026",
+      "primarySources": [
+        {
+          "type": "SEC DEF 14A",
+          "title": "Meta Platforms, Inc. Definitive Proxy Statement (DEF 14A)",
+          "citation": "SEC File No. 001-35625, Executive & Technical Talent Retention Structure",
+          "url": "https://www.sec.gov/edgar/browse/?CIK=0001326801"
+        },
+        {
+          "type": "SEC Form 10-K",
+          "title": "Alphabet Inc. Form 10-K (Human Capital Resources)",
+          "citation": "Item 1: Google DeepMind Talent Retention, RSU Grant Policies & Vesting Acceleration",
+          "url": "https://www.sec.gov/edgar/browse/?CIK=0001652044"
+        }
+      ],
+      "content": "<p><strong>TALENT DISPATCH:</strong> The race for frontier reasoning and multimodal post-training models has provoked an unprecedented compensation offensive. Mark Zuckerberg and Meta executive leadership have directly authorized specialized equity packages ranging between $2M and $10M+ in restricted stock units (RSUs) with front-loaded vesting schedules for top tier AI researchers.</p><p>To stem departures, OpenAI and Google DeepMind instituted accelerated refresh pools and equity lock-in bonuses for lead research scientists, while European hubs in London and Zurich establish non-solicitation covenants to protect core pre-training teams.</p><p><strong>COMPENSATION ARCHITECTURE:</strong> Elite AI packages increasingly rely on discretionary carve-outs exempt from standard corporate salary bands, tying payouts directly to model benchmark milestones.</p>"
+    },
+    "intel-4": {
+      "id": "intel-4",
+      "tag": "ENERGY SUPREMACY // INFRASTRUCTURE COALITION",
+      "title": "The Nuclear Data Center Grab: Three Mile Island & SMRs",
+      "headline": "The Nuclear Data Center Grab: Three Mile Island & SMRs",
+      "faction": "MICROSOFT vs AMAZON",
+      "time": "41m ago",
+      "impact": "9.6 / 10",
+      "statusBadge": "POWER SUPREMACY",
+      "statusType": "infrastructure",
+      "lastVerified": "October 2026",
+      "primarySources": [
+        {
+          "type": "SEC Form 8-K",
+          "title": "Constellation Energy Generation, LLC (Form 8-K)",
+          "citation": "SEC File No. 001-16477, Crane Clean Energy Center 20-Year Power Purchase Agreement with Microsoft",
+          "url": "https://www.sec.gov/edgar/browse/?CIK=0001868275"
+        },
+        {
+          "type": "SEC Form 8-K",
+          "title": "Talen Energy Corporation (Form 8-K)",
+          "citation": "SEC File No. 001-41982, Purchase and Sale Agreement with AWS for Susquehanna Nuclear Campus",
+          "url": "https://www.sec.gov/edgar/browse/?CIK=0001999238"
+        },
+        {
+          "type": "FERC Regulatory Filing",
+          "title": "Federal Energy Regulatory Commission (FERC) Docket",
+          "citation": "PJM Interconnection Co-Located Interconnection Service Agreements (Docket ER24-2172)",
+          "url": "https://www.ferc.gov"
+        }
+      ],
+      "content": "<p><strong>INFRASTRUCTURE TELEMETRY:</strong> The core bottleneck for artificial intelligence scaling has decisively shifted from semiconductor fabrication to electrical baseload generation. Microsoft finalized a 20-year power purchase agreement for the entire 835MW output of the revived Crane Clean Energy Center (Three Mile Island Unit 1), operated by Constellation Energy.</p><p>Concurrently, Amazon Web Services contracted for 960MW of zero-carbon power at the Talen Energy Susquehanna nuclear plant campus in Pennsylvania, navigating FERC co-location interconnection regulatory reviews.</p><p><strong>STRATEGIC IMPLICATION:</strong> Tech hyperscalers are now operating as de facto independent utility financiers, deploying multi-billion-dollar balance sheets to secure dedicated nuclear gigawatts ahead of regional grid connection queues stretching past 2030.</p>"
+    },
+    "intel-5": {
+      "id": "intel-5",
+      "tag": "ANTITRUST CHARTER // BRUSSELS FRONT",
+      "title": "The EU DMA Enforcement Battle: CTF Levies Under Teresa Ribera",
+      "headline": "The EU DMA Enforcement Battle: CTF Levies Under Teresa Ribera",
+      "faction": "APPLE vs EUROPEAN UNION",
+      "time": "1h ago",
+      "impact": "9.2 / 10",
+      "statusBadge": "ECOSYSTEM ENCLOSURE",
+      "statusType": "ecosystem",
+      "lastVerified": "October 2026",
+      "primarySources": [
+        {
+          "type": "European Commission Press Release",
+          "title": "European Commission Directorate-General for Competition (DG COMP)",
+          "citation": "Case DMA.100028 & AT.40437: Preliminary Findings on Apple Anti-Steering & Core Technology Fee",
+          "url": "https://ec.europa.eu/commission/presscorner/detail/en/ip_24_3401"
+        },
+        {
+          "type": "Official EU Register",
+          "title": "European Commission Leadership Register",
+          "citation": "Executive Vice-President Teresa Ribera Portfolio: Clean, Just and Competitive Transition",
+          "url": "https://commission.europa.eu/about-european-commission/college-commissioners_en"
+        },
+        {
+          "type": "Apple Developer EU Terms",
+          "title": "Apple Inc. European Union Alternative Business Terms",
+          "citation": "Core Technology Fee (CTF €0.50/install), Initial Acquisition Fee (5%), Store Services Fee (10%)",
+          "url": "https://developer.apple.com/support/alternative-app-marketplace-in-the-eu/"
+        }
+      ],
+      "content": "<p><strong>BRUSSELS PROCEEDINGS:</strong> Following the transition in EU competition leadership to Executive Vice-President Teresa Ribera, the European Commission is conducting formal non-compliance proceedings against Apple under the Digital Markets Act (DMA).</p><p>The investigation targets Apple’s revised EU business terms: specifically the <strong>€0.50 Core Technology Fee (CTF)</strong> assessed on annual first installs over 1 million, alongside Apple’s secondary 5% Initial Acquisition Fee and 10% Store Services Fee imposed on outbound web links.</p><p><strong>LEGAL STAKES:</strong> DG COMP asserts that Apple’s layered fees create prohibitive economic friction preventing alternative marketplaces (such as Epic Games and AltStore) from offering viable distribution, exposing Cupertino to statutory fines of up to 10% of worldwide annual turnover.</p>"
+    },
+    "intel-6": {
+      "id": "intel-6",
+      "tag": "AUTONOMOUS GROUND WAR // LOGISTICS",
+      "title": "The Robotaxi Autonomous Front: Waymo Surpasses 200,000 Weekly Rides",
+      "headline": "The Robotaxi Autonomous Front: Waymo Surpasses 200,000 Weekly Rides",
+      "faction": "TESLA CYBERCAB vs WAYMO",
+      "time": "2h ago",
+      "impact": "9.1 / 10",
+      "statusBadge": "AUTONOMOUS DOMAIN",
+      "statusType": "autonomous",
+      "lastVerified": "October 2026",
+      "primarySources": [
+        {
+          "type": "SEC Form 10-Q",
+          "title": "Alphabet Inc. Form 10-Q (Other Bets Telemetry)",
+          "citation": "SEC File No. 001-37580, Waymo Commercial Commercial Ride Volumes & Expansion Fleet",
+          "url": "https://www.sec.gov/edgar/browse/?CIK=0001652044"
+        },
+        {
+          "type": "CPUC Regulatory Filing",
+          "title": "California Public Utilities Commission (CPUC) Deployment Permit",
+          "citation": "Waymo LLC Autonomous Vehicle Passenger Service Commercial Authorization (Decision 23-08-017)",
+          "url": "https://www.cpuc.ca.gov/regulatory-services/licensing/transportation-licensing/autonomous-vehicle-programs"
+        },
+        {
+          "type": "NHTSA Docket",
+          "title": "National Highway Traffic Safety Administration (NHTSA)",
+          "citation": "Standing General Order 2021-01 for Crash Reporting: Autonomous Driving Systems",
+          "url": "https://www.nhtsa.gov"
+        }
+      ],
+      "content": "<p><strong>FLEET DISPERSAL:</strong> Alphabet-backed Waymo has crossed <strong>200,000 paid driverless passenger rides per week</strong> across its commercial service territories in San Francisco, Phoenix, Los Angeles, and Austin, maintaining an industry-leading zero-safety-driver commercial deployment.</p><p>Tesla counters by accelerating unsupervised Full Self-Driving (FSD) validation testing across Texas and Sun Belt corridors, targeting high-volume Cybercab manufacturing at sub-$0.30 per operating mile to ignite a price attrition battle.</p><p><strong>SAFETY & SCALE:</strong> Waymo’s CPUC and NHTSA regulatory filings demonstrate an 85% reduction in airbag-deployment injury crashes compared to human driver benchmarks across 30+ million commercial autonomous miles.</p>"
+    },
+    "intel-privacy": {
+      "id": "intel-privacy",
+      "tag": "LEGAL CHARTER // PRIVACY POLICY (GDPR & CCPA COMPLIANT)",
+      "title": "Privacy Policy & Zero-Trust Data Governance",
+      "lastVerified": "October 2026",
+      "primarySources": [
+        {
+          "type": "Statutory Regulation",
+          "title": "European Union General Data Protection Regulation (GDPR)",
+          "citation": "Regulation (EU) 2016/679, Articles 12-23 (Rights of the Data Subject)",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32016R0679"
+        },
+        {
+          "type": "Statutory Regulation",
+          "title": "California Consumer Privacy Act as amended (CCPA/CPRA)",
+          "citation": "Cal. Civ. Code § 1798.100 et seq. (Consumer Rights & Non-Sale of Data)",
+          "url": "https://oag.ca.gov/privacy/ccpa"
+        }
+      ],
+      "content": "<h3 style=\"font-size: 1.1rem; margin: 12px 0 6px; color: var(--burgundy-primary);\">1. Data Collection & Purpose</h3><p>Titan War collects only your email address when you voluntarily request a cryptographic one-time passcode (OTP) for authentication or session clearance. We collect no tracking cookies, biometric markers, or personal identifiers.</p><h3 style=\"font-size: 1.1rem; margin: 12px 0 6px; color: var(--burgundy-primary);\">2. Cryptographic Security & In-Transit Encryption</h3><p>All network communications are secured using Transport Layer Security (TLS 1.3). Passcodes are cryptographically generated on our server using pseudo-random integer seeds and stored strictly as salted, time-bounded hashes in memory. Passcode records expire and are permanently purged after 10 minutes.</p><h3 style=\"font-size: 1.1rem; margin: 12px 0 6px; color: var(--burgundy-primary);\">3. Zero Sale of Personal Data</h3><p>We do not sell, rent, monetize, or disclose your email address or usage telemetry to data brokers, advertising networks, or third parties. We utilize Cloudflare Turnstile strictly for non-invasive bot defense and Google SMTP relay exclusively for direct email delivery.</p><h3 style=\"font-size: 1.1rem; margin: 12px 0 6px; color: var(--burgundy-primary);\">4. User Rights (GDPR Articles 15-22 & CCPA)</h3><p>You have the absolute right to access, rectify, or request complete immediate erasure of your email record from our dispatch logs. To exercise your rights, contact <code>privacy@titanwar.intel</code>. All requests are processed within 24 hours.</p>"
+    },
+    "intel-terms": {
+      "id": "intel-terms",
+      "tag": "LEGAL CHARTER // TERMS OF SERVICE",
+      "title": "Terms of Service & Strategic Analysis Charter",
+      "lastVerified": "October 2026",
+      "primarySources": [
+        {
+          "type": "Legal Framework",
+          "title": "United States Copyright Fair Use Doctrine",
+          "citation": "17 U.S.C. § 107: Limitations on Exclusive Rights: Fair Use for News & Commentary",
+          "url": "https://www.copyright.gov/fair-use/"
+        },
+        {
+          "type": "Statutory Regulation",
+          "title": "Lanham Trademark Act (Nominative Fair Use)",
+          "citation": "15 U.S.C. § 1115(b)(4): Nominative Fair Use for Comparative & Journalistic Analysis",
+          "url": "https://www.uspto.gov"
+        }
+      ],
+      "content": "<h3 style=\"font-size: 1.1rem; margin: 12px 0 6px; color: var(--burgundy-primary);\">1. Platform Scope & Purpose</h3><p>Titan War is an independent competitive analysis and educational intelligence registry providing synthesis of corporate filings, federal antitrust litigation records, and market disclosures concerning major technology conglomerates.</p><h3 style=\"font-size: 1.1rem; margin: 12px 0 6px; color: var(--burgundy-primary);\">2. Non-Financial & Non-Legal Advice Disclaimer</h3><p>All valuations, war impact scores, market hegemony metrics, and corporate conflict telemetry provided on this platform are for informational, journalistic, and competitive benchmarking purposes only. Nothing contained herein constitutes financial, investment, or legal advice.</p><h3 style=\"font-size: 1.1rem; margin: 12px 0 6px; color: var(--burgundy-primary);\">3. Intellectual Property & Fair Use</h3><p>All corporate combatant names, tickers (NVDA, MSFT, AAPL, GOOGL, AMZN, META), and registered trademarks referenced remain the exclusive property of their respective holders. Their nominative citation on Titan War is conducted strictly under journalistic fair-use doctrines.</p><h3 style=\"font-size: 1.1rem; margin: 12px 0 6px; color: var(--burgundy-primary);\">4. Acceptable Conduct & System Boundaries</h3><p>Users agree not to execute automated denial-of-service floods, rate-limit circumvention, or unauthorized credential replay attacks against the dispatch endpoints. Infractions result in immediate IP blacklisting.</p>"
+    },
+    "intel-refund": {
+      "id": "intel-refund",
+      "tag": "LEGAL CHARTER // DEMO PASS & REFUND POLICY",
+      "title": "Demonstration Clearance & Refund Policy",
+      "lastVerified": "October 2026",
+      "primarySources": [
+        {
+          "type": "Consumer Protection",
+          "title": "Federal Trade Commission Consumer Rights Guidance",
+          "citation": "16 CFR Part 425: Rule Concerning Disclosures Regarding Negative Option Plans",
+          "url": "https://www.ftc.gov"
+        },
+        {
+          "type": "Consumer Directive",
+          "title": "EU Consumer Rights Directive",
+          "citation": "Directive 2011/83/EU: 14-Day Right of Withdrawal for Digital Content & Services",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=celex%3A32011L0083"
+        }
+      ],
+      "content": "<h3 style=\"font-size: 1.1rem; margin: 12px 0 6px; color: var(--burgundy-primary);\">1. Demonstration Clearance (Simulation Mode)</h3><p>The Level 5 War Room Omni-Clearance pass featured on this website currently operates in an open demonstration environment. Access is granted at <strong>$0.00 cost</strong> with zero financial obligation. No credit card information, bank details, or recurring billing covenants are collected.</p><h3 style=\"font-size: 1.1rem; margin: 12px 0 6px; color: var(--burgundy-primary);\">2. Future Commercial Subscriptions & 14-Day Guarantee</h3><p>In the event that commercial subscription tiers are activated, all paid clearance passes will feature an unconditional 14-day full money-back guarantee. If you are not completely satisfied with our unredacted telemetry reports, you may request a 100% refund with zero penalties.</p><h3 style=\"font-size: 1.1rem; margin: 12px 0 6px; color: var(--burgundy-primary);\">3. Immediate Cancellation & Support Contact</h3><p>Subscribers maintain the right to cancel active passes at any time via self-service portal or by contacting <code>billing@titanwar.intel</code>. Refund credits are issued via the original payment rail within 3 to 5 business days.</p>"
+    },
+    "intel-clearance": {
+      "id": "intel-clearance",
+      "tag": "SECURITY CHARTER // AUDIT TELEMETRY",
+      "title": "Security Architecture & Clearance Protocol",
+      "lastVerified": "October 2026",
+      "primarySources": [
+        {
+          "type": "Technical Standard",
+          "title": "IETF RFC 8446 — The Transport Layer Security (TLS) Protocol Version 1.3",
+          "citation": "Internet Engineering Task Force (IETF), Modern Cipher Suites & Ephemeral Key Exchange",
+          "url": "https://datatracker.ietf.org/doc/html/rfc8446"
+        },
+        {
+          "type": "Security Standard",
+          "title": "NIST Special Publication 800-63B",
+          "citation": "Digital Identity Guidelines: Authentication and Lifecycle Management",
+          "url": "https://pages.nist.gov/800-63-3/sp800-63b.html"
+        }
+      ],
+      "content": "<h3 style=\"font-size: 1.1rem; margin: 12px 0 6px; color: var(--burgundy-primary);\">1. Transport Layer Security</h3><p>Communications between the client browser and the Titan War API relay are secured via TLS 1.3 with forward secrecy. We reject unencrypted cleartext transmissions.</p><h3 style=\"font-size: 1.1rem; margin: 12px 0 6px; color: var(--burgundy-primary);\">2. Zero Trust Architectural Boundaries</h3><p>The server enforces strict directory isolation, serving exclusively vetted static assets from the <code>public/</code> boundary. Server source files, environment configurations (<code>.env</code>), and dotfiles are denied at the kernel level with 403 Forbidden responses.</p><h3 style=\"font-size: 1.1rem; margin: 12px 0 6px; color: var(--burgundy-primary);\">3. Cryptographic Rate Limiting & DoS Defense</h3><p>Authentication dispatch endpoints are secured by dual-layer rate limiting: maximum 3 OTP dispatches per minute per email address, and 10 requests per minute per IP address, backed by Cloudflare Turnstile bot deterrence.</p>"
+    }
+  }
+}
