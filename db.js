@@ -89,6 +89,16 @@ function initSchema() {
       portfolio_state TEXT
     );
 
+    CREATE TABLE IF NOT EXISTS audit_log (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      timestamp INTEGER NOT NULL,
+      user_id TEXT,
+      action TEXT NOT NULL,
+      ip TEXT,
+      user_agent TEXT,
+      details TEXT
+    );
+
     CREATE TABLE IF NOT EXISTS incidents (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       timestamp INTEGER NOT NULL,
@@ -105,6 +115,7 @@ function initSchema() {
     CREATE INDEX IF NOT EXISTS idx_sessions_user_id ON sessions(user_id);
     CREATE INDEX IF NOT EXISTS idx_recovery_user_id ON recovery_codes(user_id);
     CREATE INDEX IF NOT EXISTS idx_materials_category ON materials(category);
+    CREATE INDEX IF NOT EXISTS idx_audit_log_timestamp ON audit_log(timestamp);
   `);
 }
 
@@ -132,12 +143,12 @@ async function migrateInitialData() {
         VALUES (?, ?, ?, ?, ?, 'active', ?, ?)
       `);
 
-      // Admin Account: Alex Mercer (alex.mercer@titan.corp)
-      insertUserStmt.run('usr_admin_001', 'alex.mercer', 'alex.mercer@titan.corp', passwordHash, 'admin', now, now);
-      console.log('[DB MIGRATION] Seeded persistent Administrator account: alex.mercer@titan.corp');
+      // Admin Account: Alex Mercer (alex.mercer@titan.corp) with ID usr_94812
+      insertUserStmt.run('usr_94812', 'alex.mercer', 'alex.mercer@titan.corp', passwordHash, 'admin', now, now);
+      console.log('[DB MIGRATION] Seeded persistent Administrator account: alex.mercer@titan.corp (usr_94812)');
 
       // Also generate initial recovery codes for the admin
-      await generateRecoveryCodesForUser('usr_admin_001', 8);
+      await generateRecoveryCodesForUser('usr_94812', 8);
     }
   }
 
@@ -465,6 +476,26 @@ function addMaterial(item) {
 // 7. AUDIT LOGGING & WATCHDOG TELEMETRY STORE
 // ---------------------------------------------------------------------------
 
+function recordAuditLog({ userId, action, ip, userAgent, details }) {
+  try {
+    const stmt = db.prepare('INSERT INTO audit_log (timestamp, user_id, action, ip, user_agent, details) VALUES (?, ?, ?, ?, ?, ?)');
+    stmt.run(
+      Date.now(),
+      userId || null,
+      String(action || 'UNKNOWN'),
+      ip || null,
+      userAgent || null,
+      typeof details === 'object' ? JSON.stringify(details) : (details ? String(details) : null)
+    );
+  } catch (err) {
+    console.error('[DB AUDIT LOG ERROR]', err.message);
+  }
+}
+
+function getAuditLogs(limit = 100) {
+  return db.prepare('SELECT * FROM audit_log ORDER BY timestamp DESC LIMIT ?').all(limit);
+}
+
 function recordAuditTrade({ userId, action, ticker, quantity, price, riskVerdict, portfolioState }) {
   const stmt = db.prepare(`
     INSERT INTO trade_audit_log (timestamp, user_id, action, ticker, quantity, price, risk_verdict, portfolio_state)
@@ -508,8 +539,11 @@ module.exports = {
   getAllMaterials,
   getMaterialById,
   addMaterial,
+  recordAuditLog,
+  getAuditLogs,
   recordAuditTrade,
   getTradeAuditLogs,
   recordIncident,
   getRecentIncidents
 };
+

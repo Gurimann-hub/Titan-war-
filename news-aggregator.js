@@ -358,7 +358,17 @@ function fetchFeedHttp(url, timeoutMs = 4000, redirectCount = 0) {
 
       if (pinnedIp) {
         const family = net.isIPv6(pinnedIp) ? 6 : 4;
-        reqOptions.lookup = (hostname, opts, cb) => cb(null, pinnedIp, family);
+        reqOptions.lookup = (hostname, opts, cb) => {
+          const callback = typeof opts === 'function' ? opts : cb;
+          const options = (typeof opts === 'object' && opts !== null) ? opts : {};
+          if (typeof callback === 'function') {
+            if (options.all) {
+              callback(null, [{ address: pinnedIp, family }]);
+            } else {
+              callback(null, pinnedIp, family);
+            }
+          }
+        };
       }
 
       const req = client.get(reqOptions, (res) => {

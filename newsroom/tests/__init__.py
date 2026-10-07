@@ -1,0 +1,1 @@
+"""Newsroom automated tests package."""

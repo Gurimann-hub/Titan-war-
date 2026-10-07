@@ -1,0 +1,92 @@
+# =============================================================================
+# MULTI-AGENT NEWSROOM CONFIGURATION
+# =============================================================================
+
+app:
+  name: "Titan War Multi-Agent Newsroom"
+  version: "1.0.0"
+  env: "development"
+  kill_switch: false              # Set to true to immediately halt all pipelines
+  approval_mode: "manual"         # "manual" | "auto" (manual gates impact >= 8 or breaking)
+  dry_run: true                   # True by default; require explicit --live flag to publish
+  log_level: "INFO"               # DEBUG | INFO | WARNING | ERROR
+
+storage:
+  output_file: "../data/news.json"
+  history_dir: "../data/history"
+  max_history_backups: 20
+
+publisher:
+  method: "file"                  # "file" (Method A: git/atomic write) | "api" (Method B: POST webhook)
+  api_endpoint: "http://localhost:3000/api/news/publish"
+  api_timeout_seconds: 10
+  retry_attempts: 3
+
+watchlist:
+  tickers:
+    - "AAPL"
+    - "MSFT"
+    - "GOOGL"
+    - "AMZN"
+    - "META"
+    - "NVDA"
+    - "TSLA"
+  sectors:
+    Semiconductors: ["NVDA", "AMD", "TSM", "INTC", "ASML", "QCOM", "AVGO"]
+    Cloud_Enterprise: ["MSFT", "AMZN", "GOOGL", "ORCL", "CRM", "IBM"]
+    Consumer_AI: ["AAPL", "META", "GOOGL", "TSLA"]
+
+shift_detection:
+  price_change_pct: 4.0           # Price movement threshold (%)
+  window_minutes: 20              # Lookback window for sudden price move
+  volume_std_dev: 2.5             # Multiplier of 20-day standard deviation
+  vix_jump_pct: 10.0              # Volatility index spike threshold (%)
+  sp500_drop_pct: 1.5             # Broad market sell-off threshold (%)
+  keywords:
+    - "merger"
+    - "acquisition"
+    - "antitrust"
+    - "lawsuit"
+    - "layoffs"
+    - "earnings surprise"
+    - "export controls"
+    - "rate decision"
+    - "outage"
+    - "data breach"
+    - "subpoena"
+    - "national security"
+    - "chip ban"
+
+verifier:
+  min_independent_sources: 2      # Need 2 independent press sources for confirmed
+  official_source_domains:        # 1 official source is sufficient for confirmed
+    - "sec.gov"
+    - "edgar.sec.gov"
+    - "prnewswire.com"
+    - "businesswire.com"
+    - "investor.nvidia.com"
+    - "apple.com"
+    - "microsoft.com"
+    - "googleblog.com"
+    - "about.meta.com"
+  allowed_press_domains:
+    - "reuters.com"
+    - "bloomberg.com"
+    - "wsj.com"
+    - "ft.com"
+    - "cnbc.com"
+    - "marketwatch.com"
+    - "finance.yahoo.com"
+    - "techcrunch.com"
+    - "theverge.com"
+
+writer:
+  llm_provider: "anthropic"       # "anthropic" | "openai" | "gemini" | "template"
+  anthropic_model: "claude-3-7-sonnet-20250219"
+  max_summary_words: 60
+  temperature: 0.2
+
+scheduling:
+  normal_interval_seconds: 300    # 5 minutes
+  breaking_interval_seconds: 60   # 1 minute during breaking surge
+  breaking_cooldown_minutes: 30   # Surge mode duration

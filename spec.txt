@@ -1,0 +1,202 @@
+<USER_REQUEST>
+# JARVIS + TRIAD on the TITAN WAR repo: work order and specification make it in new folder 2
+
+## ROLE AND MODE
+You are a principal engineer (15+ years: Node.js services, SQLite, trading-terminal front ends, LLM agent systems). This prompt is both a work order and a specification, written against the repository as it actually exists. Sections 4-8 define the TARGET STATE. Section 10 lists defects already verified by reading the code (treat them as leads and re-verify in Step 0). Audit first, then bring the repo to the target state with minimal, reviewable changes.
+
+Preserve existing public behaviour (module exports, route paths, response shapes, auth model, CSP, existing tests) unless a section says to change it. Where this prompt says UNSPECIFIED, pick the simplest sound option, state the assumption in one line, and continue. Never invent data, endpoints, API keys or results. If a reference module (jarvis-chart-module) is attached, use it only as a reference for the charts; do not paste it over the repo.
+
+**ASSUMPTION A1 (architecture, do not relitigate).** This repo is a zero-framework Node.js server (`http` module, `node:sqlite`, CommonJS) with a static front end in `public/`. It is NOT migrated to React, Vite, FastAPI or Python. The JARVIS engines in `trading-assistant.js` and the Triad engine in `trading-bot.js` are the implementations to extend. The FastAPI proxy stays as an optional sidecar (section 5).
+
+## 1. HARD RULES (never violate)
+- JARVIS is an analytics co-pilot. It NEVER places trades. Triad is PAPER-trading only (SimulatedBroker). No code path may import or call a real broker API.
+- Mock, synthetic, fallback or stale data is never shown as live. Every JARVIS and Triad payload carries `mock` (bool), `source` (string) and an `as_of` that is the data's true time, never process-start time or "now". Every user-visible output shows "AI estimate, not financial advice" on screen (server constant `DISCLAIMER` exists; confirm the UI renders it, not only the API).
+- LLM system prompts and agent reasoning stay server-side: never in `public/`, never console.logged, never in API responses.
+- No secret in code, logs, prompts, tests, fixtures or git history. Never print or read aloud values from `.env`. No fallback default passwords, salts or keys, not even "for development".
+- Zero-key mode stays fully functional (the repo's stated policy is zero third-party API keys). Keyed providers (Finnhub, Gemini, Anthropic) are opt-in. Boot, tests and CI need no key. No key means the deterministic keyless path, honestly labelled.
+- Tests pass offline: no network, no API keys, no writes outside a temp directory.
+- Obey `AGENTS.md` and `TEACHERS_NOTES.md`: secrets and truth stay on the server; never display what didn't happen; verify, then claim.
+
+## 2. PROJECT AND LAYOUT
+Two cooperating modules in one Node repo:
+- A) JARVIS: "Live AI Trading Intelligence Dashboard": a session-gated console at `/trading-assistant` backed by JSON routes in `server.js`.
+- B) TRIAD: a paper-trading desk of three cooperating agents (Tracker, Predictor, Commander) behind a deterministic risk engine (RiskGuard).
+
+Existing files:
+```
+server.js            single http entry: routing, auth, static serving, rate limits, CSP
+db.js                node:sqlite, WAL. data/platform.db: users, sessions, recovery_codes, materials, trade_audit_log, incidents
+materials-store.js   seed materials + legacy host credential helpers
+trading-assistant.js JARVIS engines: MARKET_SNAPSHOTS, PROFITABLE_ROWS, SUPPLY_CHAINS, analyst, MarketOracle, tryProxyToFastApi
+trading-bot.js       Triad: TrackerAgent, PredictorAgent, CommanderAgent, RiskGuardAgent, SimulatedBroker, botInstance
+news-aggregator.js   keyless RSS/Atom aggregator with SSRF guard + regex XML parser
+watchdog.js          SRE probes + self-healing playbooks
+jarvis.db            analytics DB at repo root (schema = section 6; securities table is empty)
+package.json, package-lock.json, netlify.toml, vercel.json, AGENTS.md, PUBLISH_GUIDE.md, TEACHERS_NOTES.md, .env.example, .gitignore
+```
+Not provided to the author of this prompt, so audit them in Step 0: `public/` (including `public/trading-assistant/index.html`), `tests/` (package.json scripts reference `tests/smoke.test.js` and `tests/phase1..5`), any CI config, README.
+
+Files to add (flat CommonJS, matching repo style): `jarvis-db.js`, `market-data.js`, `rate-limit.js`, `triad-cli.js`, `scripts/import-jarvis-db.js`, `scripts/snapshot.js`, `Dockerfile`, `.dockerignore`, `docker-compose.yml`, `.gitleaks.toml`, `.githooks/pre-commit`, `tests/jarvis.*.test.js`, `tests/triad.*.test.js`, `public/trading-assistant/jarvis-core.mjs` (pure logic and SVG builders, shared by browser and tests). Use `.mjs` because there is no `"type":"module"` and Node must `import()` it in tests.
+
+## 3. WORKFLOW (one commit per step; do not skip order)
+**Step 0, AUDIT, no edits.** Run `node -v` (need >=22.13 so `node:sqlite` works without a flag), `npm ci`, `npm test`, `npm run test:all`. Start the server (`PORT=3999`, temp data dir if possible). Inspect `public/`, `tests/`, `.git` tracking (`git ls-files | grep -E '\.db|\.env|data/'`). Read `jarvis.db` rows for provenance (are the 63 predictions and 215 relationships real, seeded or synthetic?). Report what fails and why, and list every file you intend to change.
+
+**Step 1, FIX KNOWN DEFECTS (section 10).** Add the pre-commit secret scan. List which credentials must be rotated; do not rotate anything yourself.
+
+**Step 2, CONFIG, DOCKER, DATA (sections 6-7).** Rule: `.env.example` is the source of truth for defaults and docs are updated to match. Both Docker and local dev use `./data/` (a named volume in Docker), so no path mismatch exists. Record this as ASSUMPTION A2.
+
+**Step 3, BACKEND (section 5).** Implement or repair every route in the table, including candles, performance, MarketOracle labelling, rate limiting and the hardened proxy.
+
+**Step 4, FRONT END (section 4).** Build the two charts and the agent-desk strip with loading, error and empty states. Data comes from the API only; remove baked-in JSON. Abort in-flight requests on ticker change (AbortController). Dependency-free SVG, no CDN.
+
+**Step 5, TRIAD (section 8).** 5a: deterministic engine fixes and new invariants. 5b: optional LLM agents, default off.
+
+**Step 6, TESTS (section 9).**
+
+**Step 7, VERIFY against section 11 and write the report (section 12).**
+
+## 4. FRONT END SPEC (`public/trading-assistant/`)
+- Stack: plain HTML, CSS and ES modules. No build step, no framework, no CDN. Keep the existing CSP (`script-src 'self' 'unsafe-inline'`, `connect-src 'self'`). Keep the route session-gated. Confirm `server.js` static serving returns `text/javascript` for `.mjs`; add the MIME type if missing.
+- Desktop-only, minimum viewport 1280px; narrower shows a desktop-only notice instead of collapsing panels. Dark terminal theme.
+- Panels: pinned watchlist (`DASHBOARD_PINS`); price chart; stock panel; chat; MarketOracle verdict card; supply-chain map; rankings; morning brief; prediction-accuracy chart; agent-desk strip (Tracker -> Predictor -> Commander -> Risk Guard, fed by `/api/bot/status`, showing circuit-breaker state, "SIMULATION" and price source).
+- Price chart: candles/line toggle, SMA20 overlay, volume bars, hover crosshair with OHLC. Accuracy chart: cumulative directional accuracy over resolved predictions, a 50% reference line, plus tiles for resolved count, accuracy and mean absolute calibration error. Always show the sample size and warn when n < `CALIBRATION_MIN_SAMPLES`.
+- Badge rule (implement as a pure function `badgeFor(health, candles)` and unit-test it): "🟢 LIVE" ONLY when `/health` reports `mock_mode=false` AND the candles response has `source:"live"`; otherwise "🟡 MOCK DATA". If the backend is unreachable (for example on the static Netlify/Vercel deploys, which have no API), fall back to clearly labelled synthetic candles.
+- MarketOracle UI: news-credibility status pills plus source-tier tags, circular SVG gauge for the Arbiter probability, dual progress bar (Bull score vs Bear score), 3-paragraph executive summary, MOCK badge when `mock:true`.
+- Chart logic lives in `jarvis-core.mjs` as pure functions returning SVG strings (`normaliseCandles`, `sma`, `aggregateAccuracy`, `renderCandles`, `renderAccuracy`, `badgeFor`), so tests need no DOM library.
+
+## 5. BACKEND SPEC
+3-tier architecture:
+- Tier 1 Collectors: deterministic jobs writing to a signals cache (`signal_history`). 0 LLM calls. UNSPECIFIED which collectors exist today; do not fabricate any. `/health/agents` reports only collectors that actually ran.
+- Tier 2 Analyst: ONE model call per chat turn when a key is configured, otherwise the deterministic `buildJarvisAnalystResponse`. Reads cached Tier-1 signals as tool input and reasons across 7 desk roles (Scout, Technical, Fundamental, News, Quant, Risk, Portfolio) as a RUBRIC inside one prompt, not 7 calls.
+- Tier 3 Risk gate: rule-based, no LLM: position-size caps, de-duplication, market-cap floor, disclaimer stamp.
+
+Route map (preserve paths; keep existing response shapes where `public/` or `tests/` depend on them, and add labels additively, or via an `X-Data-Source` header when the body is a bare array):
+
+| Route | Today | Required |
+|---|---|---|
+| `GET /health` | hard-coded `mock_mode:true, ok:true` | real: `mock_mode=false` only if `MOCK_MODE=false` AND `FINNHUB_API_KEY` set; include db check, uptime |
+| `GET /health/agents` | fabricated "healthy" with `last_run=now` | real collector state; empty list and `scheduler_running:false` if none |
+| `GET /api/universe` | 8 mock rows | server-side `q`, `region` (us\|in\|global), `limit`/`offset` over `securities`; if table empty return the pinned seed labelled `source:"mock-seed"` |
+| `GET /api/universe/stats` | missing | counts by region and exchange |
+| `GET /api/company/:symbol/profile` | fabricates values for ANY symbol | 404 for unknown; data from `securities` + `company_relationships` |
+| `GET /api/company/:symbol/supply-chain` | fabricates generic entries for unknown symbols | from `company_relationships` only; per-column coverage badge FULL (>=3 verified) / PARTIAL (1-2) / NO DATA YET (0, honest reason such as "No supplier disclosures filed yet for {symbol}") |
+| `GET\|POST /api/chat` | public, unlimited, no label | per-IP rate limit `CHAT_RATE_LIMIT_PER_MINUTE` (default 20, 429 + `Retry-After`); require a valid session whenever any LLM key is configured; add `mock`/`source` |
+| `POST /api/chat/stock-verdict` | canned verdict; canned news defaults to "Confirmed True" | MarketOracle (below); canned path labelled `mock:true`; no veracity claim without supplied news |
+| `GET /api/screens/profitable` | bare array, no mock flag | always labelled MOCK until real collectors exist |
+| `GET /api/market/snapshot` | `source:'Finnhub Institutional Feed'` on hard-coded numbers; `asOf`=process start | `source:"synthetic-demo"`, fixed seed `as_of`; Finnhub quotes only if live per rule below |
+| `GET /api/market/candles/:symbol?timeframe=1D` | missing | `{symbol, timeframe, source:"live"\|"mock", as_of:ISO8601, candles:[{t (unix ms), o,h,l,c,v}]}`, ascending, validated, 404 for unknown symbol, never an empty 200 |
+| `GET /api/predictions/performance?ticker=&days=` | missing | `{n, directional_accuracy, mean_abs_calibration_error, series:[{ts,n,accuracy}]}` from resolved rows only; `n:0` with empty series is a valid 200 |
+| `GET /api/rankings` | naive score from `changePct` | trust-weighted by `agent_trust_scores`; labelled mock when that table is empty |
+| `GET /api/desk/brief` | missing | 8:00 AM brief via the 7-role pipeline; deterministic and labelled when no LLM |
+| `GET /api/portfolio` | fabricated $248,500 portfolio | `botInstance` paper portfolio, labelled SIMULATED PAPER |
+| `GET /api/news` | works; see section 10 | `force=true` requires a session |
+| `/api/bot/*`, `/api/watchdog/*`, `/api/admin/incidents` | exist | keep; no behaviour change except labels |
+
+No WebSocket: `server.js` is dependency-free and has no WS server. **ASSUMPTION A4:** replace `WS /ws/prices` with client polling of `/api/market/snapshot` (UNSPECIFIED interval, default 15 s).
+
+**FastAPI proxy (`tryProxyToFastApi`).** Make it opt-in via `JARVIS_FASTAPI_URL` (empty = off, the default). Strip `cookie` and `authorization` before forwarding. Stamp `X-Jarvis-Source: native|fastapi` on every proxied or native JARVIS response so provenance is never mixed silently.
+
+**Candles live source.** UNSPECIFIED: Finnhub candles if the key's plan includes them; otherwise stay `source:"mock"`. Never relabel. Mock candles come from a seeded PRNG (symbol + timeframe), end-aligned to the current UTC day, with OHLC validity (`l <= min(o,c)`, `h >= max(o,c)`) and `source:"mock"`.
+
+**MarketOracle** (Google Gemini when `GEMINI_API_KEY` is set, model from `GEMINI_MODEL` default `gemini-2.5-flash`, temperature 0.1, news-grounded, no unsupported claims; otherwise the deterministic engine, labelled mock), 4 stages:
+1. News Veracity and Attribution Audit. Tiers: T1 official primary (SEC 8-K/10-Q/10-K, company PR, central banks), T2 institutional press (Bloomberg, Reuters, WSJ, FT), T3 aggregators (Yahoo Finance, MarketWatch, analyst notes), T4 social/speculative. Status: Confirmed True | Probable / Ongoing | Unverified Rumor | Debunked / False. With no supplied news the status is "Unverified: no news supplied".
+2. Bull Thesis (score 1-10): revenue/EPS drivers, multiple expansion, institutional accumulation.
+3. Bear Thesis (score 1-10): sell-the-news, execution risk, margin compression, dilution, macro.
+4. Arbiter: verdict (Strong Upward Bias | Moderate Upward Bias | Neutral / Rangebound | Downward Bias), probability of price increase 0-100%, decisive tipping factor, invalidation criteria.
+
+Supply-chain columns: Inputs = what the company buys (spend share %, sourcing method). Owned = subsidiaries/stakes (ownership %, country, listed status) plus a compact profile card. Outputs = products/segments/customers (revenue share %, filing refs).
+
+Other rules: index constituents refresh from public Wikipedia tables at most once per day; Finnhub data counts as live only if `MOCK_MODE=false` and a valid `FINNHUB_API_KEY` is set; congressional-trades polling stays disabled until Quiver Quantitative limits, cost and redistribution terms are verified; CORS stays same-origin (no wildcard): the `OPTIONS` handler may only answer with an allow-list from `CORS_ORIGINS` (default empty).
+
+## 6. DATA MODEL (SQLite, WAL)
+**ASSUMPTION A5.** Two database files. `data/platform.db` (owned by `db.js`) keeps users, sessions and recovery codes; it is never archived or exported. `data/jarvis.db` (new `jarvis-db.js`, path from `JARVIS_DB_PATH`) holds the analytics tables. `jarvis.db` already in the repo root is the reference schema: reproduce its DDL exactly (read it from `sqlite_master`), then add `scripts/import-jarvis-db.js` that copies its rows once into `data/jarvis.db`. Postgres failover (`DATABASE_URL`) is NOT built (needs a new dependency); list it as a risk.
+
+Tables (already present in the root `jarvis.db`): `securities`, `company_relationships`, `predictions`, `prediction_ledger`, `agent_trust_scores`, `growth_weights`, `weight_changelog`, `reconciliation_audits`, `signal_history`, `holdings`, `thesis_snapshots`. Current counts: securities 0, company_relationships 215, predictions 63, prediction_ledger 52, growth_weights 1, the rest 0. Do not invent rows; an empty table yields an honest empty state.
+
+Self-improvement layer: predictions resolve after `horizon_hours`; reconciliation audits score hits and misses; growth weights are versioned and may move by at most `WEIGHT_UPDATE_MAX_STEP` per update, only after `CALIBRATION_MIN_SAMPLES` samples over `CALIBRATION_WINDOW_DAYS`, and are promoted automatically only if `WEIGHT_AUTO_PROMOTE=true` (default false).
+
+Snapshot archive (`scripts/snapshot.js`): archives `data/jarvis.db` records only, as sorted, deterministic, gzip-compressed JSON shards in `data_snapshots/*.json.gz` (each well under 50 MB) with a SHA-256 `manifest.json`. `node scripts/snapshot.js --rebuild` restores the DB. Running it twice on unchanged data must produce identical manifest hashes. Use `node:zlib` and `node:crypto`; no new dependency.
+
+## 7. CONFIG AND DOCKER
+`.env.example` lists NAMES; secret values are always blank. Keep the existing Titan variables (NODE_ENV, PORT, TRUST_PROXY, ENFORCE_AUTH_GATE, HOST_PASSWORD, HOST_SALT, SMTP_*, SESSION_SECRET, TURNSTILE_*) and make the placeholder values obviously non-secret. List only variables the code actually reads.
+- Secrets (blank): `FINNHUB_API_KEY`, `ANTHROPIC_API_KEY`, `GEMINI_API_KEY`. (`GROQ_API_KEY`, `ELEVENLABS_API_KEY`, `CONGRESS_TRADES_API_KEY`, `REDIS_URL` stay out until a module reads them.)
+- Non-secret defaults: `MOCK_MODE=true`; `GEMINI_MODEL=gemini-2.5-flash`; `SEC_EDGAR_USER_AGENT="JARVIS-Dashboard contact@example.com"` (placeholder; replace with a real contact before enabling SEC fetches); `TITAN_DATA_DIR=./data`; `JARVIS_DB_PATH=./data/jarvis.db`; `JARVIS_FASTAPI_URL=` (off); `CORS_ORIGINS=`; `DASHBOARD_PINS=NVDA,MSFT,AAPL,GOOGL,AMZN,META,TSLA`; `UNIVERSE_SOURCE` (us_all | india_all | global_all | sp500 | nasdaq100 | watchlist, comma-combinable; default `watchlist` until universe sync exists); `CHAT_RATE_LIMIT_PER_MINUTE=20`; `CALIBRATION_MIN_SAMPLES=50`; `CALIBRATION_WINDOW_DAYS=30`; `WEIGHT_UPDATE_MAX_STEP=0.10`; `WEIGHT_AUTO_PROMOTE=false`; `TRIAD_LLM_ENABLED=false`; `TRIAD_SEED=`; `TRIAD_RISK__*` (section 8).
+- Docker: single service `app` (build `.`, base `node:22-slim` because `bcrypt` and `sharp` are native; `env_file` optional; port 3000; named volume mounted at `/app/data`; `restart: unless-stopped`; healthcheck on `GET /health`). `.env`, `data/`, `*.db`, `node_modules`, `.git` go in `.dockerignore`, so `.env` is never copied into the image. No Redis service: nothing reads it, and the in-memory OTP/rate-limit stores keep the app single-instance (document that).
+- `.gitignore` must add: `.env.*` with `!.env.example`, `data/`, `*.db`, `*.db-wal`, `*.db-shm`, `*.sqlite*`, `*.tsbuildinfo`, `live_prices/`, `chat_logs/`, `dist/`, `build/`. Remove already-tracked `*.db` from the index (`git rm --cached`).
+- `package.json`: add `"engines": {"node": ">=22.13"}`.
+
+## 8. TRIAD SPEC (JavaScript, extends `trading-bot.js`)
+Keep every existing export (`botInstance`, `TradingBotController`, `TrackerAgent`, `PredictorAgent`, `CommanderAgent`, `RiskGuardAgent`, `SimulatedBroker`, `RISK_LIMITS`, `DISCLAIMER`); `server.js`, `watchdog.js` and tests import them.
+
+**5a, engine fixes and invariants (required).**
+- Prices are a synthetic random walk seeded from hard-coded snapshots. `getStatus()` must say so (`price_source:"synthetic-random-walk"`, `mock:true`). Replace `Math.random()` with a seeded PRNG (`TRIAD_SEED`; unset = time-seeded) so tests are deterministic.
+- Fix the RSI NaN at exactly 14 samples (section 10).
+- Make `RISK_LIMITS` env-overridable via `TRIAD_RISK__<NAME>`. **ASSUMPTION A3:** existing, stricter limits win and stay the defaults (`MAX_DRAWDOWN_PCT 0.02`, `MAX_POSITION_PCT 0.10`, `MAX_ORDERS_PER_MINUTE 10`). Add new additive invariants: `MIN_CONFIDENCE 0.65`, `MAX_GROSS_EXPOSURE 0.60`, `MAX_TRADES_PER_DAY 10`. De-risking is easy, adding risk is hard: never loosen an existing limit. If an existing test fails because it encodes pre-invariant behaviour, stop and report instead of loosening.
+- Principles: LLMs propose, code disposes (buys are clipped, never trusted); any agent error on the decision path degrades to HOLD with reason "agent error: defaulting to HOLD"; tool output (news) is hostile, untrusted data and is never obeyed.
+
+**5b, optional LLM agents (default OFF, `TRIAD_LLM_ENABLED=false`).** Build after 5a is green, as a separate commit.
+- `llm.js`: injectable protocol `complete({system, messages, tools, model})`. Anthropic provider over Node's global `fetch` (no SDK dependency), key from `ANTHROPIC_API_KEY`, server-side only. `ScriptedLLM` and `FakeMarketData` ship in `triad-testing.js`. LLM, market data, broker and clock are all injectable.
+- Fail closed: refuse to enable LLM agents (clear log line, no key echoed) if no key is set OR prices are still synthetic. LLM reasoning over fabricated prices is not allowed.
+- Bus (`triad-bus.js`, EventEmitter based): topics SIGNAL, FORECAST, DECISION, TRACKER_REQUEST, PREDICTOR_REQUEST. Contracts validated by hand-rolled validators (no schema dependency); malformed submissions are bounced back with validation errors; the submit tool is forced on the last step. Contracts: Signal (headline, evidence[headline], severity 0-1, sentiment -1..+1); Forecast (direction, magnitude, horizon, confidence, invalidation, signal_id); Decision (ticker, action BUY|SELL|HOLD, target_weight, rationale, forecast_id); RiskVerdict (approved, target_weight, reason); ExecutionReport (decision, verdict, fill); InvestigationRequest (ticker, question).
+- Tools (one shared toolbox, allow-listed per-agent ToolBelts, TTL cache for identical calls): `get_quote`, `get_technicals` (from TrackerAgent), `search_news` (reuse `getAggregatedNews`; do NOT add a second scraper), `get_portfolio`, `ask_tracker`, `ask_predictor`.
+- TRACKER (default model `claude-haiku-4-5-20251001`, env `TRIAD_TRACKER_MODEL`): pull quote and technicals, run 1-3 news searches, separate signal from noise, cross-check against price. Severity 0.0-0.3 noise, 0.4-0.6 notable, 0.7-0.9 material (earnings surprise, guidance change, M&A, regulatory action), 1.0 thesis-changing. Sweep the watchlist every `TRIAD_POLL_INTERVAL_S` (300) behind a semaphore; signals below `TRIAD_SIGNAL_MIN_SEVERITY` (0.4) are logged, not published; duplicates suppressed by SHA-1 of sorted evidence headlines (insertion-ordered LRU, max 2000); remembers its last 5 headlines per ticker; answers Commander questions via TRACKER_REQUEST (concurrency 2).
+- PREDICTOR (default `claude-sonnet-5-5`, env `TRIAD_PREDICTOR_MODEL`): consumes SIGNAL and PREDICTOR_REQUEST (concurrency 2); setup (trend vs SMA20/50, RSI, volatility, volume), independent catalyst check with 1-2 searches, judge how much is priced in, choose direction, magnitude and horizon consistent with realised volatility, state what would prove it wrong. Calibration: 0.50 = coin flip; conflicting or priced-in evidence pulls toward 0.50; above 0.80 only for rare multi-source confirmed catalysts with supportive technicals; prefer FLAT with low confidence over a forced call.
+- COMMANDER (default `claude-opus-5-5`, env `TRIAD_COMMANDER_MODEL`): consumes FORECAST with concurrency 1 (decisions serialised so risk and cash accounting never race). Long-only. If confidence < ~0.75 or evidence is thin, delegate (at most two delegations); size by conviction (small starter positions for moderate conviction); BUY opens or adds, SELL reduces or exits (`target_weight` 0 = full exit), HOLD when there is no clear edge. Deterministic execution after the LLM: fetch quote, mark the position and every other held ticker (failed refresh falls back to last mark), `RiskGuard.validateOrder`, `delta = target_weight * equity - current market value`, `qty = floor(|delta| / price)`, reject if `qty < 1`, `broker.executeOrder`, audit via `recordAuditTrade`. Any exception means HOLD.
+- CLI `triad-cli.js`: `node triad-cli.js tools | once NVDA [--offline] | run -t AAPL,NVDA -i 300`. `--offline` uses ScriptedLLM + FakeMarketData and must end by printing an ExecutionReport as JSON. Add npm scripts `triad:once` and `triad:run`.
+- Roadmap, do NOT build unless asked: decision journal beyond `trade_audit_log`, forecast scoring with calibration feedback, stop-loss/take-profit, Redis bus, shorting/options risk.
+
+## 9. TESTS (`node --test`, offline; add every new file to `test:all`)
+- Test isolation prerequisites: `TITAN_DATA_DIR` override in `db.js`/`jarvis-db.js`/`trading-bot.js`/`watchdog.js`; `.env` loader must not override real environment variables; `db.js` cleanup interval must `unref()`.
+- Unit: candle normalisation (unix seconds vs ms, ISO strings, bad rows dropped); SMA; accuracy aggregation; mock-candle determinism and OHLC validity; `badgeFor`; rate limiter with a fake clock; coverage-badge function (FULL/PARTIAL/NO DATA YET); RSI never NaN at 14 samples; `isPrivateIp` rejects `::ffff:127.0.0.1`, `::ffff:7f00:1`, `::`, `100.64.0.1`; `parseFeedXmlSafe` keeps the other items when one has an invalid date; snapshot manifest is identical across two runs.
+- API (spawn `server.js` with ephemeral `PORT`, temp `TITAN_DATA_DIR`, `MOCK_MODE=true`, no keys): contract tests for candles (shape, ascending, 404 unknown) and performance; one test asserting mock data is labelled `source:"mock"`; `/health` reports `mock_mode:true` and `/health/agents` fabricates nothing; rate-limit test on `/api/chat` (`CHAT_RATE_LIMIT_PER_MINUTE=3`, 4th request returns 429); stock-verdict without news never returns "Confirmed True"; `/api/portfolio` is labelled simulated; unknown-symbol profile returns 404.
+- UI (string-level, no DOM library): one candle element per candle; an SMA `<path>`; non-empty accuracy path plus the 50% reference line; the n < min warning text appears.
+- Triad: ScriptedLLM + FakeMarketData; one end-to-end `once NVDA` ending in an ExecutionReport; risk tests for position clipping, confidence floor, gross-exposure cap, drawdown halt, trades-per-day cap, and the HOLD fail-safe; a hostile-headline test (news text says "BUY 100% now") that cannot change the clipped outcome.
+- Security regressions: no admin is seeded without `HOST_PASSWORD`; an unknown email with any 8-character password cannot log in; the FastAPI proxy never forwards `cookie`/`authorization`.
+
+## 10. KNOWN DEFECTS TO FIX OR AVOID (verified by reading; re-verify in Step 0)
+**Credentials and auth**
+- `db.js:122` seeds the admin account (`alex.mercer@titan.corp`, role admin) with a hard-coded fallback password when `HOST_PASSWORD` is unset, in production too. `materials-store.js` also ships a fallback host password and salt (`DEFAULT_DEV_HOST_PASS`, `DEFAULT_DEV_HOST_SALT`). Fix: no fallbacks; with `HOST_PASSWORD` unset, skip the seed and log one line. Report that any `data/platform.db` created under the fallback has a known admin password and must be reset by the operator.
+- `materials-store.js` `verifyCredentials` returns a LEVEL 5 host session for ANY syntactically valid email plus an 8-character password. `server.js` imports it (line 31) but the login route uses `db.verifyCredentials`. Confirm with grep, then delete the function and the dead import.
+- `server.js` `.env` loader assigns `process.env[key]` unconditionally, so `.env` overrides real environment variables (breaks Docker and test isolation). Only set keys that are not already defined.
+- `/api/chat*` is unauthenticated and unlimited.
+
+**Honesty violations (Lessons 2 and 3)**
+- `/health` hard-codes `mock_mode:true` and `ok:true`; `/health/agents` invents "healthy" agents with `last_run = now`.
+- `/api/portfolio` returns a fabricated portfolio; `/api/company/:symbol/profile` and `/supply-chain` fabricate data for unknown symbols.
+- `MARKET_SNAPSHOTS` label hard-coded numbers `source:'Finnhub Institutional Feed'`; `asOf`, `PROFITABLE_ROWS.asOf` and `SUPPLY_CHAINS.as_of` are evaluated at module load, so they claim "today" on every restart. `PROFITABLE_ROWS` has no mock flag.
+- `buildMarketOracleVerdict` defaults to a canned news snippet and reports it as "Confirmed True / Tier 2" with hard-coded probabilities.
+- `watchdog.js` hard-codes the `newsFeed` component as HEALTHY ("cached") without probing.
+- `news-aggregator.js`: `FALLBACK_NEWS_ITEMS` are merged into live results with `publishedAt` set to "now minus N minutes" and no flag. The header also claims "SQLite persistence", which does not exist. Fix: separate fallback samples, flag `mock:true`, fixed timestamps, use only when live fetch yields nothing; correct the header or implement persistence.
+- `trading-bot.js` header says "deterministic" but `tickMarket` uses `Math.random()`.
+
+**Bugs**
+- `TrackerAgent.getIndicators`: at exactly 14 price samples the RSI loop reads `hist[-1]`, producing `NaN` (verified). Require 15 samples.
+- `news-aggregator.js`: `new Date(bad).toISOString()` throws `RangeError`, which drops the whole feed because of one bad date; the later `isNaN` check is dead code (verified).
+- `isPrivateIp` treats `::ffff:127.0.0.1`, `::ffff:7f00:1`, `::` and `100.64.0.0/10` as public (verified), so the SSRF guard can be bypassed. `fetchFeedHttp` follows redirects without re-running `validateFeedUrlSafe`, and DNS is resolved separately from the connect (rebinding window). Fix: validate every hop, pin the validated IP for the request, cap redirects at 3, resolve relative `Location`.
+- `news-aggregator.js` User-Agent is a made-up contact; SEC requires a real declared contact. Use `SEC_EDGAR_USER_AGENT`.
+- `db.js` session-cleanup `setInterval` is not `unref()`'d, so any test that requires `db.js` can hang.
+- `tryProxyToFastApi` forwards all headers (cookies, authorization) to `127.0.0.1:8000` and falls back silently.
+- `/api/news?force=true` lets anyone trigger outbound fetches.
+
+**Repo hygiene**
+- `.gitignore` does not exclude `data/`, `*.db`, `*.db-wal`, `*.db-shm`, `*.sqlite*`. `data/platform.db` (password hashes, sessions) and `jarvis.db` are one `git add .` from being committed.
+- `netlify.toml` has a self-referential `/api/* -> /api/:splat` rewrite (a no-op). Static deploys have no backend; do not add API proxying there unless a backend URL is supplied. Keep `connect-src 'self'`.
+- No secret scanning exists. Add `.gitleaks.toml` (allow-list `.env.example` placeholders), `.githooks/pre-commit` running `gitleaks protect --staged` and failing with install instructions if gitleaks is missing, and an `npm run prepare` that sets `core.hooksPath .githooks`. If no CI config exists, add a minimal `.github/workflows/ci.yml` (Node 22, `npm ci`, `npm run test:all`).
+
+## 11. ACCEPTANCE (prove each with command output or a screenshot)
+1) `npm ci`, `npm test` and `npm run test:all` exit 0 on Node >=22.13, offline.
+2) With `MOCK_MODE=true`: `/health` says `mock_mode:true`, every JARVIS payload carries `mock`/`source`/true `as_of`, every chart and the MarketOracle card show MOCK DATA, and the LIVE badge appears only per the badge rule (unit-tested).
+3) `docker compose up --build` serves UI and API; `GET /health` works; `.env` is absent from the image (`docker run --rm <img> ls -a /app`).
+4) Price chart and accuracy chart render at 1360px width with zero console errors (Playwright, existing devDependency; if browsers cannot be installed, say so under "could not verify").
+5) `node triad-cli.js once NVDA --offline` runs with no network and ends in an ExecutionReport.
+6) Secret scan of the working tree and git history is clean, and `grep -R` finds no remaining fallback password literal in code (history will still contain it: report that as a rotation item, do not rewrite history).
+
+## 12. DELIVERABLE
+Small commits, one per workflow step (5a and 5b separate). Finish with a short report: what changed, what you verified, what you could not verify, assumptions made (A1 architecture, A2 data paths, A3 stricter risk limits win, A4 polling instead of WebSocket, A5 two databases), credentials to rotate or reset, and risks left (Postgres failover not built, single-instance in-memory stores, Finnhub candle plan limits, synthetic prices in Triad). If something is ambiguous, state the assumption and continue.
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-10-07T12:17:07+05:30.
+</ADDITIONAL_METADATA>
+<USER_SETTINGS_CHANGE>
+The user changed setting `Model Selection` from None to Gemini 3.8 Flash (High). No need to comment on this change if the user doesn't ask about it. If reporting what model you are, please use a human readable name instead of the exact string.
+</USER_SETTINGS_CHANGE>
