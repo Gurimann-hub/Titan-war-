@@ -17,7 +17,9 @@ if (fs.existsSync(envPath)) {
       if (match) {
         const key = match[1].trim();
         let value = match[2].trim().replace(/^['"](.*)['"]$/, '$1');
-        process.env[key] = value;
+        if (process.env[key] === undefined) {
+          process.env[key] = value;
+        }
       }
     });
     console.log('[TITAN] Loaded configuration from .env');
@@ -28,12 +30,18 @@ if (fs.existsSync(envPath)) {
 
 const {
   HOST_USER,
-  verifyCredentials,
   getAllMaterials,
   getMaterialById,
   addMaterial,
   getStorageMetrics
 } = require('./materials-store');
+
+const { RateLimiter } = require('./rate-limit');
+const { getCandles, isKnownSymbol } = require('./market-data');
+const chatLimiter = new RateLimiter({
+  limit: parseInt(process.env.CHAT_RATE_LIMIT_PER_MINUTE, 10) || 20,
+  windowMs: 60 * 1000
+});
 
 const {
   MARKET_SNAPSHOTS,
@@ -495,6 +503,7 @@ const MIME_TYPES = {
   '.html': 'text/html; charset=UTF-8',
   '.css': 'text/css; charset=UTF-8',
   '.js': 'application/javascript; charset=UTF-8',
+  '.mjs': 'text/javascript; charset=UTF-8',
   '.json': 'application/json; charset=UTF-8',
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
@@ -581,13 +590,20 @@ function parseCookies(req) {
 const server = http.createServer(async (req, res) => {
   // Wrap entire request lifecycle in top-level try/catch to prevent unhandled process crashes
   try {
-    // CORS Preflight Handling (Restricted to same-origin or explicit options)
+    // CORS Preflight Handling (Restricted to same-origin or explicit CORS_ORIGINS allow-list)
     if (req.method === 'OPTIONS') {
-      res.writeHead(204, {
+      const allowedOrigins = (process.env.CORS_ORIGINS || '').split(',').map(s => s.trim()).filter(Boolean);
+      const origin = req.headers.origin;
+      const headers = {
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization',
         'Access-Control-Max-Age': '86400'
-      });
+      };
+      if (origin && allowedOrigins.includes(origin)) {
+        headers['Access-Control-Allow-Origin'] = origin;
+        headers['Vary'] = 'Origin';
+      }
+      res.writeHead(204, headers);
       res.end();
       return;
     }
@@ -1060,27 +1076,30 @@ const server = http.createServer(async (req, res) => {
     // TRADING ASSISTANT API ROUTES (JARVIS & MarketOracle Integration)
     // =========================================================================
     if (pathname === '/health' && req.method === 'GET') {
+      const isMock = process.env.MOCK_MODE !== 'false' || !process.env.FINNHUB_API_KEY;
+      let dbCheck = 'ok';
+      try {
+        const row = db.db.prepare('PRAGMA integrity_check(1);').get();
+        dbCheck = row ? Object.values(row)[0] : 'ok';
+      } catch (e) {
+        dbCheck = 'error: ' + e.message;
+      }
+
       return sendJson(res, 200, {
-        status: 'healthy',
-        ok: true,
-        mock_mode: true,
+        status: dbCheck === 'ok' ? 'healthy' : 'degraded',
+        ok: dbCheck === 'ok',
+        mock_mode: isMock,
+        database: dbCheck,
         uptime: Math.floor(process.uptime()),
-        timestamp: new Date().toISOString(),
-        agents: ['congress_trades_agent', 'form13f_agent', 'insider_buys_agent', 'fundamentals_agent', 'sentiment_price_agent', 'energy_oil_agent', 'geo_risk_agent', 'reconciliation_agent']
-      });
+        timestamp: new Date().toISOString()
+      }, { 'X-Jarvis-Source': 'native' });
     }
 
     if (pathname === '/health/agents' && req.method === 'GET') {
       return sendJson(res, 200, {
-        scheduler_running: true,
-        agents: [
-          { name: 'congress_trades_agent', status: 'healthy', last_run: new Date().toISOString() },
-          { name: 'form13f_agent', status: 'healthy', last_run: new Date().toISOString() },
-          { name: 'insider_buys_agent', status: 'healthy', last_run: new Date().toISOString() },
-          { name: 'fundamentals_agent', status: 'healthy', last_run: new Date().toISOString() },
-          { name: 'sentiment_price_agent', status: 'healthy', last_run: new Date().toISOString() }
-        ]
-      });
+        scheduler_running: false,
+        agents: []
+      }, { 'X-Jarvis-Source': 'native' });
     }
 
     if (pathname === '/api/market/snapshot' && req.method === 'GET') {
@@ -1104,17 +1123,34 @@ const server = http.createServer(async (req, res) => {
         source: 'synthetic-demo',
         mock: true,
         stale: false,
-        asOf: new Date().toISOString()
+        asOf: '2026-09-09T12:00:00.000Z'
       });
 
-      return sendJson(res, 200, snapshots);
+      return sendJson(res, 200, snapshots, { 'X-Jarvis-Source': 'native' });
+    }
+
+    if (pathname.startsWith('/api/market/candles/') && req.method === 'GET') {
+      const proxied = await tryProxyToFastApi(req, res, req.url);
+      if (proxied) return;
+
+      const rawSymbol = pathname.replace('/api/market/candles/', '').trim();
+      const timeframe = parsedUrl.searchParams.get('timeframe') || '1D';
+      const candleData = await getCandles(rawSymbol, timeframe);
+      if (!candleData) {
+        return sendJson(res, 404, {
+          success: false,
+          error: 'Unknown security symbol',
+          symbol: rawSymbol
+        }, { 'X-Jarvis-Source': 'native' });
+      }
+      return sendJson(res, 200, candleData, { 'X-Jarvis-Source': 'native' });
     }
 
     if (pathname === '/api/screens/profitable' && req.method === 'GET') {
       const proxied = await tryProxyToFastApi(req, res, req.url);
       if (proxied) return;
 
-      return sendJson(res, 200, PROFITABLE_ROWS);
+      return sendJson(res, 200, PROFITABLE_ROWS, { 'X-Jarvis-Source': 'native' });
     }
 
     if (pathname.startsWith('/api/company/') && pathname.endsWith('/supply-chain') && req.method === 'GET') {
@@ -1122,17 +1158,25 @@ const server = http.createServer(async (req, res) => {
       if (proxied) return;
 
       const symbol = pathname.replace('/api/company/', '').replace('/supply-chain', '').trim().toUpperCase();
-      const chain = SUPPLY_CHAINS[symbol] || {
-        symbol: symbol,
-        company_name: MARKET_SNAPSHOTS[symbol]?.company || symbol,
-        coverage: { inputs: 'partial', owned: 'partial', outputs: 'partial' },
-        inputs: [{ name: 'Tier 1 Global Semiconductor Foundries', role: 'Foundry & Component Fabrication', spend_share_pct: 35.0, confidence: 0.85 }],
-        owned: [{ name: 'Strategic Enterprise Holdings LLC', role: 'Operating Subsidiary', stake_pct: 100, country: 'USA' }],
-        outputs: [{ name: 'Global Enterprise Cloud Tenants', role: 'Enterprise Software & Compute', revenue_share_pct: 45.0, confidence: 0.88 }],
-        as_of: new Date().toISOString().split('T')[0]
-      };
+      const chain = SUPPLY_CHAINS[symbol];
+      if (!chain) {
+        return sendJson(res, 200, {
+          data: {
+            symbol,
+            company_name: MARKET_SNAPSHOTS[symbol]?.company || symbol,
+            coverage: { inputs: 'NO DATA YET', owned: 'NO DATA YET', outputs: 'NO DATA YET' },
+            inputs: [],
+            owned: [],
+            outputs: [],
+            reason: `No supplier disclosures filed yet for ${symbol}`,
+            as_of: '2026-09-09',
+            mock: true
+          },
+          disclaimer: DISCLAIMER
+        }, { 'X-Jarvis-Source': 'native' });
+      }
 
-      return sendJson(res, 200, { data: chain, disclaimer: DISCLAIMER });
+      return sendJson(res, 200, { data: chain, disclaimer: DISCLAIMER }, { 'X-Jarvis-Source': 'native' });
     }
 
     if (pathname.startsWith('/api/company/') && pathname.endsWith('/profile') && req.method === 'GET') {
@@ -1141,20 +1185,55 @@ const server = http.createServer(async (req, res) => {
 
       const symbol = pathname.replace('/api/company/', '').replace('/profile', '').trim().toUpperCase();
       const snapshot = MARKET_SNAPSHOTS[symbol];
+      if (!snapshot) {
+        return sendJson(res, 404, {
+          success: false,
+          error: `Company profile not found for unknown symbol: ${symbol}`
+        }, { 'X-Jarvis-Source': 'native' });
+      }
+
       return sendJson(res, 200, {
         data: {
           symbol,
-          company_name: snapshot?.company || symbol,
+          company_name: snapshot.company,
           sector: 'Technology & Corporate Warfare',
-          price: snapshot?.price || 120.0,
-          market_cap: snapshot?.marketCap || 1000000000000,
-          pe_ratio: snapshot?.peRatio || 30.0
+          price: snapshot.price,
+          market_cap: snapshot.marketCap,
+          pe_ratio: snapshot.peRatio
         },
         disclaimer: DISCLAIMER
-      });
+      }, { 'X-Jarvis-Source': 'native' });
     }
 
     if (pathname === '/api/chat' && (req.method === 'POST' || req.method === 'GET')) {
+      // 1. Rate limiting check
+      const rate = chatLimiter.check(clientIp);
+      if (!rate.allowed) {
+        return sendJson(res, 429, {
+          success: false,
+          status: 'error',
+          message: 'Chat rate limit exceeded. Please wait before asking another question.'
+        }, {
+          'Retry-After': String(rate.retryAfter || 60),
+          'X-Jarvis-Source': 'native'
+        });
+      }
+
+      // 2. Auth requirement if LLM provider key is configured
+      const hasLlmKey = Boolean((process.env.ANTHROPIC_API_KEY || '').trim() || (process.env.GEMINI_API_KEY || '').trim());
+      if (hasLlmKey) {
+        const cookies = parseCookies(req);
+        const token = cookies['titan_session'] || (req.headers.authorization?.startsWith('Bearer ') ? req.headers.authorization.slice(7) : null);
+        const session = verifySession(token);
+        if (!session) {
+          return sendJson(res, 401, {
+            success: false,
+            status: 'error',
+            message: 'Authentication session required to access AI chat co-pilot when LLM provider is configured.'
+          }, { 'X-Jarvis-Source': 'native' });
+        }
+      }
+
       const proxied = await tryProxyToFastApi(req, res, req.url);
       if (proxied) return;
 
@@ -1179,7 +1258,8 @@ const server = http.createServer(async (req, res) => {
         res.writeHead(200, {
           'Content-Type': 'text/plain; charset=UTF-8',
           'Cache-Control': 'no-cache',
-          'X-Jarvis-Mode': 'mock'
+          'X-Jarvis-Mode': 'mock',
+          'X-Jarvis-Source': 'native'
         });
         const chunkSize = 120;
         for (let offset = 0; offset < reply.length; offset += chunkSize) {
@@ -1189,7 +1269,13 @@ const server = http.createServer(async (req, res) => {
         return;
       }
 
-      return sendJson(res, 200, { data: reply, disclaimer: DISCLAIMER });
+      return sendJson(res, 200, {
+        data: reply,
+        mock: true,
+        source: 'native-analyst',
+        as_of: '2026-09-09T12:00:00.000Z',
+        disclaimer: DISCLAIMER
+      }, { 'X-Jarvis-Source': 'native' });
     }
 
     if (pathname === '/api/chat/stock-verdict' && req.method === 'POST') {
@@ -1202,7 +1288,7 @@ const server = http.createServer(async (req, res) => {
       const newsSnippet = (body.news_snippet || '').trim();
 
       const verdict = buildMarketOracleVerdict(ticker, userQuery, newsSnippet);
-      return sendJson(res, 200, verdict);
+      return sendJson(res, 200, verdict, { 'X-Jarvis-Source': 'native' });
     }
 
     if (pathname === '/api/rankings' && req.method === 'GET') {
@@ -1218,7 +1304,7 @@ const server = http.createServer(async (req, res) => {
         as_of: s.asOf
       }));
 
-      return sendJson(res, 200, { data: rows, disclaimer: DISCLAIMER });
+      return sendJson(res, 200, { data: rows, mock: true, disclaimer: DISCLAIMER }, { 'X-Jarvis-Source': 'native' });
     }
 
     if (pathname === '/api/universe' && req.method === 'GET') {
@@ -1233,25 +1319,21 @@ const server = http.createServer(async (req, res) => {
         market_cap: s.marketCap,
         pe_ratio: s.peRatio
       }));
-      return sendJson(res, 200, { data: universe, total: universe.length, disclaimer: DISCLAIMER });
+      return sendJson(res, 200, { data: universe, total: universe.length, mock: true, disclaimer: DISCLAIMER }, { 'X-Jarvis-Source': 'native' });
     }
 
     if (pathname === '/api/portfolio' && req.method === 'GET') {
       const proxied = await tryProxyToFastApi(req, res, req.url);
       if (proxied) return;
 
+      const botStatus = botInstance.getStatus();
       return sendJson(res, 200, {
-        cash_balance: 100000.0,
-        portfolio_value: 248500.0,
-        unrealized_pnl: 14500.0,
-        positions: [
-          { symbol: 'NVDA', shares: 500, avg_cost: 112.50, current_price: 128.80, market_value: 64400.0, pnl: 8150.0 },
-          { symbol: 'MSFT', shares: 200, avg_cost: 410.00, current_price: 420.70, market_value: 84140.0, pnl: 2140.0 },
-          { symbol: 'GOOGL', shares: 300, avg_cost: 165.00, current_price: 176.30, market_value: 52890.0, pnl: 3390.0 }
-        ],
+        source: 'SIMULATED PAPER',
+        mock: true,
         disclaimer: DISCLAIMER,
-        as_of: new Date().toISOString()
-      });
+        portfolio: botStatus.portfolio,
+        as_of: '2026-09-09T12:00:00.000Z'
+      }, { 'X-Jarvis-Source': 'native' });
     }
 
     // =========================================================================
@@ -1532,6 +1614,20 @@ const server = http.createServer(async (req, res) => {
       const category = (parsedUrl.searchParams.get('category') || 'all').toLowerCase();
       const limit = parseInt(parsedUrl.searchParams.get('limit') || '15', 10);
 
+      // Require valid session for force refresh
+      if (force) {
+        const cookies = parseCookies(req);
+        const token = cookies['titan_session'] || (req.headers.authorization?.startsWith('Bearer ') ? req.headers.authorization.slice(7) : null);
+        const session = verifySession(token);
+        if (!session) {
+          return sendJson(res, 401, {
+            status: 'error',
+            success: false,
+            message: 'Authentication session required for force-refreshing news feeds.'
+          });
+        }
+      }
+
       try {
         const result = await getAggregatedNews(force);
         let items = result.items;
@@ -1804,7 +1900,7 @@ const server = http.createServer(async (req, res) => {
       if (req.headers['if-none-match'] === etag) {
         res.writeHead(304, {
           'ETag': etag,
-          'Cache-Control': (ext === '.js' || ext === '.json' || ext === '.css' || ext === '.html')
+          'Cache-Control': (ext === '.js' || ext === '.mjs' || ext === '.json' || ext === '.css' || ext === '.html')
             ? 'no-cache, must-revalidate'
             : 'public, max-age=86400',
           'X-Content-Type-Options': 'nosniff',

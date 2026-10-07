@@ -24,7 +24,8 @@ const RISK_LIMITS = {
   ESTIMATED_FEE_PCT: 0.0005      // 0.05% simulated slippage / broker fee
 };
 
-const INCIDENTS_LOG_PATH = path.join(__dirname, 'data', 'incidents.log');
+const DATA_DIR = process.env.TITAN_DATA_DIR ? path.resolve(process.env.TITAN_DATA_DIR) : path.join(__dirname, 'data');
+const INCIDENTS_LOG_PATH = path.join(DATA_DIR, 'incidents.log');
 
 function appendIncidentsLog(entry) {
   try {
@@ -34,6 +35,27 @@ function appendIncidentsLog(entry) {
     console.error('[RISKGUARD] Could not append to incidents.log:', err.message);
   }
 }
+
+// Seedable PRNG for deterministic tests (TRIAD_SEED; unset = time-seeded)
+function createPrng(seedVal) {
+  let s = 0;
+  if (seedVal !== undefined && seedVal !== null && seedVal !== '') {
+    const str = String(seedVal);
+    for (let i = 0; i < str.length; i++) {
+      s = (s * 31 + str.charCodeAt(i)) >>> 0;
+    }
+  } else {
+    s = (Date.now() ^ (Math.random() * 0x100000000)) >>> 0;
+  }
+  return function nextRandom() {
+    s = (s + 0x6D2B79F5) >>> 0;
+    let t = Math.imul(s ^ (s >>> 15), 1 | s);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+const triadRng = createPrng(process.env.TRIAD_SEED);
 
 // ---------------------------------------------------------------------------
 // 1. TRACKER AGENT: Market Universe & Technical Analysis
@@ -56,8 +78,8 @@ class TrackerAgent {
   tickMarket() {
     this.tickers.forEach(sym => {
       const cur = this.currentPrices.get(sym);
-      // Small Gaussian-like walk [-0.8%, +0.8%]
-      const deltaPct = (Math.random() - 0.49) * 0.016;
+      // Small Gaussian-like walk [-0.8%, +0.8%] using seeded PRNG
+      const deltaPct = (triadRng() - 0.49) * 0.016;
       const nextPrice = Math.max(1.0, parseFloat((cur * (1 + deltaPct)).toFixed(2)));
       this.currentPrices.set(sym, nextPrice);
 
@@ -88,9 +110,9 @@ class TrackerAgent {
     const base5 = slice5[0] || cur;
     const momentum = (cur - base5) / (base5 || 1);
 
-    // RSI 14
+    // RSI 14 (requires at least 15 samples so hist[i - 1] is never out of bounds)
     let rsi = 50.0;
-    if (len >= 14) {
+    if (len >= 15) {
       let gains = 0;
       let losses = 0;
       for (let i = len - 14; i < len; i++) {
@@ -644,6 +666,8 @@ class TradingBotController {
     return {
       success: true,
       status: this.status,
+      mock: true,
+      price_source: 'synthetic-random-walk',
       activeStrategy: 'Triad Momentum & Structural Alpha',
       uptimeSeconds: this.startTime ? Math.floor((Date.now() - this.startTime) / 1000) : 0,
       lastTickAt: this.lastTickTime ? new Date(this.lastTickTime).toISOString() : null,

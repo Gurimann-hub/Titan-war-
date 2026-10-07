@@ -9,7 +9,11 @@
     "test": "node --test tests/smoke.test.js",
     "test:phases": "node --test tests/phase1.auth.test.js tests/phase2.hardening.test.js tests/phase3.news.test.js tests/phase4.bot.test.js tests/phase5.watchdog.test.js",
     "test:all": "node --test tests/smoke.test.js tests/phase1.auth.test.js tests/phase2.hardening.test.js tests/phase3.news.test.js tests/phase4.bot.test.js tests/phase5.watchdog.test.js",
-    "test:playwright": "playwright test tests/playwright.smoke.spec.js"
+    "test:playwright": "playwright test tests/playwright.smoke.spec.js",
+    "prepare": "git config core.hooksPath .githooks || true"
+  },
+  "engines": {
+    "node": ">=22.13"
   },
   "keywords": [
     "business-war",

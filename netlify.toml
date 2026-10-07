@@ -30,14 +30,9 @@
   [headers.values]
     Cache-Control = "public, max-age=86400, stale-while-revalidate=604800"
 
-# Do not rewrite /api requests to index.html
-[[redirects]]
-  from = "/api/*"
-  to = "/api/:splat"
-  status = 200
-
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
 

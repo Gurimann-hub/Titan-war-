@@ -1,0 +1,18 @@
+#!/bin/sh
+# TITAN WAR // PRE-COMMIT SECRET SCANNER HOOK
+
+if ! command -v gitleaks >/dev/null 2>&1; then
+  echo "======================================================================"
+  echo "[SECURITY ERROR] gitleaks is not installed or not in your PATH."
+  echo "Titan War security policy requires gitleaks pre-commit secret scanning."
+  echo ""
+  echo "Installation instructions:"
+  echo "  - Windows (winget):   winget install Gitleaks.Gitleaks"
+  echo "  - Windows (choco):    choco install gitleaks"
+  echo "  - macOS (brew):       brew install gitleaks"
+  echo "  - Linux / Container:  curl -sSfL https://github.com/gitleaks/gitleaks/releases/latest/download/gitleaks_...tar.gz | tar -xz"
+  echo "======================================================================"
+  exit 1
+fi
+
+gitleaks protect --staged --verbose

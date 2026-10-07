@@ -10,7 +10,7 @@ const fs = require('node:fs');
 const crypto = require('node:crypto');
 const bcrypt = require('bcrypt');
 
-const DATA_DIR = path.join(__dirname, 'data');
+const DATA_DIR = process.env.TITAN_DATA_DIR ? path.resolve(process.env.TITAN_DATA_DIR) : path.join(__dirname, 'data');
 if (!fs.existsSync(DATA_DIR)) {
   fs.mkdirSync(DATA_DIR, { recursive: true });
 }
@@ -119,22 +119,26 @@ async function migrateInitialData() {
 
   if (userCount === 0) {
     // Migrate Host / Admin user
-    const hostPass = process.env.HOST_PASSWORD || 'HostPass123!';
-    const saltRounds = 12;
-    const passwordHash = await bcrypt.hash(hostPass, saltRounds);
-    const now = Date.now();
+    const hostPass = (process.env.HOST_PASSWORD || '').trim();
+    if (!hostPass) {
+      console.log('[DB MIGRATION] HOST_PASSWORD not configured. Skipping initial admin seeding.');
+    } else {
+      const saltRounds = 12;
+      const passwordHash = await bcrypt.hash(hostPass, saltRounds);
+      const now = Date.now();
 
-    const insertUserStmt = db.prepare(`
-      INSERT INTO users (id, username, email, password_hash, role, status, created_at, updated_at)
-      VALUES (?, ?, ?, ?, ?, 'active', ?, ?)
-    `);
+      const insertUserStmt = db.prepare(`
+        INSERT INTO users (id, username, email, password_hash, role, status, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, 'active', ?, ?)
+      `);
 
-    // Admin Account: Alex Mercer (alex.mercer@titan.corp)
-    insertUserStmt.run('usr_admin_001', 'alex.mercer', 'alex.mercer@titan.corp', passwordHash, 'admin', now, now);
-    console.log('[DB MIGRATION] Seeded persistent Administrator account: alex.mercer@titan.corp');
+      // Admin Account: Alex Mercer (alex.mercer@titan.corp)
+      insertUserStmt.run('usr_admin_001', 'alex.mercer', 'alex.mercer@titan.corp', passwordHash, 'admin', now, now);
+      console.log('[DB MIGRATION] Seeded persistent Administrator account: alex.mercer@titan.corp');
 
-    // Also generate initial recovery codes for the admin
-    await generateRecoveryCodesForUser('usr_admin_001', 8);
+      // Also generate initial recovery codes for the admin
+      await generateRecoveryCodesForUser('usr_admin_001', 8);
+    }
   }
 
   // Migrate initial materials from materials-store.js if materials table is empty
@@ -360,13 +364,16 @@ function destroyAllUserSessions(userId) {
 }
 
 // Clean expired sessions periodically
-setInterval(() => {
+const sessionCleanupInterval = setInterval(() => {
   try {
     db.prepare('DELETE FROM sessions WHERE expires_at < ?').run(Date.now());
   } catch (e) {
     // Ignore cleanup error
   }
 }, 5 * 60 * 1000);
+if (sessionCleanupInterval.unref) {
+  sessionCleanupInterval.unref();
+}
 
 // ---------------------------------------------------------------------------
 // 6. MATERIALS CATALOG (PERSISTENT SQLITE)

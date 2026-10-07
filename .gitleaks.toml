@@ -1,0 +1,19 @@
+title = "Titan War Gitleaks Configuration"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Allowlisted example environment templates and documentation placeholders"
+paths = [
+  '''^\.env\.example$''',
+  '''^README\.md$''',
+  '''^PUBLISH_GUIDE\.md$''',
+  '''^TEACHERS_NOTES\.md$'''
+]
+regexes = [
+  '''HostPass123!''',
+  '''titan_sec_host_salt_2026_q4''',
+  '''your_secure_host_password_here''',
+  '''your_custom_salt_string_here'''
+]

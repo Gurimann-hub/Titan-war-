@@ -6,17 +6,6 @@
 
 const crypto = require('crypto');
 
-// Pre-seeded host account: Alex Mercer (Host / Workspace Admin)
-// Host credentials configured strictly via environment variables (never exposed in client code)
-const DEFAULT_DEV_HOST_PASS = 'HostPass123!';
-const DEFAULT_DEV_HOST_SALT = 'titan_sec_host_salt_2026_q4';
-
-function getHostCredentials() {
-  const salt = (process.env.HOST_SALT || DEFAULT_DEV_HOST_SALT).trim();
-  const pass = (process.env.HOST_PASSWORD || (process.env.NODE_ENV === 'production' ? '' : DEFAULT_DEV_HOST_PASS)).trim();
-  return { salt, pass };
-}
-
 const HOST_USER = {
   id: 'usr_94812',
   name: 'Alex Mercer',
@@ -28,67 +17,6 @@ const HOST_USER = {
   storageQuotaBytes: 15 * 1024 * 1024 * 1024, // 15 GB
   storageUsedBytes: 6.4 * 1024 * 1024 * 1024  // 6.4 GB
 };
-
-/**
- * Verify host credentials
- * @param {string} identity - Email address or username
- * @param {string} password - Raw password
- * @returns {object|null}
- */
-function verifyCredentials(identity, password) {
-  if (!identity || !password) return null;
-  const cleanId = identity.trim().toLowerCase();
-
-  // Match designated Host: alex.mercer@titan.corp or host or alex.mercer
-  const isHost = cleanId === 'alex.mercer@titan.corp' ||
-                 cleanId === 'alex.mercer' ||
-                 cleanId === 'host' ||
-                 cleanId === 'host@titan.intel';
-
-  if (isHost) {
-    const { salt, pass: configuredPass } = getHostCredentials();
-    if (!configuredPass) {
-      console.error('[TITAN AUTH] HOST_PASSWORD is not configured in production environment.');
-      return null;
-    }
-
-    const expectedHash = crypto.scryptSync(configuredPass, salt, 64).toString('hex');
-    const computedHash = crypto.scryptSync(password, salt, 64).toString('hex');
-    const computedBuf = Buffer.from(computedHash, 'hex');
-    const storedBuf = Buffer.from(expectedHash, 'hex');
-
-    if (computedBuf.length === storedBuf.length && crypto.timingSafeEqual(computedBuf, storedBuf)) {
-      return { ...HOST_USER };
-    }
-    return null;
-  }
-
-  // Also support custom analyst credentials for testing flexibility:
-  // Requires RFC-valid email and minimum 8-character password
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  if (emailRegex.test(cleanId) && password.length >= 8) {
-    const username = cleanId.split('@')[0];
-    const cleanName = username
-      .split(/[._-]/)
-      .filter(Boolean)
-      .map(part => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
-      .join(' ') || 'Titan Analyst';
-
-    return {
-      id: `usr_${crypto.randomBytes(4).toString('hex')}`,
-      name: cleanName,
-      role: 'host',
-      email: cleanId,
-      avatar: cleanName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() || 'TA',
-      clearance: 'LEVEL 5 (HOST PRIVILEGES)',
-      department: 'Corporate Warfare & Antitrust Research',
-      storageQuotaBytes: 15 * 1024 * 1024 * 1024,
-      storageUsedBytes: 6.4 * 1024 * 1024 * 1024
-    };
-  }
-
-  return null;
-}
 
 // 12 Production-Grade Realistic Assets across Document, Media, Archive, Spreadsheet
 const initialMaterials = [
@@ -481,7 +409,6 @@ function getStorageMetrics() {
 
 module.exports = {
   HOST_USER,
-  verifyCredentials,
   getAllMaterials,
   getMaterialById,
   addMaterial,

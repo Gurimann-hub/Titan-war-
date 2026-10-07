@@ -11,8 +11,10 @@ const fs = require('fs');
 const path = require('path');
 const db = require('./db');
 const { botInstance } = require('./trading-bot');
+const { getAggregatedNews } = require('./news-aggregator');
 
-const INCIDENTS_LOG_PATH = path.join(__dirname, 'data', 'incidents.log');
+const DATA_DIR = process.env.TITAN_DATA_DIR ? path.resolve(process.env.TITAN_DATA_DIR) : path.join(__dirname, 'data');
+const INCIDENTS_LOG_PATH = path.join(DATA_DIR, 'incidents.log');
 
 function appendIncidentsLog(entry) {
   try {
@@ -190,11 +192,22 @@ class WatchdogService {
     }
 
     // 5. Probing News Aggregator Health
-    components.newsFeed = {
-      status: 'HEALTHY',
-      cached: true,
-      message: 'News aggregator operating with local deterministic cache fallback.'
-    };
+    try {
+      const newsResult = await getAggregatedNews(false);
+      components.newsFeed = {
+        status: newsResult.items && newsResult.items.length > 0 ? 'HEALTHY' : 'DEGRADED',
+        cached: Boolean(newsResult.cached),
+        itemCount: newsResult.items ? newsResult.items.length : 0,
+        message: 'News aggregator operational.'
+      };
+    } catch (newsErr) {
+      components.newsFeed = {
+        status: 'DEGRADED',
+        cached: false,
+        message: newsErr.message
+      };
+      score -= 10;
+    }
 
     // Calculate Overall Status
     const overallStatus = score >= 90 ? 'HEALTHY' : score >= 70 ? 'DEGRADED' : 'CRITICAL';

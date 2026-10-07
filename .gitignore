@@ -5,16 +5,29 @@ node_modules/
 
 # Environment variables & secrets (CRITICAL)
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*
+!.env.example
 
-# Logs
+# Databases & local data
+data/
+*.db
+*.db-wal
+*.db-shm
+*.sqlite*
+
+# Logs & Runtime telemetry
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 *.log
+live_prices/
+chat_logs/
+
+# Build artifacts & temp
+dist/
+build/
+*.tsbuildinfo
+test-results/
 
 # OS generated files
 .DS_Store
