@@ -10,6 +10,7 @@ node_modules/
 
 # Databases & local data
 data/
+data_snapshots/
 *.db
 *.db-wal
 *.db-shm

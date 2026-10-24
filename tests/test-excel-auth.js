@@ -4,7 +4,8 @@ const path = require('path');
 const XLSX = require('xlsx');
 
 const BASE_URL = process.env.TEST_URL || 'http://localhost:3000';
-const USERS_XLSX_PATH = path.join(__dirname, '..', 'data', 'users.xlsx');
+const dataDir = process.env.TITAN_DATA_DIR ? path.resolve(process.env.TITAN_DATA_DIR) : path.join(__dirname, '..', 'data');
+const USERS_XLSX_PATH = path.join(dataDir, 'users.xlsx');
 
 test('Excel Storage & Admin Gmail Approval Flow: Registration, Pending Staging, Rejection of Login, Admin Approval Push, and Container Verification', async () => {
   const nonce = Date.now();

@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
-    "test": "node --test tests/smoke.test.js tests/phase0.hardening.test.js",
+    "test": "node scripts/test-runner.js",
     "test:m0": "node --test tests/phase0.hardening.test.js",
     "test:jarvis": "node --test tests/jarvis-and-news.test.js",
     "test:excel": "node --test tests/test-excel-auth.js",

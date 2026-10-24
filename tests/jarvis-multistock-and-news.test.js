@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const http = require('node:http');
 const crypto = require('node:crypto');
 
-const BASE_URL = 'http://localhost:3000';
+const BASE_URL = process.env.TEST_URL || 'http://localhost:3000';
 
 test('JARVIS MULTI-STOCK: /api/market/snapshot returns snapshots for all tracked stocks', async () => {
   const allTickers = 'NVDA,MSFT,AAPL,GOOGL,AMZN,META,TSLA,PLTR,TSM,AMD';
@@ -28,9 +28,10 @@ test('JARVIS MULTI-STOCK: /api/market/snapshot returns snapshots for all tracked
 test('JARVIS WEBSOCKET: /ws/prices transmits multi-asset batch prices for all stocks simultaneously', async () => {
   await new Promise((resolve, reject) => {
     const key = crypto.randomBytes(16).toString('base64');
+    const parsed = new URL(BASE_URL);
     const req = http.request({
-      host: 'localhost',
-      port: 3000,
+      host: parsed.hostname || 'localhost',
+      port: parsed.port || (parsed.protocol === 'https:' ? 443 : 80),
       path: '/ws/prices',
       headers: {
         'Connection': 'Upgrade',

@@ -4,7 +4,7 @@ const { spawn } = require('node:child_process');
 const path = require('node:path');
 const jarvisDb = require('../jarvis-db');
 
-const BASE_URL = 'http://localhost:3000';
+const BASE_URL = process.env.TEST_URL || 'http://localhost:3000';
 
 test('M0 Hardening: Immutable triggers reject UPDATE and DELETE on append-only tables (P5)', () => {
   const db = jarvisDb.getDb();
