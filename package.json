@@ -6,9 +6,13 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
-    "test": "node --test tests/smoke.test.js",
-    "test:phases": "node --test tests/phase1.auth.test.js tests/phase2.hardening.test.js tests/phase3.news.test.js tests/phase4.bot.test.js tests/phase5.watchdog.test.js",
-    "test:all": "node --test tests/smoke.test.js tests/phase1.auth.test.js tests/phase2.hardening.test.js tests/phase3.news.test.js tests/phase4.bot.test.js tests/phase5.watchdog.test.js",
+    "test": "node --test tests/smoke.test.js tests/phase0.hardening.test.js",
+    "test:m0": "node --test tests/phase0.hardening.test.js",
+    "test:jarvis": "node --test tests/jarvis-and-news.test.js",
+    "test:excel": "node --test tests/test-excel-auth.js",
+    "test:phase4": "node --test tests/phase4.jarvis.test.js",
+    "test:phases": "node --test tests/phase1.auth.test.js tests/phase2.hardening.test.js tests/phase2.news-engine.test.js tests/phase3.news.test.js tests/phase3.materials-stream.test.js tests/phase4.jarvis.test.js tests/phase4.bot.test.js tests/phase5.watchdog.test.js",
+    "test:all": "node --test tests/phase0.hardening.test.js tests/smoke.test.js tests/phase1.auth.test.js tests/phase2.hardening.test.js tests/phase2.news-engine.test.js tests/phase3.news.test.js tests/phase3.materials-stream.test.js tests/phase4.jarvis.test.js tests/phase4.bot.test.js tests/phase5.watchdog.test.js tests/jarvis-and-news.test.js",
     "test:playwright": "playwright test tests/playwright.smoke.spec.js",
     "prepare": "git config core.hooksPath .githooks || true"
   },

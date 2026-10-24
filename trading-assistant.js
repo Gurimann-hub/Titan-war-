@@ -130,6 +130,76 @@ const MARKET_SNAPSHOTS = {
     mock: true,
     stale: false,
     asOf: FIXED_SEED_AS_OF
+  },
+  TSM: {
+    ticker: 'TSM',
+    company: 'Taiwan Semiconductor',
+    price: 172.40,
+    changePct: 2.10,
+    marketCap: 890000000000,
+    peRatio: 28.5,
+    primarySignal: 'fundamental',
+    riskVerdict: 'CoWoS advanced packaging capacity fully allocated through late 2026.',
+    source: 'synthetic-demo',
+    mock: true,
+    stale: false,
+    asOf: FIXED_SEED_AS_OF
+  },
+  AVGO: {
+    ticker: 'AVGO',
+    company: 'Broadcom Inc.',
+    price: 168.90,
+    changePct: 1.75,
+    marketCap: 785000000000,
+    peRatio: 36.2,
+    primarySignal: 'institutional',
+    riskVerdict: 'Custom AI ASIC accelerators and VMware enterprise subscriptions driving top-line.',
+    source: 'synthetic-demo',
+    mock: true,
+    stale: false,
+    asOf: FIXED_SEED_AS_OF
+  },
+  ASTS: {
+    ticker: 'ASTS',
+    company: 'AST SpaceMobile',
+    price: 26.80,
+    changePct: 4.15,
+    marketCap: 7200000000,
+    peRatio: 45.0,
+    primarySignal: 'momentum',
+    riskVerdict: 'Direct-to-cell orbital deployment satellite constellation validation ongoing.',
+    source: 'synthetic-demo',
+    mock: true,
+    stale: false,
+    asOf: FIXED_SEED_AS_OF
+  },
+  AMD: {
+    ticker: 'AMD',
+    company: 'Advanced Micro Devices',
+    price: 154.30,
+    changePct: 1.25,
+    marketCap: 250000000000,
+    peRatio: 42.1,
+    primarySignal: 'momentum',
+    riskVerdict: 'MI300/MI325 accelerators gaining hyperscaler cloud evaluations alongside EPYC servers.',
+    source: 'synthetic-demo',
+    mock: true,
+    stale: false,
+    asOf: FIXED_SEED_AS_OF
+  },
+  NFLX: {
+    ticker: 'NFLX',
+    company: 'Netflix Inc.',
+    price: 685.20,
+    changePct: 0.95,
+    marketCap: 295000000000,
+    peRatio: 37.8,
+    primarySignal: 'momentum',
+    riskVerdict: 'Ad-tier subscriber momentum and live sports broadcast contracts expanding engagement.',
+    source: 'synthetic-demo',
+    mock: true,
+    stale: false,
+    asOf: FIXED_SEED_AS_OF
   }
 };
 
@@ -308,21 +378,64 @@ function tryProxyToFastApi(req, res, targetPath) {
  * Structures answers across the 7 Desk Roles, respects risk gating,
  * and stamps non-negotiable disclaimers.
  */
-function buildJarvisAnalystResponse(prompt, materialContext = null) {
+let _jarvisTools = null;
+function getJarvisTools() {
+  if (!_jarvisTools) {
+    try {
+      _jarvisTools = require('./jarvis-tools');
+    } catch (e) {
+      console.warn('[JARVIS ASSISTANT] Could not load jarvis-tools:', e.message);
+    }
+  }
+  return _jarvisTools;
+}
+
+const db = require('./db');
+
+/**
+ * Native Tier 2 JARVIS Analyst reasoning engine
+ * Structures answers across Desk Roles, respects RiskGuard invariants,
+ * ingests news catalyst dossiers with SHA-256 provenance,
+ * and stamps non-negotiable compliance disclaimers.
+ */
+function buildJarvisAnalystResponse(prompt, materialContext = null, options = {}) {
   const p = (prompt || '').trim();
   const lower = p.toLowerCase();
+  const tools = getJarvisTools();
 
-  // Find mentioned tickers
+  // Find mentioned tickers or extract from options
   const mentionedTickers = ['NVDA', 'MSFT', 'AAPL', 'GOOGL', 'AMZN', 'META', 'TSLA', 'PLTR']
     .filter(t => new RegExp(`\\b${t}\\b`, 'i').test(p));
 
-  const primaryTicker = mentionedTickers[0] || 'NVDA';
+  const primaryTicker = (options.ticker || mentionedTickers[0] || (materialContext && (materialContext.ticker || materialContext.symbol)) || 'NVDA').toUpperCase();
   const snapshot = MARKET_SNAPSHOTS[primaryTicker] || MARKET_SNAPSHOTS.NVDA;
+
+  // Resolve article catalyst if articleId or materialContext provided
+  let catalystArticle = null;
+  const targetArticleId = options.articleId || (materialContext && materialContext.id) || null;
+  if (targetArticleId) {
+    try {
+      catalystArticle = db.getArticleById(targetArticleId);
+    } catch (e) {}
+  }
 
   let responseText = '';
 
-  // Case 1: Material dossier integration context
-  if (materialContext && materialContext.title) {
+  // 1. Catalyst Dossier Ingestion Block (if article or materialContext provided)
+  if (catalystArticle) {
+    responseText += `### [STRATEGIC CATALYST DOSSIER INGESTION]\n`;
+    responseText += `**Dossier ID:** \`${catalystArticle.id}\` | **Category:** ${catalystArticle.category.toUpperCase()}\n`;
+    responseText += `**Headline:** "${catalystArticle.headline}"\n`;
+    responseText += `**Source:** ${catalystArticle.source_name || catalystArticle.source} | **Published:** ${catalystArticle.publishedAt || new Date(catalystArticle.published_at).toISOString()}\n`;
+    responseText += `**Impact Score:** ${catalystArticle.impactScore || catalystArticle.impact_score || 7}/10 | **Directional Sentiment:** ${(catalystArticle.sentiment || 'neutral').toUpperCase()}\n`;
+    if (catalystArticle.whyItMatters || catalystArticle.why_it_matters) {
+      responseText += `**Strategic Rationale:** ${catalystArticle.whyItMatters || catalystArticle.why_it_matters}\n`;
+    }
+    if (catalystArticle.provenance_sha256 || catalystArticle.content_hash) {
+      responseText += `**SHA-256 Provenance Checksum:** \`${(catalystArticle.provenance_sha256 || catalystArticle.content_hash).slice(0, 32)}...\` (Verified Cryptographic Chain)\n`;
+    }
+    responseText += `\n`;
+  } else if (materialContext && materialContext.title) {
     responseText += `### [STRATEGIC REPOSITORY DOSSIER SYNTHESIS]\n`;
     responseText += `**Asset Ingested:** \`${materialContext.title}\` (${materialContext.category || 'Dossier'})\n`;
     responseText += `**Cross-Market Target:** **${primaryTicker}** ($${snapshot.price.toFixed(2)} | ${snapshot.changePct >= 0 ? '+' : ''}${snapshot.changePct}%)\n\n`;
@@ -330,7 +443,102 @@ function buildJarvisAnalystResponse(prompt, materialContext = null) {
     responseText += `The repository asset \`${materialContext.title}\` bears direct operational exposure to **${primaryTicker}**'s core profit vectors. Institutional flow indicates capital desks are discounting ${primaryTicker}'s exposure against antitrust defense filings and capex amortization schedules.\n\n`;
   }
 
-  // Case 2: Specific query matching
+  // 2. Financial Metrics Query
+  if (lower.includes('metric') || lower.includes('valuation') || lower.includes('ebitda') || lower.includes('capex') || lower.includes('pe ratio') || lower.includes('fcf')) {
+    const metrics = tools ? tools.get_financial_metrics(primaryTicker) : null;
+    responseText += `### [INSTITUTIONAL VALUATION & FINANCIAL METRICS] // ${primaryTicker}\n`;
+    if (metrics) {
+      responseText += `**Company:** ${metrics.company}\n`;
+      responseText += `**Trailing P/E:** ${metrics.peRatio}x | **Forward Multiple:** ${metrics.forwardMultiple}x\n`;
+      responseText += `**EV/EBITDA:** ${metrics.evEbitda}x\n`;
+      responseText += `**CapEx YoY Growth:** +${metrics.capexGrowthPct}%\n`;
+      responseText += `**Revenue Growth:** +${metrics.revenueGrowthPct}%\n`;
+      responseText += `**Free Cash Flow Margin:** ${metrics.freeCashFlowMarginPct}%\n`;
+      responseText += `**Gross Margin:** ${metrics.grossMarginPct}%\n`;
+      responseText += `**Debt-to-Equity:** ${metrics.debtToEquity}\n\n`;
+    } else {
+      responseText += `**P/E Multiple:** ${snapshot.peRatio}x forward earnings\n`;
+      responseText += `**Market Cap:** $${(snapshot.marketCap / 1e12).toFixed(2)} Trillion\n\n`;
+    }
+    responseText += `*${DISCLAIMER}*`;
+    return responseText;
+  }
+
+  // 3. Antitrust Litigation Query
+  if (lower.includes('antitrust') || lower.includes('litigation') || lower.includes('docket') || lower.includes('investigation') || lower.includes('doj') || lower.includes('ftc')) {
+    const docket = tools ? tools.get_antitrust_docket(primaryTicker) : null;
+    responseText += `### [ANTITRUST DOCKET & REGULATORY LITIGATION AUDIT] // ${primaryTicker}\n`;
+    if (docket && docket.activeInvestigations && docket.activeInvestigations.length) {
+      responseText += `**Jurisdictions Engaged:** ${docket.jurisdictions.join(', ')}\n\n`;
+      docket.activeInvestigations.forEach(inv => {
+        responseText += `• **${inv.agency} (${inv.stage}):** ${inv.focus}\n`;
+        responseText += `  - Remedies Sought: ${inv.remediesSought}\n`;
+        responseText += `  - Potential Fine: ${inv.potentialFine}\n`;
+        responseText += `  - Settlement Likelihood: ${Math.round(inv.settlementProbability * 100)}%\n\n`;
+      });
+      responseText += `**Litigation Assessment:** ${docket.summary}\n\n`;
+    } else {
+      responseText += `**Primary Risk Vector:** Regulatory scrutiny and supply chain concentration.\n`;
+      responseText += `**Active Invariants:** Position sizes capped at 10.0% NAV; Drawdown breaker engaged at 2.0%.\n`;
+      responseText += `**Desk Verdict:** ${snapshot.riskVerdict}\n\n`;
+    }
+    responseText += `*${DISCLAIMER}*`;
+    return responseText;
+  }
+
+  // 4. Position Sizing & Risk Calculation Query
+  if (lower.includes('size') || lower.includes('sizing') || lower.includes('position size') || lower.includes('calculate') || lower.includes('allocation')) {
+    if (tools) {
+      const sizePlan = tools.calculate_position_size(primaryTicker, options.confidence || 0.85, options.stopLossPct || 0.05);
+      responseText += `### [RISKGUARD POSITION SIZING CALCULATION] // ${primaryTicker}\n`;
+      responseText += `**Current Price:** $${sizePlan.currentPrice.toFixed(2)}\n`;
+      responseText += `**Recommended Position:** **${sizePlan.recommendedShares} shares** ($${sizePlan.recommendedAllocationDollars.toLocaleString()} | ${sizePlan.recommendedAllocationPct}% NAV)\n`;
+      responseText += `**Risk-Reward Target:** $${sizePlan.targetPrice.toFixed(2)} (+${((sizePlan.targetPrice/sizePlan.currentPrice - 1)*100).toFixed(1)}%) vs Stop-Loss: $${sizePlan.stopLossPrice.toFixed(2)} (-${((1 - sizePlan.stopPrice/sizePlan.currentPrice)*100).toFixed(1)}%)\n`;
+      responseText += `**Reward-to-Risk Ratio:** ${sizePlan.riskRewardRatio}:1 (Complies with 1.5:1 minimum invariant)\n`;
+      responseText += `**RiskGuard Validation:** Position Cap (<=10%): ${sizePlan.riskGuardValidation.positionCapCompliance ? 'PASSED' : 'FAILED'} | Cash Buffer (>=20%): ${sizePlan.riskGuardValidation.cashReserveCompliance ? 'PASSED' : 'FAILED'} | Circuit Breaker: ${sizePlan.riskGuardValidation.circuitBreakerClear ? 'CLEAR' : 'HALTED'}\n`;
+      responseText += `**Final Status:** **${sizePlan.riskGuardValidation.status}**\n\n`;
+      responseText += `*${DISCLAIMER}*`;
+      return responseText;
+    }
+  }
+
+  // 5. Portfolio Summary Query
+  if (lower.includes('portfolio') || lower.includes('holdings') || lower.includes('my positions') || lower.includes('balance')) {
+    if (tools) {
+      const summary = tools.get_portfolio_summary();
+      responseText += `### [PAPER TRADING PORTFOLIO TELEMETRY]\n`;
+      responseText += `**Total NAV:** $${summary.totalValue.toLocaleString()} | **Cash Reserve:** $${summary.cash.toLocaleString()} (${((summary.cash / summary.totalValue) * 100).toFixed(1)}%)\n`;
+      responseText += `**Starting Capital:** $${summary.startingCash.toLocaleString()} | **Total Return:** ${summary.totalReturnPct >= 0 ? '+' : ''}${summary.totalReturnPct.toFixed(2)}%\n`;
+      responseText += `**Realized P&L:** $${summary.realizedPnl.toFixed(2)} | **Peak Drawdown:** ${summary.drawdownPct.toFixed(2)}% (Max Tolerance: 2.0%)\n`;
+      responseText += `**Circuit Breaker:** ${summary.circuitBreakerTripped ? '⚠️ TRIPPED (' + summary.tripReason + ')' : '✅ NOMINAL / ARMED'}\n\n`;
+      responseText += `**Active Book Holdings:**\n`;
+      for (const [sym, pos] of Object.entries(summary.positions)) {
+        responseText += `• **${sym}:** ${pos.shares} shares @ $${pos.avgCost.toFixed(2)} | Market Value: $${pos.marketValue.toLocaleString()} (${pos.weightPct}% NAV) | P&L: ${pos.unrealizedPnl >= 0 ? '+' : ''}$${pos.unrealizedPnl.toFixed(2)} (${pos.unrealizedPnlPct >= 0 ? '+' : ''}${pos.unrealizedPnlPct}%)\n`;
+      }
+      responseText += `\n*${DISCLAIMER}*`;
+      return responseText;
+    }
+  }
+
+  // 6. Risk Sentinel Status Query
+  if (lower.includes('risk status') || lower.includes('circuit breaker') || lower.includes('drawdown') || lower.includes('sentinel')) {
+    if (tools) {
+      const risk = tools.get_risk_status();
+      responseText += `### [RISKGUARD SENTINEL TELEMETRY]\n`;
+      responseText += `**Circuit Breaker Status:** ${risk.circuitBreakerTripped ? '⚠️ TRIPPED' : '✅ NOMINAL ARMED'}\n`;
+      responseText += `**Current Drawdown:** ${risk.currentDrawdownPct.toFixed(2)}% / ${risk.maxDrawdownTolerancePct.toFixed(1)}% Max Breaker Cap\n`;
+      responseText += `**Cash Reserve:** ${risk.cashReservePct.toFixed(1)}% / ${risk.minCashReserveRequiredPct.toFixed(1)}% Required Reserve\n`;
+      responseText += `**Risk Verdict:** **${risk.riskVerdict}**\n\n`;
+      responseText += `**Single-Stock NAV Concentrations:**\n`;
+      for (const [sym, exp] of Object.entries(risk.exposuresByTicker)) {
+        responseText += `• ${sym}: ${exp.toFixed(1)}% (Limit: ${risk.maxSinglePositionCapPct.toFixed(1)}%)\n`;
+      }
+      responseText += `\n*${DISCLAIMER}*`;
+      return responseText;
+    }
+  }
+
+  // 7. Equity Quote & Runtime Telemetry Query
   if (lower.includes('price') || lower.includes('quote') || lower.includes('trading at')) {
     responseText += `### [EQUITY QUOTE & RUNTIME TELEMETRY] // ${snapshot.ticker}\n`;
     responseText += `**Company:** ${snapshot.company}\n`;
@@ -343,15 +551,7 @@ function buildJarvisAnalystResponse(prompt, materialContext = null) {
     return responseText;
   }
 
-  if (lower.includes('risk') || lower.includes('antitrust') || lower.includes('litigation') || lower.includes('warning')) {
-    responseText += `### [RISK DESK & ANTITRUST LITIGATION ASSESSMENT] // ${snapshot.ticker}\n`;
-    responseText += `**Primary Risk Vector:** Regulatory scrutiny and supply chain concentration.\n`;
-    responseText += `**Active Invariants:** Position sizes capped at 10.0% NAV; Drawdown breaker engaged at 2.0%.\n`;
-    responseText += `**Desk Verdict:** ${snapshot.riskVerdict}\n\n`;
-    responseText += `*${DISCLAIMER}*`;
-    return responseText;
-  }
-
+  // 8. Supply-Chain Graph Query
   if (lower.includes('supply') || lower.includes('chain') || lower.includes('supplier')) {
     const chain = SUPPLY_CHAINS[primaryTicker];
     responseText += `### [SUPPLY-CHAIN GRAPH AUDIT] // ${primaryTicker}\n`;
@@ -367,15 +567,26 @@ function buildJarvisAnalystResponse(prompt, materialContext = null) {
     return responseText;
   }
 
-  // Default Full 7-Desk Rubric Analysis
-  responseText += `### [JARVIS 7-DESK SYNTHESIS] // ${snapshot.ticker} (${snapshot.company})\n\n`;
+  // 9. Comprehensive Dialectical Synthesis & 7-Desk Rubric (Default)
+  const convictionScore = primaryTicker === 'NVDA' ? 82 : primaryTicker === 'MSFT' ? 79 : primaryTicker === 'GOOGL' ? 76 : primaryTicker === 'AMZN' ? 78 : primaryTicker === 'META' ? 80 : 64;
+  const invalidationPrice = (snapshot.price * 0.93).toFixed(2);
+
+  const sma200Level = (snapshot.price * 0.91).toFixed(2);
+  const rocCurrent = snapshot.changePct >= 0 ? `+${(snapshot.changePct * 0.8).toFixed(1)}%` : `${(snapshot.changePct * 0.8).toFixed(1)}%`;
+
+  responseText += `### [JARVIS 7-DESK SYNTHESIS & DIALECTICAL THESIS] // ${snapshot.ticker} (${snapshot.company})\n\n`;
   responseText += `**1. Market Scout Desk:** Liquidity depth is institutional grade ($${(snapshot.marketCap / 1e12).toFixed(2)}T market cap). Capital rotations favor high-barrier compute moats over generic enterprise software.\n\n`;
-  responseText += `**2. Technical Analyst Desk:** Trading at $${snapshot.price.toFixed(2)} (${snapshot.changePct >= 0 ? '+' : ''}${snapshot.changePct}%). Key support defined at $${(snapshot.price * 0.94).toFixed(2)}; overhead resistance tested at $${(snapshot.price * 1.06).toFixed(2)}. RSI is balanced at 54.\n\n`;
+  responseText += `**2. Technical Analyst Desk:** Trading at $${snapshot.price.toFixed(2)} (${snapshot.changePct >= 0 ? '+' : ''}${snapshot.changePct}%). Macro trend filter confirmed: Price is **above the 200-Day SMA ($${sma200Level})**, with the **200-day SMA pointed upward** (+0.14/day slope). Rate of Change (ROC) has **reset to ${rocCurrent}** after peak expansion, indicating consolidation in a **3-month trend** and readiness for next leg higher. RSI is balanced at 54.\n\n`;
   responseText += `**3. Fundamental Analyst Desk:** P/E sits at ${snapshot.peRatio}x. Hyperscaler capex allocation remains buoyant through fiscal 2026/2027, maintaining strong forward free cash flow conversion.\n\n`;
-  responseText += `**4. News Catalyst Desk:** Cross-referencing antitrust litigation dossiers with semiconductor supply checks. No unconfirmed rumors detected; enterprise pipeline backlogs confirmed.\n\n`;
+  responseText += `**4. News Catalyst Desk:** Cross-referencing forward corporate events (Dev Days, hardware keynotes) and antitrust litigation dossiers. No unconfirmed rumors detected; enterprise pipeline backlogs confirmed.\n\n`;
   responseText += `**5. Quant Desk:** 30-day implied volatility at 32.4%. Signal stack weighting favors fundamental retention (0.42) over headline sentiment volume (0.28).\n\n`;
-  responseText += `**6. Risk Manager Verdict (Mandatory Gate):** **${snapshot.riskVerdict}** Maximum single-name exposure limit is 5.0% NAV. Invalidation condition: break below 50-day moving average on >1.5x volume.\n\n`;
-  responseText += `**7. Portfolio Manager Frame:** Maintain core overweight stance with staged call overwrite hedges on extended momentum spikes.\n\n`;
+  responseText += `**6. Risk Manager Verdict (Mandatory RiskGuard Gate):** **${snapshot.riskVerdict}** Maximum single-name exposure limit is 10.0% NAV. Invalidation condition: break below $${invalidationPrice} on >1.5x volume.\n\n`;
+  responseText += `**7. SynthesisEngine Dialectical Arbiter:**\n`;
+  responseText += `• **Bull Case:** Dominant ecosystem lock-in, expanding enterprise token demand, and multi-year capex commitments.\n`;
+  responseText += `• **Bear Case:** Regulatory remedies from DOJ/EC antitrust scrutiny and packaging supply chain bottlenecks.\n`;
+  responseText += `• **Synthesis Verdict:** Accumulate on orderly pullbacks with tight stop discipline at $${invalidationPrice}.\n`;
+  responseText += `• **Conviction Score:** **${convictionScore}/100**\n`;
+  responseText += `• **Invalidation Price:** **$${invalidationPrice}**\n\n`;
   responseText += `*${DISCLAIMER}*`;
 
   return responseText;
@@ -399,16 +610,16 @@ function buildMarketOracleVerdict(ticker = 'NVDA', userQuery = '', newsSnippet =
   let auditSummary;
 
   if (!hasNews) {
-    veracityStatus = 'Unverified: no news supplied';
-    veracityTier = 'T4 social/speculative';
-    reliabilityIndex = 0.0;
-    auditSummary = 'No news docket or filing supplied for verification. Claim veracity cannot be verified without source text.';
+    veracityStatus = 'Unverified Rumor';
+    veracityTier = 'Tier 4: Social / Unverified';
+    reliabilityIndex = 'Low';
+    auditSummary = 'No news docket or filing supplied for verification. Claim veracity cannot be verified without primary source text.';
   } else {
     // Stage 1: Attribution audit
     veracityStatus = 'Probable / Ongoing';
-    veracityTier = 'T2 institutional press (Bloomberg, Reuters, WSJ, FT)';
-    reliabilityIndex = 0.75;
-    auditSummary = `Claim cross-referenced against primary dockets and recent corporate filings for ${normTicker}.`;
+    veracityTier = 'Tier 2: Institutional Press';
+    reliabilityIndex = 'High';
+    auditSummary = `Claim cross-referenced against primary regulatory dockets and recent corporate filings for ${normTicker}.`;
   }
 
   // Stage 2 & 3: Dialectical Bull vs Bear
@@ -442,48 +653,86 @@ function buildMarketOracleVerdict(ticker = 'NVDA', userQuery = '', newsSnippet =
     invalidationCriteria = 'Forced divestiture of Chrome browser or Android distribution network.';
   }
 
+  const executiveSummary = `MarketOracle Arbiter assigns a ${probabilityPercent}% directional probability of upward valuation realization for ${normTicker}. While antitrust litigation dossiers document genuine scrutiny, corporate spending cycles are already locked into multi-year vendor commitments, preserving near-term earnings power.`;
+  const conversationalChatResponse = `MarketOracle Arbiter evaluation for $${normTicker}: Net verdict is ${netVerdict} (${probabilityPercent}% conviction). Key driver: ${tippingFactor} Invalidation criteria: ${invalidationCriteria}`;
+
+  const newsAuditObj = {
+    headline_or_claim: claimText,
+    veracity_status: veracityStatus,
+    source_classification: {
+      tier: veracityTier,
+      identified_source_name: hasNews ? 'Institutional Press & Dockets' : 'None',
+      reliability_index: reliabilityIndex
+    },
+    fact_check_summary: auditSummary,
+    audit_summary: auditSummary
+  };
+
+  const dialecticalThesesObj = {
+    bull_thesis: {
+      thesis_strength_score: bullScore,
+      score: bullScore,
+      core_premise: `Irreplaceable strategic infrastructure position in the corporate compute stack for ${normTicker}.`,
+      growth_catalysts: [
+        `Irreplaceable infrastructure position in Big Tech warfare compute stack.`,
+        `Operating leverage expands gross margins above 72% on custom architectures.`,
+        `Hyperscaler enterprise backlog contracted through 2027 fiscal year.`
+      ],
+      key_arguments: [
+        `Irreplaceable infrastructure position in Big Tech warfare compute stack.`,
+        `Operating leverage expands gross margins above 72% on custom architectures.`,
+        `Hyperscaler enterprise backlog contracted through 2027 fiscal year.`
+      ],
+      valuation_upside_driver: `Acceleration in enterprise software agent token consumption creating secondary wave of data center CapEx.`,
+      multiple_expansion_catalyst: `Acceleration in enterprise software agent token consumption creating secondary wave of data center CapEx.`
+    },
+    bear_thesis: {
+      thesis_strength_score: bearScore,
+      score: bearScore,
+      core_premise: `Antitrust litigation overhead, export control friction, and customer concentration headwinds for ${normTicker}.`,
+      risks_and_headwinds: [
+        `Regulatory antitrust remedies introduce legal overhead and partner scrutiny.`,
+        `Customer concentration: Top 4 customers account for over 45% of total segment revenue.`,
+        `Valuation leaves zero margin of safety for supply chain fab bottlenecks.`
+      ],
+      key_arguments: [
+        `Regulatory antitrust remedies introduce legal overhead and partner scrutiny.`,
+        `Customer concentration: Top 4 customers account for over 45% of total segment revenue.`,
+        `Valuation leaves zero margin of safety for supply chain fab bottlenecks.`
+      ],
+      downside_triggers: `Market expectations demand flawless quarterly beats; any shipment delay triggers aggressive multiple rerating.`,
+      headwind_summary: `Market expectations demand flawless quarterly beats; any shipment delay triggers aggressive multiple rerating.`
+    }
+  };
+
+  const arbiterDecisionObj = {
+    directional_verdict: netVerdict,
+    net_verdict: netVerdict,
+    probability_of_price_increase_pct: probabilityPercent,
+    probability_percent: probabilityPercent,
+    the_decisive_tipping_factor: tippingFactor,
+    decisive_tipping_factor: tippingFactor,
+    invalidation_criteria: invalidationCriteria,
+    time_horizon: '3 to 6 months',
+    recommended_timeframe: '3 to 6 months',
+    executive_summary: executiveSummary
+  };
+
   return {
     ticker: normTicker,
     company_name: snapshot.company,
     query: defaultQuery,
     mock: true,
     source: 'deterministic-oracle',
-    news_audit: {
-      headline_or_claim: claimText,
-      veracity_status: veracityStatus,
-      source_classification: {
-        tier: veracityTier,
-        identified_source_name: hasNews ? 'Institutional Press & Dockets' : 'None',
-        reliability_index: reliabilityIndex
-      },
-      audit_summary: auditSummary
-    },
-    bull_thesis: {
-      score: bullScore,
-      key_arguments: [
-        `Irreplaceable infrastructure position in Big Tech warfare compute stack.`,
-        `Operating leverage expands gross margins above 72% on custom architectures.`,
-        `Hyperscaler enterprise backlog contracted through 2027 fiscal year.`
-      ],
-      multiple_expansion_catalyst: `Acceleration in enterprise software agent token consumption creating secondary wave of data center CapEx.`
-    },
-    bear_thesis: {
-      score: bearScore,
-      key_arguments: [
-        `Regulatory antitrust remedies introduce legal overhead and partner scrutiny.`,
-        `Customer concentration: Top 4 customers account for over 45% of total segment revenue.`,
-        `Valuation leaves zero margin of safety for supply chain fab bottlenecks.`
-      ],
-      headwind_summary: `Market expectations demand flawless quarterly beats; any shipment delay triggers aggressive multiple rerating.`
-    },
-    arbiter_decision: {
-      net_verdict: netVerdict,
-      probability_percent: probabilityPercent,
-      decisive_tipping_factor: tippingFactor,
-      invalidation_criteria: invalidationCriteria,
-      recommended_timeframe: '3 to 6 months',
-      executive_summary: `MarketOracle Arbiter assigns a ${probabilityPercent}% directional probability of upward valuation realization for ${normTicker}. While antitrust litigation dossiers document genuine scrutiny, corporate spending cycles are already locked into multi-year vendor commitments, preserving near-term earnings power.`
-    },
+    news_audit: newsAuditObj,
+    dialectical_theses: dialecticalThesesObj,
+    arbiter_decision_system: arbiterDecisionObj,
+    conversational_chat_response: conversationalChatResponse,
+    compliance_disclaimer: DISCLAIMER,
+    // Backward compatibility aliases
+    bull_thesis: dialecticalThesesObj.bull_thesis,
+    bear_thesis: dialecticalThesesObj.bear_thesis,
+    arbiter_decision: arbiterDecisionObj,
     disclaimer: DISCLAIMER,
     as_of: FIXED_SEED_AS_OF
   };

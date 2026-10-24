@@ -91,63 +91,260 @@
       </div>
     </div>
 
-    <!-- Trading Assistant Workstation Section (Direct Integration of New Folder 1 onto Materials Page) -->
-    <section class="trading-assistant-hub-card" id="trading-assistant-hub-card" aria-label="AI Trading Assistant Workstation" style="background: linear-gradient(135deg, rgba(13, 24, 40, 0.85) 0%, rgba(10, 16, 26, 0.95) 100%); border: 1px solid rgba(6, 182, 212, 0.3); border-radius: var(--radius-lg); padding: 22px; margin-bottom: 24px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);">
-      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 18px;">
-        <div style="display: flex; align-items: center; gap: 14px;">
-          <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(6, 182, 212, 0.15); border: 1px solid rgba(6, 182, 212, 0.4); display: flex; align-items: center; justify-content: center; color: #06b6d4;">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+    <!-- =========================================================================
+         PHASE 3: LIVE INTELLIGENCE STREAM & CORPORATE WAR ROOM
+         ========================================================================= -->
+    <section class="newsroom-stream-section" id="newsroom-stream-section" aria-label="Titan War Live Intelligence Stream">
+      <!-- Stream Header Bar -->
+      <div class="stream-header-bar">
+        <div class="stream-title-group">
+          <div class="stream-icon-badge" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
           </div>
           <div>
-            <div style="display: flex; align-items: center; gap: 8px;">
-              <h2 style="font-family: var(--font-heading); font-size: 1.25rem; color: #f8fafc; letter-spacing: 0.04em; margin: 0;">JARVIS Trading Assistant</h2>
-              <span style="font-size: 0.68rem; font-weight: 700; background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); padding: 2px 8px; border-radius: 4px; letter-spacing: 0.05em;">SIMULATION LIVE</span>
-              <span style="font-size: 0.68rem; font-weight: 700; background: rgba(6, 182, 212, 0.15); color: #06b6d4; border: 1px solid rgba(6, 182, 212, 0.3); padding: 2px 8px; border-radius: 4px;">ZERO-API POLICY</span>
+            <h2>
+              <span>Titan War Live Stream</span>
+              <span class="live-status-pill" id="stream-status-pill" title="Real-time Server-Sent Events link">
+                <span class="live-pulse-dot"></span>
+                <span id="stream-status-text">LIVE STREAM ACTIVE</span>
+              </span>
+            </h2>
+            <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 3px;" id="stream-live-date">
+              OCTOBER 2026 // REAL-TIME HYPERSCALER CATALYST RADAR
             </div>
-            <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 4px 0 0 0;">Triad multi-agent intelligence (Tracker &bull; Predictor &bull; Commander &bull; RiskGuard) with MarketOracle dialectical arbitration.</p>
           </div>
         </div>
-        <div style="display: flex; gap: 10px; align-items: center;">
-          <button type="button" class="btn btn-sm btn-ghost" id="toggle-embedded-assistant" style="border: 1px solid rgba(255, 255, 255, 0.15); color: #e2e8f0;">
-            <span id="toggle-assistant-text">Expand Embedded Workstation</span>
+
+        <div class="stream-actions">
+          <!-- Audio Briefing Play Trigger -->
+          <button type="button" class="btn btn-sm btn-gold" id="btn-play-briefing" title="Generate executive audio briefing of top catalysts">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+            <span id="btn-briefing-label">Play Audio Briefing</span>
           </button>
-          <a href="/trading-assistant" target="_blank" class="btn btn-sm" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: #fff; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
-            <span>Full-Screen Workstation</span>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+
+          <!-- Force Engine Cycle Refresh -->
+          <button type="button" class="btn btn-sm btn-ghost" id="btn-force-refresh-news" title="Force trigger Tracker & Predictor cycle (10s cooldown)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+            <span>Force Refresh</span>
+          </button>
+
+          <!-- Open Jarvis Deep Link -->
+          <a href="/trading-assistant" class="btn btn-sm btn-cyan" id="stream-jarvis-btn" title="Open Jarvis Trading Intelligence Workstation">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            <span>Open Jarvis</span>
           </a>
         </div>
       </div>
 
-      <!-- Simulation Regulatory Notice Banner & Bot Controls -->
-      <div class="simulation-disclaimer-banner" style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 0.8rem; color: #fca5a5; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
-        <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 280px;">
-          <span style="font-weight: 700; color: #ef4444; display: inline-flex; align-items: center; gap: 4px;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            SIMULATION ONLY:
+      <!-- Breaking News Alert Banner (Dynamic) -->
+      <div class="breaking-alert-banner" id="breaking-alert-banner" style="display: none;" role="alert">
+        <div style="display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0;">
+          <span class="breaking-tag">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            BREAKING
           </span>
-          <span>Zero real money transactions. Not financial advice. Triad Autonomous RiskGuard enforces 2% max drawdown and 10% position cap.</span>
+          <span class="breaking-headline" id="breaking-headline-text">
+            NVDA: US Expands AI Chip Export Restrictions; TSMC Yield Allocation Under Scrutiny
+          </span>
         </div>
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <span id="bot-status-pill" style="font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; background: rgba(148, 163, 184, 0.2); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.3);">BOT: STOPPED</span>
-          <button type="button" id="bot-start-btn" style="background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); color: #10b981; font-weight: 600; cursor: pointer; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem;">▶ Start Bot</button>
-          <button type="button" id="bot-stop-btn" style="background: rgba(148, 163, 184, 0.2); border: 1px solid rgba(148, 163, 184, 0.4); color: #cbd5e1; font-weight: 600; cursor: pointer; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; display: none;">⏸ Stop</button>
-          <button type="button" id="bot-kill-btn" style="background: #dc2626; border: 1px solid #b91c1c; color: #fff; font-weight: 700; cursor: pointer; padding: 4px 12px; border-radius: 4px; font-size: 0.75rem; box-shadow: 0 0 10px rgba(220, 38, 38, 0.4);" title="Physical Emergency Kill Switch - Immediately Halt Bot & Lock Trading">⚡ KILL SWITCH</button>
-          <button type="button" id="bot-reset-btn" style="background: rgba(245, 158, 11, 0.2); border: 1px solid rgba(245, 158, 11, 0.4); color: #fbbf24; font-weight: 600; cursor: pointer; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; display: none;">↺ Reset</button>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <button type="button" class="btn btn-sm btn-gold" id="btn-breaking-dossier">Read Analysis</button>
+          <button type="button" class="btn-modal-close" id="btn-dismiss-breaking" aria-label="Dismiss breaking banner">✕</button>
         </div>
       </div>
 
-      <!-- Quick Ticker Snapshot Ribbon -->
-      <div id="assistant-ticker-ribbon" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 14px;">
-        <!-- Populated dynamically via /api/market/snapshot -->
+      <!-- Audio Briefing Player Widget (Dynamic) -->
+      <div class="audio-briefing-bar" id="audio-briefing-bar" style="display: none;" aria-label="Audio Briefing Player">
+        <div style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0;">
+          <button type="button" class="audio-ctrl-btn" id="audio-play-toggle">
+            <span id="audio-toggle-icon">⏸</span>
+            <span id="audio-toggle-label">Pause</span>
+          </button>
+          <div class="audio-bars-viz" id="audio-bars-viz">
+            <div class="audio-bar"></div>
+            <div class="audio-bar"></div>
+            <div class="audio-bar"></div>
+            <div class="audio-bar"></div>
+            <div class="audio-bar"></div>
+          </div>
+          <div style="font-size: 0.82rem; color: #e2e8f0; font-family: var(--font-mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" id="audio-briefing-text">
+            Titan War Executive Audio Briefing // Synthesizing catalysts...
+          </div>
+        </div>
+        <button type="button" class="audio-ctrl-btn" id="audio-close-btn" style="background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.4); color: #fca5a5;">
+          <span>✕ Stop</span>
+        </button>
       </div>
 
-      <!-- Embedded Workstation Container (Expandable) -->
-      <div id="embedded-assistant-container" style="display: none; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 16px;">
-        <div style="border-radius: 12px; overflow: hidden; border: 1px solid rgba(6, 182, 212, 0.25); background: #0a0e17; height: 680px; position: relative;">
-          <iframe id="assistant-iframe" src="about:blank" style="width: 100%; height: 100%; border: none;" title="Trading Assistant Workstation"></iframe>
+      <!-- Mode Tabs Switcher -->
+      <div class="news-mode-tabs" role="tablist" aria-label="Newsroom Mode Selector">
+        <button type="button" class="news-mode-tab active" id="tab-live-stream" data-mode="stream" role="tab" aria-selected="true">
+          <span>⚡ Live Intelligence Feed</span>
+          <span class="pill-count" id="stream-count-badge" style="background: rgba(225, 29, 72, 0.2); color: #fb7185; padding: 2px 7px; border-radius: 10px; font-size: 0.72rem; margin-left: 4px;">7</span>
+        </button>
+        <button type="button" class="news-mode-tab" id="tab-saved-bookmarks" data-mode="bookmarks" role="tab" aria-selected="false">
+          <span>🔖 Saved Bookmarks</span>
+          <span class="pill-count" id="bookmarks-count-badge" style="background: rgba(207, 168, 86, 0.2); color: #fbbf24; padding: 2px 7px; border-radius: 10px; font-size: 0.72rem; margin-left: 4px;">0</span>
+        </button>
+        <button type="button" class="news-mode-tab" id="tab-dossier-assets" data-mode="assets" role="tab" aria-selected="false">
+          <span>📁 Dossier Archives</span>
+        </button>
+      </div>
+
+      <!-- Live Feed View (Active by default for Stream & Bookmarks) -->
+      <div id="news-feed-view">
+        <!-- Feed Controls Toolbar -->
+        <div class="news-toolbar" id="news-toolbar">
+          <div class="news-toolbar-row">
+            <!-- Real-time search query -->
+            <div class="search-container" style="max-width: 440px; flex: 1;">
+              <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input 
+                type="search" 
+                class="search-input" 
+                id="news-search-input" 
+                placeholder="Search headlines, catalysts, rationale..." 
+                aria-label="Filter Intelligence Stream"
+              >
+              <button type="button" class="search-clear-btn" id="news-search-clear" aria-label="Clear news search">✕</button>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+              <!-- Min Impact Dropdown -->
+              <div class="sort-select-wrapper">
+                <label for="news-impact-select" style="font-size: 0.78rem; color: var(--text-muted);">Impact:</label>
+                <select class="sort-select" id="news-impact-select" style="padding: 6px 12px; font-size: 0.8rem;">
+                  <option value="0">All Impacts (1 - 10)</option>
+                  <option value="6">High & Critical (6+)</option>
+                  <option value="8">Severe Impact (8+)</option>
+                  <option value="9">Critical Breaking (9+)</option>
+                </select>
+              </div>
+
+              <!-- Time Horizon Dropdown -->
+              <div class="sort-select-wrapper">
+                <label for="news-time-select" style="font-size: 0.78rem; color: var(--text-muted);">Window:</label>
+                <select class="sort-select" id="news-time-select" style="padding: 6px 12px; font-size: 0.8rem;">
+                  <option value="all">All Available</option>
+                  <option value="24h">Past 24 Hours</option>
+                  <option value="7d">Past 7 Days</option>
+                  <option value="30d">Past 30 Days</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ticker Filter Pills Row -->
+          <div class="news-toolbar-row">
+            <div style="font-size: 0.74rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Tickers:</div>
+            <div class="news-filter-pills" id="news-ticker-pills">
+              <button type="button" class="news-pill-btn ticker-pill active" data-ticker="all">ALL</button>
+              <button type="button" class="news-pill-btn ticker-pill" data-ticker="NVDA">NVDA</button>
+              <button type="button" class="news-pill-btn ticker-pill" data-ticker="MSFT">MSFT</button>
+              <button type="button" class="news-pill-btn ticker-pill" data-ticker="AAPL">AAPL</button>
+              <button type="button" class="news-pill-btn ticker-pill" data-ticker="GOOGL">GOOGL</button>
+              <button type="button" class="news-pill-btn ticker-pill" data-ticker="AMZN">AMZN</button>
+              <button type="button" class="news-pill-btn ticker-pill" data-ticker="META">META</button>
+              <button type="button" class="news-pill-btn ticker-pill" data-ticker="TSLA">TSLA</button>
+              <button type="button" class="news-pill-btn ticker-pill" data-ticker="TSM">TSM</button>
+              <button type="button" class="news-pill-btn ticker-pill" data-ticker="AMD">AMD</button>
+            </div>
+          </div>
+
+          <!-- Category & Sentiment Filter Pills Row -->
+          <div class="news-toolbar-row">
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <span style="font-size: 0.74rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Category:</span>
+              <div class="news-filter-pills" id="news-category-pills">
+                <button type="button" class="news-pill-btn active" data-category="all">All</button>
+                <button type="button" class="news-pill-btn" data-category="Big Tech">Big Tech</button>
+                <button type="button" class="news-pill-btn" data-category="Antitrust">Antitrust</button>
+                <button type="button" class="news-pill-btn" data-category="Semiconductors">Semiconductors</button>
+                <button type="button" class="news-pill-btn" data-category="Hardware">Hardware</button>
+                <button type="button" class="news-pill-btn" data-category="Cloud/AI">Cloud/AI</button>
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <span style="font-size: 0.74rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Sentiment:</span>
+              <div class="news-filter-pills" id="news-sentiment-pills">
+                <button type="button" class="news-pill-btn active" data-sentiment="all">All</button>
+                <button type="button" class="news-pill-btn" data-sentiment="bullish" style="color: #34d399;">Bullish</button>
+                <button type="button" class="news-pill-btn" data-sentiment="cautionary" style="color: #fb7185;">Cautionary</button>
+                <button type="button" class="news-pill-btn" data-sentiment="neutral">Neutral</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- News Stream Cards Grid -->
+        <div class="news-stream-grid" id="news-stream-container" aria-label="Real-time News Stories Feed">
+          <!-- Dynamically populated via materials.js -->
         </div>
       </div>
     </section>
+
+    <!-- =========================================================================
+         DOSSIER ARCHIVES VIEW (Existing Materials Repository & Document Hub)
+         ========================================================================= -->
+    <div id="dossier-archives-view" style="display: none;">
+      <!-- Trading Assistant Workstation Section (Direct Integration of New Folder 1 onto Materials Page) -->
+      <section class="trading-assistant-hub-card" id="trading-assistant-hub-card" aria-label="AI Trading Assistant Workstation" style="background: linear-gradient(135deg, rgba(13, 24, 40, 0.85) 0%, rgba(10, 16, 26, 0.95) 100%); border: 1px solid rgba(6, 182, 212, 0.3); border-radius: var(--radius-lg); padding: 22px; margin-bottom: 24px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 18px;">
+          <div style="display: align-items: center; gap: 14px; display: flex;">
+            <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(6, 182, 212, 0.15); border: 1px solid rgba(6, 182, 212, 0.4); display: flex; align-items: center; justify-content: center; color: #06b6d4;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <h2 style="font-family: var(--font-heading); font-size: 1.25rem; color: #f8fafc; letter-spacing: 0.04em; margin: 0;">JARVIS Trading Assistant</h2>
+                <span style="font-size: 0.68rem; font-weight: 700; background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); padding: 2px 8px; border-radius: 4px; letter-spacing: 0.05em;">SIMULATION LIVE</span>
+                <span style="font-size: 0.68rem; font-weight: 700; background: rgba(6, 182, 212, 0.15); color: #06b6d4; border: 1px solid rgba(6, 182, 212, 0.3); padding: 2px 8px; border-radius: 4px;">ZERO-API POLICY</span>
+              </div>
+              <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 4px 0 0 0;">Triad multi-agent intelligence (Tracker &bull; Predictor &bull; Commander &bull; RiskGuard) with MarketOracle dialectical arbitration.</p>
+            </div>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <button type="button" class="btn btn-sm btn-ghost" id="toggle-embedded-assistant" style="border: 1px solid rgba(255, 255, 255, 0.15); color: #e2e8f0;">
+              <span id="toggle-assistant-text">Expand Embedded Workstation</span>
+            </button>
+            <a href="/trading-assistant" target="_blank" class="btn btn-sm" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: #fff; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+              <span>Full-Screen Workstation</span>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Simulation Regulatory Notice Banner & Bot Controls -->
+        <div class="simulation-disclaimer-banner" style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 0.8rem; color: #fca5a5; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+          <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 280px;">
+            <span style="font-weight: 700; color: #ef4444; display: inline-flex; align-items: center; gap: 4px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              SIMULATION ONLY:
+            </span>
+            <span>Zero real money transactions. Not financial advice. Triad Autonomous RiskGuard enforces 2% max drawdown and 10% position cap.</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span id="bot-status-pill" style="font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; background: rgba(148, 163, 184, 0.2); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.3);">BOT: STOPPED</span>
+            <button type="button" id="bot-start-btn" style="background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); color: #10b981; font-weight: 600; cursor: pointer; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem;">▶ Start Bot</button>
+            <button type="button" id="bot-stop-btn" style="background: rgba(148, 163, 184, 0.2); border: 1px solid rgba(148, 163, 184, 0.4); color: #cbd5e1; font-weight: 600; cursor: pointer; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; display: none;">⏸ Stop</button>
+            <button type="button" id="bot-kill-btn" style="background: #dc2626; border: 1px solid #b91c1c; color: #fff; font-weight: 700; cursor: pointer; padding: 4px 12px; border-radius: 4px; font-size: 0.75rem; box-shadow: 0 0 10px rgba(220, 38, 38, 0.4);" title="Physical Emergency Kill Switch - Immediately Halt Bot & Lock Trading">⚡ KILL SWITCH</button>
+            <button type="button" id="bot-reset-btn" style="background: rgba(245, 158, 11, 0.2); border: 1px solid rgba(245, 158, 11, 0.4); color: #fbbf24; font-weight: 600; cursor: pointer; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; display: none;">↺ Reset</button>
+          </div>
+        </div>
+
+        <!-- Quick Ticker Snapshot Ribbon -->
+        <div id="assistant-ticker-ribbon" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 14px;">
+          <!-- Populated dynamically via /api/market/snapshot -->
+        </div>
+
+        <!-- Embedded Workstation Container (Expandable) -->
+        <div id="embedded-assistant-container" style="display: none; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 16px;">
+          <div style="border-radius: 12px; overflow: hidden; border: 1px solid rgba(6, 182, 212, 0.25); background: #0a0e17; height: 680px; position: relative;">
+            <iframe id="assistant-iframe" src="about:blank" style="width: 100%; height: 100%; border: none;" title="Trading Assistant Workstation"></iframe>
+          </div>
+        </div>
+      </section>
 
     <!-- Storage Metric Visualizer Widget (Section 5.A) -->
     <section class="storage-metric-widget" aria-label="Cloud Storage Utilization">
@@ -278,6 +475,7 @@
         </tbody>
       </table>
     </section>
+  </div><!-- /#dossier-archives-view -->
 
   </main>
 
@@ -402,6 +600,55 @@
           </button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       PHASE 3: STORY INTELLIGENCE DOSSIER MODAL DIALOG
+       ========================================================================= -->
+  <div class="portal-modal-backdrop" id="story-dossier-modal" role="dialog" aria-modal="true" aria-labelledby="dossier-modal-title">
+    <div class="portal-modal-box" style="max-width: 840px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold-accent)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <span id="dossier-modal-title">Intelligence Catalyst Dossier</span>
+        </div>
+        <button type="button" class="btn-modal-close" data-close-modal aria-label="Close Dossier Dialog">✕</button>
+      </div>
+
+      <div class="modal-body" id="dossier-modal-body">
+        <!-- Dynamically rendered by materials.js -->
+        <div class="dossier-badge-grid" id="dossier-modal-badges"></div>
+        <h2 class="dossier-full-headline" id="dossier-modal-headline">Loading story catalyst...</h2>
+        <p class="dossier-lead-text" id="dossier-modal-summary"></p>
+        <div class="dossier-catalyst-box" id="dossier-modal-rationale-box">
+          <div class="dossier-catalyst-title">Tactical Market Rationale & Executive Impact</div>
+          <div id="dossier-modal-rationale" style="font-size: 0.88rem; color: #f1f5f9; line-height: 1.5;"></div>
+        </div>
+        <div class="dossier-content-body" id="dossier-modal-content"></div>
+        
+        <!-- Provenance & Cryptographic Chain Box -->
+        <div class="dossier-provenance-box">
+          <div class="dossier-provenance-header">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span>Agent Pipeline Provenance & Integrity Chain</span>
+          </div>
+          <div class="dossier-provenance-grid" id="dossier-provenance-grid">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-ghost" data-close-modal>Close</button>
+        <button type="button" class="btn btn-ghost" id="dossier-btn-bookmark">
+          <span id="dossier-bookmark-text">🔖 Bookmark Story</span>
+        </button>
+        <a href="/trading-assistant" class="btn btn-cyan" id="dossier-btn-jarvis" target="_blank">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          <span>Analyze in Jarvis</span>
+        </a>
+      </div>
     </div>
   </div>
 

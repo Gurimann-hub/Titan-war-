@@ -19,14 +19,19 @@ const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes cache
 // Default public institutional RSS/Atom feeds (zero credentials required)
 const DEFAULT_FEEDS = [
   {
-    name: 'Yahoo Finance Tech Wire',
+    name: 'Google News Big Tech Wire',
     category: 'Market Equities',
-    url: 'https://finance.yahoo.com/news/rssindex'
+    url: 'https://news.google.com/rss/search?q=NVIDIA+OR+Microsoft+OR+Apple+OR+Google+OR+Amazon+OR+Meta+OR+Tesla+when:1d&hl=en-US&gl=US&ceid=US:en'
+  },
+  {
+    name: 'Semiconductor & AI Compute Wire',
+    category: 'Regulatory & Tech',
+    url: 'https://news.google.com/rss/search?q=AI+chips+OR+Blackwell+OR+semiconductors+OR+antitrust+tech+when:1d&hl=en-US&gl=US&ceid=US:en'
   },
   {
     name: 'SEC EDGAR Real-Time Filings',
     category: 'Regulatory Dockets',
-    url: 'https://www.sec.gov/cgi-bin/browse-edgar?action=getcurrent&type=10-K&count=15&output=atom'
+    url: 'https://www.sec.gov/cgi-bin/browse-edgar?action=getcurrent&type=8-K&count=20&output=atom'
   }
 ];
 
@@ -214,7 +219,9 @@ function cleanText(raw) {
     .replace(/&gt;/g, '>')
     .replace(/&quot;/g, '"')
     .replace(/&#039;/g, "'")
+    .replace(/&#39;/g, "'")
     .replace(/&apos;/g, "'")
+    .replace(/&nbsp;/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
 }
@@ -327,7 +334,7 @@ function parseFeedXmlSafe(xmlText, defaultSource = 'RSS Feed', defaultCategory =
 // 3. SECURE ASYNCHRONOUS FEED FETCHER
 // =========================================================================
 
-function fetchFeedHttp(url, timeoutMs = 4000, redirectCount = 0) {
+function fetchFeedHttp(url, timeoutMs = 8000, redirectCount = 0) {
   if (redirectCount > 3) {
     return Promise.reject(new Error('Too many redirects (max 3)'));
   }
@@ -341,7 +348,7 @@ function fetchFeedHttp(url, timeoutMs = 4000, redirectCount = 0) {
     const parsed = new URL(url);
     const isHttps = parsed.protocol === 'https:';
     const client = isHttps ? https : http;
-    const userAgent = process.env.SEC_EDGAR_USER_AGENT || 'JARVIS-Dashboard contact@example.com';
+    const userAgent = process.env.SEC_EDGAR_USER_AGENT || 'TitanWarIntelligence research@titanwar.intel';
 
     return new Promise((resolve, reject) => {
       const reqOptions = {
@@ -464,6 +471,7 @@ module.exports = {
   getAggregatedNews,
   validateFeedUrlSafe,
   parseFeedXmlSafe,
+  fetchFeedHttp,
   isPrivateIp,
   FALLBACK_NEWS_ITEMS
 };

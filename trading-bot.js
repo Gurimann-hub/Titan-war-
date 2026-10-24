@@ -1,10 +1,14 @@
 /**
- * TITAN WAR // TRIAD TRADING BOT SIMULATION & RISKGUARD SENTINEL
+ * TITAN WAR // 5-AGENT TRADING BOT SIMULATION & RISKGUARD SENTINEL
  * Architecture:
- * - Triad Multi-Agent Engine (Tracker, Predictor, Commander)
+ * - 5-Agent Collaborative AI Trading Framework:
+ *   1. Agent 1 (Fundamental Analyst): Earnings reports, forecasts, analyst revisions & business health.
+ *   2. Agent 2 (News & Sentiment Analyst): General company news, X (Twitter) pulse, and Bull vs Bear dialectics.
+ *   3. Agent 3 (Technical Analyst): 200-Day SMA Trend Filter (slope > 0) + Rate of Change (ROC) Reset Consolidation (3-Month Horizon).
+ *   4. Agent 4 (Catalyst & Event Tracker): Upcoming corporate catalysts (Dev Days, product launches, keynotes).
+ *   5. Agent 5 (RiskGuard & Execution Arbiter): Order sizing, paper-trading ledger & physical kill switch.
  * - Autonomous RiskGuard & Physical Kill Switch (2% Drawdown Circuit Breaker, 10% Position Cap)
  * - Deterministic Paper-Trading Broker (100% Zero-Risk Simulation, $100,000 Starting Capital)
- * - Zero Third-Party API Key Policy (Local technical analysis & deterministic pricing walk)
  * - Full SQLite Audit Trail (CWE-89 immune, node:sqlite prepared statements)
  */
 
@@ -12,6 +16,7 @@ const fs = require('fs');
 const path = require('path');
 const db = require('./db');
 const { MARKET_SNAPSHOTS } = require('./trading-assistant');
+const { generateMockCandles } = require('./market-data');
 
 const DISCLAIMER = 'Simulation only. Zero real money transactions. Not financial advice.';
 
@@ -58,34 +63,56 @@ function createPrng(seedVal) {
 const triadRng = createPrng(process.env.TRIAD_SEED);
 
 // ---------------------------------------------------------------------------
-// 1. TRACKER AGENT: Market Universe & Technical Analysis
+// TRACKER AGENT: Market Universe & 200-Bar Historical Candlestick Buffer
 // ---------------------------------------------------------------------------
 class TrackerAgent {
   constructor(tickers) {
-    this.tickers = tickers || ['NVDA', 'MSFT', 'AAPL', 'GOOGL', 'AMZN', 'META', 'TSLA'];
+    // Focused 5-name universe default as advised by friend
+    this.tickers = tickers || ['NVDA', 'MSFT', 'AAPL', 'GOOGL', 'AMZN'];
     this.priceHistory = new Map();
     this.currentPrices = new Map();
 
-    // Initialize with baseline market snapshots
+    // Initialize each ticker with 250 historical bars (to compute 200-day SMA and slope)
     this.tickers.forEach(sym => {
-      const base = MARKET_SNAPSHOTS[sym]?.price || 150.0;
-      this.currentPrices.set(sym, base);
-      this.priceHistory.set(sym, [base]);
+      let initialCloses = [];
+      try {
+        const mockData = generateMockCandles(sym, '1D', 250);
+        if (mockData && Array.isArray(mockData.candles) && mockData.candles.length >= 200) {
+          initialCloses = mockData.candles.map(c => c.c);
+        }
+      } catch (e) {
+        // Fallback synthetic generator
+      }
+
+      if (initialCloses.length < 250) {
+        const base = MARKET_SNAPSHOTS[sym]?.price || 150.0;
+        let p = base * 0.85;
+        initialCloses = [];
+        for (let i = 0; i < 250; i++) {
+          const drift = 0.0006;
+          const shock = (triadRng() - 0.49) * 0.015;
+          p = Math.max(1.0, parseFloat((p * (1 + drift + shock)).toFixed(2)));
+          initialCloses.push(p);
+        }
+        initialCloses[initialCloses.length - 1] = base;
+      }
+
+      const latestPrice = initialCloses[initialCloses.length - 1];
+      this.currentPrices.set(sym, latestPrice);
+      this.priceHistory.set(sym, initialCloses);
     });
   }
 
-  // Deterministic or pseudo-random step walk
   tickMarket() {
     this.tickers.forEach(sym => {
       const cur = this.currentPrices.get(sym);
-      // Small Gaussian-like walk [-0.8%, +0.8%] using seeded PRNG
       const deltaPct = (triadRng() - 0.49) * 0.016;
       const nextPrice = Math.max(1.0, parseFloat((cur * (1 + deltaPct)).toFixed(2)));
       this.currentPrices.set(sym, nextPrice);
 
       const hist = this.priceHistory.get(sym);
       hist.push(nextPrice);
-      if (hist.length > 60) hist.shift(); // retain last 60 ticks
+      if (hist.length > 300) hist.shift(); // retain up to 300 historical closes
     });
   }
 
@@ -96,9 +123,9 @@ class TrackerAgent {
   getIndicators(ticker) {
     const hist = this.priceHistory.get(ticker) || [this.getPrice(ticker)];
     const cur = this.getPrice(ticker);
+    const len = hist.length;
 
     // SMA 5
-    const len = hist.length;
     const slice5 = hist.slice(-Math.min(5, len));
     const sma5 = slice5.reduce((a, b) => a + b, 0) / slice5.length;
 
@@ -106,11 +133,48 @@ class TrackerAgent {
     const slice20 = hist.slice(-Math.min(20, len));
     const sma20 = slice20.reduce((a, b) => a + b, 0) / slice20.length;
 
-    // Momentum (ROC 5)
+    // 200-DAY MOVING AVERAGE (Core Trend Filter)
+    const sma200Period = Math.min(200, len);
+    const slice200 = hist.slice(-sma200Period);
+    const sma200 = slice200.reduce((a, b) => a + b, 0) / slice200.length;
+
+    // 200-DAY SMA SLOPE: Check if 200 SMA is pointing upward
+    let sma200Slope = 0.0;
+    if (len >= 210) {
+      const slice200Prev = hist.slice(-210, -10);
+      const sma200Prev = slice200Prev.reduce((a, b) => a + b, 0) / slice200Prev.length;
+      sma200Slope = parseFloat(((sma200 - sma200Prev) / 10).toFixed(4));
+    } else if (len >= 30) {
+      const prevHalf = hist.slice(0, Math.floor(len / 2));
+      const smaHalf = prevHalf.reduce((a, b) => a + b, 0) / prevHalf.length;
+      sma200Slope = parseFloat(((sma200 - smaHalf) / (len / 2)).toFixed(4));
+    }
+
+    const isAbove200Sma = cur > sma200;
+    const is200SmaUpward = sma200Slope > 0;
+
+    // RATE OF CHANGE (ROC) OVER 20 BARS & RESET CONSOLIDATION LOGIC
+    const base20 = hist[Math.max(0, len - 21)] || cur;
+    const roc20 = base20 > 0 ? (cur - base20) / base20 : 0;
+
+    // Rolling peak ROC over recent 30-40 bars
+    let peakRoc = roc20;
+    for (let i = Math.max(20, len - 35); i < len; i++) {
+      const b = hist[i - 20] || hist[0];
+      const r = b > 0 ? (hist[i] - b) / b : 0;
+      if (r > peakRoc) peakRoc = r;
+    }
+
+    // Friend's ROC Reset Condition:
+    // ROC was previously higher (peakRoc >= +2.5%) and has now reset close to 0 (-1.5% <= roc20 <= +3.0%)
+    // Signaling consolidation in an ongoing uptrend above the rising 200-SMA.
+    const isRocReset = peakRoc >= 0.025 && roc20 >= -0.015 && roc20 <= 0.035;
+
+    // Short-term Momentum (ROC 5)
     const base5 = slice5[0] || cur;
     const momentum = (cur - base5) / (base5 || 1);
 
-    // RSI 14 (requires at least 15 samples so hist[i - 1] is never out of bounds)
+    // RSI 14
     let rsi = 50.0;
     if (len >= 15) {
       let gains = 0;
@@ -133,17 +197,104 @@ class TrackerAgent {
       currentPrice: cur,
       sma5: parseFloat(sma5.toFixed(2)),
       sma20: parseFloat(sma20.toFixed(2)),
+      sma200: parseFloat(sma200.toFixed(2)),
+      sma200Slope: parseFloat(sma200Slope.toFixed(4)),
+      isAbove200Sma,
+      is200SmaUpward,
+      roc20: parseFloat((roc20 * 100).toFixed(2)),
+      peakRoc: parseFloat((peakRoc * 100).toFixed(2)),
+      isRocReset,
       rsi: parseFloat(rsi.toFixed(1)),
-      momentum: parseFloat(momentum.toFixed(4))
+      momentum: parseFloat(momentum.toFixed(4)),
+      timeHorizon: '3-Month Trend'
     };
   }
 }
 
 // ---------------------------------------------------------------------------
-// 2. PREDICTOR AGENT: Alpha Signal Generation
+// 1. AGENT 1: FUNDAMENTAL ANALYST AGENT (Earnings, Analysts & Guidance)
 // ---------------------------------------------------------------------------
-class PredictorAgent {
+class FundamentalAgent {
+  constructor() {
+    this.name = 'Agent 1: Fundamental Analyst';
+  }
+
+  analyze(ticker) {
+    const defaultFundamentals = {
+      NVDA: { revGrowth: 122.4, fcfMargin: 47.8, forwardPe: 36.5, capexGrowth: 68.4 },
+      MSFT: { revGrowth: 15.2, fcfMargin: 31.4, forwardPe: 29.8, capexGrowth: 52.1 },
+      AAPL: { revGrowth: 4.9, fcfMargin: 28.6, forwardPe: 28.4, capexGrowth: 12.3 },
+      GOOGL: { revGrowth: 14.1, fcfMargin: 29.2, forwardPe: 20.4, capexGrowth: 44.7 },
+      AMZN: { revGrowth: 12.8, fcfMargin: 14.5, forwardPe: 32.1, capexGrowth: 38.5 },
+      META: { revGrowth: 22.1, fcfMargin: 36.8, forwardPe: 22.0, capexGrowth: 58.2 },
+      TSLA: { revGrowth: 8.5, fcfMargin: 12.0, forwardPe: 62.1, capexGrowth: 28.0 }
+    };
+
+    const metrics = defaultFundamentals[ticker] || { revGrowth: 15.0, fcfMargin: 25.0, forwardPe: 30.0, capexGrowth: 20.0 };
+    let score = 0.70;
+    if (metrics.revGrowth > 20) score += 0.15;
+    if (metrics.fcfMargin > 25) score += 0.10;
+    if (metrics.forwardPe > 60) score -= 0.15;
+
+    score = Math.max(0.20, Math.min(0.95, score));
+    const status = score >= 0.70 ? 'BULLISH' : score >= 0.50 ? 'NEUTRAL' : 'BEARISH';
+
+    return {
+      agent: this.name,
+      ticker,
+      score: parseFloat(score.toFixed(2)),
+      status,
+      metrics: {
+        revenueGrowthYoY: `+${metrics.revGrowth}%`,
+        fcfMarginPct: `${metrics.fcfMargin}%`,
+        forwardMultiple: `${metrics.forwardPe}x`
+      },
+      analystForecastConsensus: score >= 0.70 ? 'Upward Revisions / Institutional Accumulation' : 'Neutral / Rangebound Target',
+      headline: `Solid earnings conversion with ${metrics.fcfMargin}% FCF margin and +${metrics.revGrowth}% revenue growth.`
+    };
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 2. AGENT 2: NEWS & SENTIMENT AGENT (X / Twitter, Bull vs Bear Pulse)
+// ---------------------------------------------------------------------------
+class SentimentAgent {
+  constructor() {
+    this.name = 'Agent 2: News & Sentiment (X/Social)';
+  }
+
+  analyze(ticker) {
+    const sentimentDatabase = {
+      NVDA: { score: 0.85, bias: 'BULLISH', xPulse: 'High token generation volume and next-gen data center demand trending on X.' },
+      MSFT: { score: 0.79, bias: 'BULLISH', xPulse: 'Enterprise Azure Copilot deployment cases dominating tech feeds on X.' },
+      AAPL: { score: 0.74, bias: 'BULLISH', xPulse: 'Apple Intelligence beta engagement and ecosystem hardware cycles discussed on X.' },
+      GOOGL: { score: 0.76, bias: 'BULLISH', xPulse: 'Custom TPU silicon benchmarks and Gemini enterprise integration trending positively.' },
+      AMZN: { score: 0.78, bias: 'BULLISH', xPulse: 'AWS custom AI accelerator efficiency and retail margin expansion noted on X.' },
+      META: { score: 0.81, bias: 'BULLISH', xPulse: 'Open-source Llama adoption and ad monetisation efficiency praise on X.' },
+      TSLA: { score: 0.58, bias: 'NEUTRAL', xPulse: 'Robotaxi regulatory timelines counterbalanced by EV competitive margin debates on X.' }
+    };
+
+    const data = sentimentDatabase[ticker] || { score: 0.70, bias: 'NEUTRAL', xPulse: 'Steady institutional commentary on X.' };
+
+    return {
+      agent: this.name,
+      ticker,
+      score: data.score,
+      sentiment: data.bias,
+      xPulse: data.xPulse,
+      bullCase: 'Durable infrastructure moat and expanding enterprise software token consumption.',
+      bearCase: 'Antitrust litigation overhead and customer concentration scrutiny.',
+      rationale: `Social discourse on X and institutional press indicate a net ${data.bias.toLowerCase()} stance (Conviction: ${Math.round(data.score * 100)}%).`
+    };
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 3. AGENT 3: TECHNICAL ANALYST AGENT (200 SMA + ROC Reset Strategy)
+// ---------------------------------------------------------------------------
+class TechnicalAgent {
   constructor(tracker) {
+    this.name = 'Agent 3: Technical Analyst';
     this.tracker = tracker;
   }
 
@@ -151,17 +302,117 @@ class PredictorAgent {
     const ind = this.tracker.getIndicators(ticker);
     let signal = 'HOLD';
     let confidence = 0.50;
-    let rationale = 'Neutral moving-average convergence.';
+    let rationale = '';
 
-    // Trend Following + Momentum Alpha
-    if (ind.sma5 > ind.sma20 && ind.rsi < 68 && ind.momentum > 0.002) {
+    // FRIEND'S EXACT STRATEGY CRITERIA:
+    // 1. Price > 200-day moving average
+    // 2. 200-day moving average is pointed upward (slope > 0)
+    // 3. Rate of change (ROC) has reset close to 0 after being higher (Consolidation for 3-month trend)
+    if (ind.isAbove200Sma && ind.is200SmaUpward && ind.isRocReset) {
       signal = 'BUY';
-      confidence = Math.min(0.92, 0.60 + Math.abs(ind.momentum) * 10);
-      rationale = `Bullish SMA Golden Cross (SMA5: $${ind.sma5} > SMA20: $${ind.sma20}) with RSI at ${ind.rsi}.`;
-    } else if (ind.sma5 < ind.sma20 || ind.rsi > 78 || ind.momentum < -0.005) {
+      confidence = Math.min(0.95, 0.74 + (ind.sma200Slope > 0 ? 0.08 : 0) + (ind.isAbove200Sma ? 0.08 : 0));
+      rationale = `Bullish 3-Month Trend Setup: Price ($${ind.currentPrice}) > Rising 200-SMA ($${ind.sma200}, slope: +${ind.sma200Slope}/bar). ROC reset to ${ind.roc20}% (post-peak ${ind.peakRoc}%). Consolidated and ready for next leg higher.`;
+    } else if (ind.isAbove200Sma && ind.is200SmaUpward && ind.roc20 > 3.5) {
+      signal = 'HOLD';
+      confidence = 0.65;
+      rationale = `Macro uptrend intact (Price > Rising 200-SMA), but ROC (+${ind.roc20}%) is extended. Awaiting ROC reset to near 0 before adding.`;
+    } else if (!ind.isAbove200Sma) {
       signal = 'SELL';
-      confidence = Math.min(0.90, 0.60 + Math.abs(ind.momentum) * 10);
-      rationale = `Bearish Momentum Fade (SMA5: $${ind.sma5} < SMA20: $${ind.sma20}) or Overbought RSI (${ind.rsi}).`;
+      confidence = Math.min(0.90, 0.70 + Math.abs(ind.momentum) * 10);
+      rationale = `Trend Breakdown: Price ($${ind.currentPrice}) broke below 200-SMA ($${ind.sma200}). RiskGuard invalidation trigger.`;
+    } else if (ind.sma200Slope < -0.05) {
+      signal = 'SELL';
+      confidence = 0.85;
+      rationale = `Macro Degradation: 200-day SMA slope turned negative (${ind.sma200Slope}). Trend filter failed.`;
+    } else if (ind.roc20 < -6.0) {
+      signal = 'SELL';
+      confidence = 0.82;
+      rationale = `Momentum Failure: ROC (${ind.roc20}%) broke below consolidation floor (-6.0%).`;
+    } else {
+      signal = 'HOLD';
+      confidence = 0.52;
+      rationale = `Consolidating near 200-SMA ($${ind.sma200}). Trend slope: ${ind.sma200Slope >= 0 ? '+' : ''}${ind.sma200Slope}. Awaiting ROC reset confirmation.`;
+    }
+
+    return {
+      agent: this.name,
+      ticker,
+      signal,
+      confidence: parseFloat(confidence.toFixed(2)),
+      rationale,
+      price: ind.currentPrice,
+      indicators: ind
+    };
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 4. AGENT 4: CATALYST & EVENT TRACKER AGENT (Dev Days, Product Keynotes)
+// ---------------------------------------------------------------------------
+class CatalystAgent {
+  constructor() {
+    this.name = 'Agent 4: Catalyst & Event Tracker';
+  }
+
+  analyze(ticker, technicalInd) {
+    const upcomingCatalysts = {
+      NVDA: { event: 'NVIDIA GTC & Blackwell Hyperscaler Delivery Milestone', timeframe: 'Next 3-6 weeks', impact: 9 },
+      MSFT: { event: 'Microsoft Ignite Enterprise Copilot Expansion', timeframe: 'Next 4 weeks', impact: 8 },
+      AAPL: { event: 'Apple Developer Day (WWDC) & Hardware Special Event', timeframe: 'Next 2-4 weeks', impact: 8 },
+      GOOGL: { event: 'Google I/O & Gemini 2.0 Integration Day', timeframe: 'Next 5 weeks', impact: 8 },
+      AMZN: { event: 'AWS re:Invent Custom Silicon Keynote', timeframe: 'Next 6 weeks', impact: 8 },
+      META: { event: 'Meta Connect & Next-Gen Llama Ecosystem Keynote', timeframe: 'Next 4 weeks', impact: 8 },
+      TSLA: { event: 'Tesla Autonomous Robotaxi Commercial Milestone Event', timeframe: 'Next 8 weeks', impact: 9 }
+    };
+
+    const cat = upcomingCatalysts[ticker] || { event: 'Quarterly Earnings & Strategic Analyst Day', timeframe: 'Upcoming', impact: 7 };
+    const priceActingGreat = technicalInd.isAbove200Sma && technicalInd.is200SmaUpward;
+
+    return {
+      agent: this.name,
+      ticker,
+      upcomingEvent: cat.event,
+      timeframe: cat.timeframe,
+      impactScore: cat.impact,
+      actingGreatLeadingIn: priceActingGreat,
+      rationale: `${cat.event} scheduled (${cat.timeframe}). Stock is ${priceActingGreat ? 'acting great leading in (holding above rising 200-SMA)' : 'testing key technical support'}.`
+    };
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 5. PREDICTOR AGENT: 5-Agent Multi-Model Synthesis Engine
+// ---------------------------------------------------------------------------
+class PredictorAgent {
+  constructor(tracker) {
+    this.tracker = tracker;
+    this.fundamentalAgent = new FundamentalAgent();
+    this.sentimentAgent = new SentimentAgent();
+    this.technicalAgent = new TechnicalAgent(this.tracker);
+    this.catalystAgent = new CatalystAgent();
+  }
+
+  analyze(ticker) {
+    const tech = this.technicalAgent.analyze(ticker);
+    const fund = this.fundamentalAgent.analyze(ticker);
+    const sent = this.sentimentAgent.analyze(ticker);
+    const cata = this.catalystAgent.analyze(ticker, tech.indicators);
+
+    let signal = tech.signal;
+    let confidence = tech.confidence;
+    let rationale = tech.rationale;
+
+    // Multi-Agent Confluence Validation:
+    // When Technical Agent flags BUY, verify Fundamental & Sentiment backing
+    if (tech.signal === 'BUY') {
+      if (fund.status === 'BEARISH') {
+        signal = 'HOLD';
+        confidence = 0.50;
+        rationale = `Technical ROC reset active, but Agent 1 (Fundamental) flagged earnings risk. Gated.`;
+      } else {
+        confidence = Math.min(0.95, (tech.confidence * 0.50) + (fund.score * 0.30) + (sent.score * 0.20));
+        rationale = `${tech.rationale} Supported by ${fund.analystForecastConsensus} and ${sent.sentiment} sentiment on X ahead of ${cata.upcomingEvent}.`;
+      }
     }
 
     return {
@@ -169,8 +420,15 @@ class PredictorAgent {
       signal,
       confidence: parseFloat(confidence.toFixed(2)),
       rationale,
-      price: ind.currentPrice,
-      indicators: ind
+      price: tech.price,
+      indicators: tech.indicators,
+      fiveAgentReport: {
+        agent1_fundamental: fund,
+        agent2_sentiment_x: sent,
+        agent3_technical_roc: tech,
+        agent4_catalysts: cata,
+        agent5_execution_status: 'Ready for RiskGuard pre-trade validation'
+      }
     };
   }
 
@@ -180,7 +438,7 @@ class PredictorAgent {
 }
 
 // ---------------------------------------------------------------------------
-// 3. COMMANDER AGENT: Order Sizing & Execution Decision
+// 6. COMMANDER AGENT: Order Sizing & Execution Decision (Agent 5 Executive)
 // ---------------------------------------------------------------------------
 class CommanderAgent {
   constructor(predictor, broker, riskGuard) {
@@ -242,7 +500,7 @@ class CommanderAgent {
 }
 
 // ---------------------------------------------------------------------------
-// 4. RISKGUARD AGENT: Financial Safety Invariants & Kill Switch
+// 7. RISKGUARD AGENT: Financial Safety Invariants & Kill Switch
 // ---------------------------------------------------------------------------
 class RiskGuardAgent {
   constructor(broker, dbClient = null) {
@@ -387,7 +645,7 @@ class RiskGuardAgent {
 }
 
 // ---------------------------------------------------------------------------
-// 5. SIMULATED BROKER: Paper-Trading & Portfolio Ledger
+// 8. SIMULATED BROKER: Paper-Trading & Portfolio Ledger
 // ---------------------------------------------------------------------------
 class SimulatedBroker {
   constructor(tracker, dbClient = null) {
@@ -511,7 +769,7 @@ class SimulatedBroker {
 }
 
 // ---------------------------------------------------------------------------
-// 6. TRADING BOT ORCHESTRATOR & LIFECYCLE CONTROLLER
+// 9. TRADING BOT ORCHESTRATOR & LIFECYCLE CONTROLLER
 // ---------------------------------------------------------------------------
 class TradingBotController {
   constructor(options = {}) {
@@ -554,7 +812,7 @@ class TradingBotController {
     return {
       success: true,
       status: 'success',
-      message: 'Triad Trading Bot simulation started in automated paper-trading mode.'
+      message: '5-Agent Trading Bot simulation started in automated paper-trading mode.'
     };
   }
 
@@ -569,7 +827,7 @@ class TradingBotController {
     return {
       success: true,
       status: 'success',
-      message: 'Triad Trading Bot simulation stopped.'
+      message: '5-Agent Trading Bot simulation stopped.'
     };
   }
 
@@ -667,8 +925,16 @@ class TradingBotController {
       success: true,
       status: this.status,
       mock: true,
-      price_source: 'synthetic-random-walk',
-      activeStrategy: 'Triad Momentum & Structural Alpha',
+      price_source: 'synthetic-candlestick-walk',
+      activeStrategy: '5-Agent AI Confluence: 200-Day SMA Trend & ROC Reset Consolidation',
+      timeHorizon: '3-Month Trend Riding',
+      framework: {
+        agent1_fundamental: 'Earnings, forecast revisions & free cash flow margins',
+        agent2_sentiment_x: 'News, social sentiment pulse on X & Bull/Bear dialectics',
+        agent3_technical_roc: 'Price > 200 SMA (slope > 0) + Rate of Change (ROC) reset to 0',
+        agent4_catalysts: 'Upcoming Dev Days, product keynotes & relative strength verification',
+        agent5_execution_risk: 'Paper broker, 10% position limit, 2% drawdown circuit breaker'
+      },
       uptimeSeconds: this.startTime ? Math.floor((Date.now() - this.startTime) / 1000) : 0,
       lastTickAt: this.lastTickTime ? new Date(this.lastTickTime).toISOString() : null,
       tickCount: this.tickCount,
@@ -697,6 +963,10 @@ module.exports = {
   CommanderAgent,
   RiskGuardAgent,
   SimulatedBroker,
+  FundamentalAgent,
+  SentimentAgent,
+  TechnicalAgent,
+  CatalystAgent,
   botInstance,
   RISK_LIMITS,
   DISCLAIMER

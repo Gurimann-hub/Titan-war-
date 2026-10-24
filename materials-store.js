@@ -8,10 +8,10 @@ const crypto = require('crypto');
 
 const HOST_USER = {
   id: 'usr_94812',
-  name: 'Alex Mercer',
+  name: 'Guri Mann',
   role: 'host',
-  email: 'alex.mercer@titan.corp',
-  avatar: 'AM',
+  email: (process.env.ADMIN_EMAIL || process.env.GMAIL_USER || 'guri.mann.2307@gmail.com').trim(),
+  avatar: 'GM',
   clearance: 'LEVEL 5 (HOST PRIVILEGES)',
   department: 'Strategic Corporate Intelligence',
   storageQuotaBytes: 15 * 1024 * 1024 * 1024, // 15 GB

@@ -220,4 +220,1635 @@ Error generating stack: `+s.message+`
  */const Of=oe("UserRound",[["circle",{cx:"12",cy:"8",r:"5",key:"1hypcn"}],["path",{d:"M20 21a8 8 0 0 0-16 0",key:"rfgkzh"}]]),Zu={live:"LIVE",mock:"MOCK",stale:"STALE"};function $t(u,k=!1,c=!1){return!u||c?"stale":k?"mock":"live"}function on({status:u}){return i.jsxs("span",{className:`data-badge data-badge--${u}`,"aria-label":`Data status: ${Zu[u]}`,children:[i.jsx("span",{className:"data-badge__dot"}),Zu[u]]})}function Af(u){switch(u){case"Confirmed True":return"veracity--true";case"Probable / Ongoing":return"veracity--probable";case"Unverified Rumor":return"veracity--rumor";case"Debunked / False":return"veracity--false";default:return"veracity--neutral"}}function Df(u){switch(u){case"Confirmed True":return i.jsx(Sf,{size:13,className:"veracity-icon"});case"Probable / Ongoing":return i.jsx(jf,{size:13,className:"veracity-icon"});case"Unverified Rumor":return i.jsx(If,{size:13,className:"veracity-icon"});case"Debunked / False":return i.jsx(Nf,{size:13,className:"veracity-icon"});default:return i.jsx(Kn,{size:13,className:"veracity-icon"})}}function Ff(u){switch(u){case"Strong Upward Bias":return"verdict--strong-bull";case"Moderate Upward Bias":return"verdict--bull";case"Neutral / Rangebound":return"verdict--neutral";case"Downward Bias":return"verdict--bear";default:return"verdict--neutral"}}function Uf({data:u,onNavigateCompany:k}){const{ticker:c,company_name:E,news_audit:v,dialectical_theses:g,arbiter_decision_system:A,conversational_chat_response:B,compliance_disclaimer:R}=u,F=A.probability_of_price_increase_pct,Y=g.bull_thesis.thesis_strength_score,W=g.bear_thesis.thesis_strength_score,X=Y+W||1,ee=Math.round(Y/X*100),q=38,U=8,Q=2*Math.PI*q,Te=Q-F/100*Q;return i.jsxs("div",{className:"verdict-card",role:"region","aria-label":`MarketOracle Verdict for ${c}`,children:[i.jsxs("div",{className:"verdict-card__head",children:[i.jsxs("div",{className:"verdict-card__brand",children:[i.jsxs("div",{className:"verdict-card__oracle-tag",children:[i.jsx(Wl,{size:12}),i.jsx("span",{children:"MARKETORACLE AI"})]}),i.jsx("span",{className:"verdict-card__model-tag",children:"Gemini 0.1 Temp Grounded"})]}),i.jsxs("div",{className:"verdict-card__asset",children:[i.jsxs("button",{type:"button",className:"verdict-card__ticker-btn",title:`View supply chain map for ${c}`,onClick:()=>k==null?void 0:k(c),children:[i.jsx("span",{className:"verdict-card__ticker",children:c}),i.jsx(Ir,{size:11})]}),i.jsx("span",{className:"verdict-card__company",children:E})]})]}),i.jsxs("section",{className:"verdict-section verdict-section--audit",children:[i.jsxs("div",{className:"verdict-kicker",children:[i.jsx(Kn,{size:11})," STEP 1: NEWS VERACITY & ATTRIBUTION AUDIT"]}),i.jsxs("div",{className:"veracity-badge-row",children:[i.jsxs("span",{className:`veracity-pill ${Af(v.veracity_status)}`,"aria-label":`Veracity: ${v.veracity_status}`,children:[Df(v.veracity_status),i.jsx("strong",{children:v.veracity_status})]}),i.jsx("span",{className:"source-pill source-pill--tier",children:v.source_classification.tier}),i.jsxs("span",{className:`reliability-pill reliability--${v.source_classification.reliability_index.toLowerCase()}`,children:["Reliability: ",v.source_classification.reliability_index]})]}),i.jsxs("div",{className:"veracity-source-name",children:["Source: ",i.jsx("strong",{children:v.source_classification.identified_source_name})]}),i.jsx("p",{className:"veracity-fact-check",children:v.fact_check_summary})]}),i.jsxs("section",{className:"verdict-section verdict-section--arbiter",children:[i.jsxs("div",{className:"verdict-kicker",children:[i.jsx(Wi,{size:11})," STEP 4: THE ARBITER DECISION SYSTEM (NET VERDICT ENGINE)"]}),i.jsxs("div",{className:"decision-meter-grid",children:[i.jsxs("div",{className:"decision-meter__gauge",children:[i.jsxs("svg",{width:"96",height:"96",viewBox:"0 0 96 96",className:"gauge-svg","aria-hidden":"true",children:[i.jsx("circle",{cx:"48",cy:"48",r:q,className:"gauge-track",strokeWidth:U}),i.jsx("circle",{cx:"48",cy:"48",r:q,className:`gauge-bar ${F>=60?"gauge-bar--bull":F<=40?"gauge-bar--bear":"gauge-bar--neutral"}`,strokeWidth:U,strokeDasharray:Q,strokeDashoffset:Te,strokeLinecap:"round",transform:"rotate(-90 48 48)"})]}),i.jsxs("div",{className:"decision-meter__pct-box",children:[i.jsxs("span",{className:"decision-meter__pct",children:[F,"%"]}),i.jsx("span",{className:"decision-meter__pct-label",children:"Prob. Up"})]})]}),i.jsxs("div",{className:"decision-meter__info",children:[i.jsxs("div",{className:"verdict-call-row",children:[i.jsxs("span",{className:`verdict-badge ${Ff(A.directional_verdict)}`,children:[F>=50?i.jsx(Ju,{size:13}):i.jsx(qu,{size:13}),A.directional_verdict]}),i.jsxs("span",{className:"horizon-tag",children:[i.jsx(_f,{size:11})," ",A.time_horizon]})]}),i.jsxs("div",{className:"arbiter-factor-box",children:[i.jsxs("div",{className:"arbiter-factor__label",children:[i.jsx(Mf,{size:11})," DECISIVE TIPPING FACTOR"]}),i.jsx("p",{className:"arbiter-factor__text",children:A.the_decisive_tipping_factor})]}),i.jsxs("div",{className:"invalidation-box",children:[i.jsx("span",{className:"invalidation__label",children:"INVALIDATION TRIGGER:"}),i.jsx("span",{className:"invalidation__text",children:A.invalidation_criteria})]})]})]})]}),i.jsxs("section",{className:"verdict-section verdict-section--theses",children:[i.jsxs("div",{className:"verdict-kicker",children:[i.jsx(Wi,{size:11})," STEPS 2 & 3: THE BULL VS. BEAR DIALECTICAL DEBATE"]}),i.jsxs("div",{className:"theses-ratio-bar",role:"meter","aria-valuenow":Y,"aria-valuemin":1,"aria-valuemax":10,children:[i.jsx("div",{className:"theses-ratio-bar__bull",style:{width:`${ee}%`},children:i.jsxs("span",{children:["BULL ",Y,"/10"]})}),i.jsx("div",{className:"theses-ratio-bar__bear",style:{width:`${100-ee}%`},children:i.jsxs("span",{children:["BEAR ",W,"/10"]})})]}),i.jsxs("div",{className:"theses-grid",children:[i.jsxs("div",{className:"thesis-card thesis-card--bull",children:[i.jsxs("div",{className:"thesis-card__title",children:[i.jsx(Ju,{size:13})," Bull Thesis (",Y,"/10)"]}),i.jsx("p",{className:"thesis-card__premise",children:g.bull_thesis.core_premise}),i.jsx("div",{className:"thesis-card__sublabel",children:"Key Catalysts:"}),i.jsx("ul",{className:"thesis-card__list",children:g.bull_thesis.growth_catalysts.map((he,ae)=>i.jsx("li",{children:he},ae))}),i.jsxs("div",{className:"thesis-card__driver",children:[i.jsx("strong",{children:"Upside Driver:"})," ",g.bull_thesis.valuation_upside_driver]})]}),i.jsxs("div",{className:"thesis-card thesis-card--bear",children:[i.jsxs("div",{className:"thesis-card__title",children:[i.jsx(qu,{size:13})," Bear Thesis (",W,"/10)"]}),i.jsx("p",{className:"thesis-card__premise",children:g.bear_thesis.core_premise}),i.jsx("div",{className:"thesis-card__sublabel",children:"Headwinds & Traps:"}),i.jsx("ul",{className:"thesis-card__list",children:g.bear_thesis.risks_and_headwinds.map((he,ae)=>i.jsx("li",{children:he},ae))}),i.jsxs("div",{className:"thesis-card__driver",children:[i.jsx("strong",{children:"Downside Trigger:"})," ",g.bear_thesis.downside_triggers]})]})]})]}),i.jsxs("section",{className:"verdict-section verdict-section--narrative",children:[i.jsx("div",{className:"verdict-kicker",children:"EXECUTIVE SUMMARY"}),i.jsx("div",{className:"verdict-narrative-text",children:B.split(`
 
 `).map((he,ae)=>i.jsx("p",{children:he},ae))})]}),i.jsx("footer",{className:"verdict-card__foot",children:i.jsx("p",{className:"compliance-text",children:R})})]})}const $f=/(?:you are JARVIS, an embedded equity-research assistant|DATA RULES \(non-negotiable\):|OUTPUT DISCIPLINE:|BEHAVIORAL GUARDRAILS:|system[_ ]prompt|tool[_ ]output|tool schema|<\|(?:system|tool|assistant)[^|]*\|>|\[TOOL OUTPUT[^\]]*\])/i,Vf=128;function bu(u,k=!1){return/^\s*(?:```(?:json)?\s*)?[\[{]/i.test(u)?k?"The service returned structured internal data instead of a user-facing answer. The response was withheld.":"":$f.test(u)?"The service returned internal instructions or tool output. The response was withheld.":(k?u:u.slice(0,Math.max(0,u.length-Vf))).trim()}function Hf({onNavigateCompany:u}){const[k,c]=T.useState([]),[E,v]=T.useState(""),[g,A]=T.useState("market_oracle"),[B,R]=T.useState("NVDA"),[F,Y]=T.useState("Is the rumor about chip packaging delay true or debunked?"),[W,X]=T.useState(""),[ee,q]=T.useState(!1),[U,Q]=T.useState("stale"),[Te,he]=T.useState(null),ae=T.useRef(null),$=async K=>{var Be,ze;K.preventDefault();const de=E.trim();if(!de||ee)return;const Ie={role:"user",content:de,ts:new Date().toISOString()},Ae={role:"assistant",content:"",ts:new Date().toISOString()};c(J=>[...J,Ie,Ae]),v(""),q(!0),Q("stale"),he(null);try{const J=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json",Accept:"text/plain"},body:JSON.stringify({message:de})});if(!J.ok)throw Q("stale"),new Error(`Chat service unavailable (HTTP ${J.status}).`);if(!J.body)throw new Error("Chat service returned no readable response stream.");Q($t(!0,J.headers.get("X-Jarvis-Mode")==="mock"));const ye=J.body.getReader(),Ne=new TextDecoder;let fe="",le=!1;for(;;){const{value:N,done:C}=await ye.read();if(C)break;fe+=Ne.decode(N,{stream:!0});const p=bu(fe);if(p.includes("response was withheld")){le=!0,c(x=>x.map((D,Z)=>Z===x.length-1&&D.role==="assistant"?{...D,content:p}:D)),await ye.cancel();break}c(x=>x.map((D,Z)=>Z===x.length-1&&D.role==="assistant"?{...D,content:p}:D)),(Be=ae.current)==null||Be.scrollIntoView({block:"end"})}le||(fe+=Ne.decode());const P=le?"The service returned internal instructions or tool output. The response was withheld.":bu(fe,!0);if(!P)throw new Error("Chat service returned an empty response.");c(N=>N.map((C,p)=>p===N.length-1&&C.role==="assistant"?{...C,content:P}:C))}catch(J){Q("stale");const ye=J instanceof Error?J.message:"Chat service unavailable.";he(ye),c(Ne=>Ne.filter(fe=>fe!==Ae))}finally{q(!1),(ze=ae.current)==null||ze.scrollIntoView({block:"end"})}},je=async K=>{var ze;K&&K.preventDefault();const de=B.trim().toUpperCase(),Ie=F.trim();if(!de||!Ie||ee)return;const Ae={role:"user",content:`[MarketOracle Audit Request: $${de}] ${Ie}${W?`
-Context: ${W}`:""}`,ts:new Date().toISOString()},Be={role:"assistant",content:`Evaluating $${de} with MarketOracle 4-stage pipeline (Gemini 0.1 Temp Grounded)...`,ts:new Date().toISOString()};c(J=>[...J,Ae,Be]),q(!0),he(null),Q("stale");try{const J=await fetch("/api/chat/stock-verdict",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({ticker:de,user_query:Ie,news_snippet:W.trim()||null})});if(!J.ok)throw new Error(`MarketOracle unavailable (HTTP ${J.status})`);const ye=await J.json(),Ne=ye.data||ye;Q("live"),c(fe=>fe.map((le,P)=>P===fe.length-1&&le.role==="assistant"?{...le,content:Ne.conversational_chat_response,verdict:Ne}:le))}catch(J){Q("stale");const ye=J instanceof Error?J.message:"Failed to retrieve stock verdict";he(ye),c(Ne=>Ne.filter(fe=>fe!==Be))}finally{q(!1),(ze=ae.current)==null||ze.scrollIntoView({block:"end"})}},ve=(K,de,Ie="")=>{R(K),Y(de),X(Ie)};return i.jsxs("section",{className:"dashboard-panel chat-panel","aria-label":"JARVIS and MarketOracle chat",children:[i.jsxs("header",{className:"panel-header",children:[i.jsxs("div",{children:[i.jsx("div",{className:"panel-kicker",children:"QUANTITATIVE AI CO-PILOT"}),i.jsx("h2",{children:g==="market_oracle"?i.jsxs(i.Fragment,{children:[i.jsx(Wl,{size:16,color:"#38bdf8"})," MarketOracle AI Verdict"]}):i.jsxs(i.Fragment,{children:[i.jsx(Yu,{size:16})," JARVIS Chat"]})})]}),i.jsx(on,{status:U})]}),i.jsxs("div",{className:"chat-mode-tabs",role:"tablist",children:[i.jsxs("button",{type:"button",role:"tab","aria-selected":g==="market_oracle",className:`chat-mode-tab ${g==="market_oracle"?"active":""}`,onClick:()=>A("market_oracle"),children:[i.jsx(Wi,{size:13})," MarketOracle Verdict (Gemini)"]}),i.jsxs("button",{type:"button",role:"tab","aria-selected":g==="jarvis",className:`chat-mode-tab ${g==="jarvis"?"active":""}`,onClick:()=>A("jarvis"),children:[i.jsx(Cf,{size:13})," JARVIS Stream Analyst"]})]}),i.jsxs("div",{className:"chat-feed","aria-live":"polite",children:[!k.length&&i.jsx("div",{className:"chat-intro",children:g==="market_oracle"?i.jsxs("div",{children:[i.jsx("strong",{children:"MarketOracle AI Decision Engine:"}),i.jsx("p",{children:"Submit a ticker and any market headline, rumor, or question. Gemini audits news veracity (Tiers 1–4), runs dialectical Bull vs. Bear analysis, and computes the Arbiter probability verdict."}),i.jsxs("div",{style:{display:"flex",gap:"6px",flexWrap:"wrap",marginTop:"8px"},children:[i.jsx("button",{type:"button",className:"company-tag company-tag--category",style:{cursor:"pointer"},onClick:()=>ve("NVDA","Blackwell chip delay rumor - true or debunked?"),children:"NVDA Blackwell Rumor"}),i.jsx("button",{type:"button",className:"company-tag company-tag--category",style:{cursor:"pointer"},onClick:()=>ve("AAPL","Record iPhone shipments in supply chain","Foxconn seasonal peak production"),children:"AAPL Shipments Beat"}),i.jsx("button",{type:"button",className:"company-tag company-tag--category",style:{cursor:"pointer"},onClick:()=>ve("TSLA","Robotaxi regulatory approval status"),children:"TSLA Robotaxi Catalysts"})]})]}):"Ask JARVIS about a ticker, profitability screens, or supply chain linkages."}),k.map((K,de)=>i.jsxs("article",{className:`chat-message chat-message--${K.role}`,children:[i.jsx("span",{className:"chat-avatar","aria-hidden":"true",children:K.role==="assistant"?K.verdict?i.jsx(Wl,{size:13,color:"#38bdf8"}):i.jsx(Yu,{size:13}):i.jsx(Of,{size:13})}),i.jsxs("div",{style:{flex:1,minWidth:0},children:[i.jsxs("div",{className:"chat-message-meta",children:[i.jsx("strong",{children:K.role==="assistant"?K.verdict?"MarketOracle AI":"JARVIS":"YOU"}),i.jsx("time",{dateTime:K.ts,children:new Date(K.ts).toLocaleTimeString()})]}),K.verdict?i.jsx(Uf,{data:K.verdict,onNavigateCompany:u}):i.jsx("p",{children:K.content||(ee?"Composing response…":"")})]})]},`${K.ts}-${de}`)),i.jsx("div",{ref:ae})]}),Te&&i.jsx("div",{className:"chat-error",role:"alert",children:Te}),g==="market_oracle"?i.jsxs("form",{className:"market-oracle-form",onSubmit:je,children:[i.jsxs("div",{className:"market-oracle-form__row",children:[i.jsx("input",{value:B,onChange:K=>R(K.target.value.toUpperCase()),placeholder:"Ticker ($NVDA)","aria-label":"Target Ticker",maxLength:15,disabled:ee,style:{fontWeight:700},required:!0}),i.jsx("input",{value:F,onChange:K=>Y(K.target.value),placeholder:"News headline, rumor, or question to investigate…","aria-label":"Inquiry / Rumor",maxLength:500,disabled:ee,required:!0})]}),i.jsxs("div",{className:"market-oracle-form__actions",children:[i.jsx("input",{value:W,onChange:K=>X(K.target.value),placeholder:"Optional: Paste news link or context snippet","aria-label":"Optional news snippet",maxLength:500,disabled:ee,style:{flex:1}}),i.jsxs("button",{type:"submit",className:"market-oracle-submit-btn",disabled:ee||!B.trim()||!F.trim(),"aria-label":"Evaluate Stock Verdict",children:[i.jsx(Wl,{size:14}),ee?"Evaluating…":"Run Verdict"]})]})]}):i.jsxs("form",{className:"chat-form",onSubmit:$,children:[i.jsx("input",{value:E,onChange:K=>v(K.target.value),placeholder:"Ask JARVIS…","aria-label":"Message JARVIS",maxLength:2e3,disabled:ee}),i.jsx("button",{type:"submit",disabled:ee||!E.trim(),"aria-label":"Send message",children:i.jsx(Rf,{size:15})})]}),i.jsx("p",{className:"panel-footnote",children:"AI probabilistic scenario model — not financial or investment advice."})]})}function Bf({items:u,status:k}){return i.jsxs("section",{className:"dashboard-panel news-panel","aria-label":"Market news",children:[i.jsxs("header",{className:"panel-header",children:[i.jsxs("div",{children:[i.jsx("div",{className:"panel-kicker",children:"WIRE MONITOR"}),i.jsxs("h2",{children:[i.jsx(Pf,{size:15})," Market news"]})]}),i.jsx(on,{status:k})]}),i.jsx("div",{className:"news-list",children:u.length?u.map((c,E)=>i.jsxs("article",{className:"news-item",children:[i.jsxs("div",{className:"news-meta",children:[i.jsx("strong",{children:c.ticker}),i.jsx("span",{children:c.source})]}),i.jsx("p",{children:c.headline}),i.jsx("time",{dateTime:c.publishedAt,children:new Date(c.publishedAt).toLocaleString()})]},`${c.ticker}-${c.publishedAt}-${E}`)):i.jsx("div",{className:"empty-state",children:"No news items have resolved from the news feed."})})]})}function Wf({status:u,connected:k}){return i.jsxs("section",{className:"dashboard-panel orb-panel","aria-label":"JARVIS system status",children:[i.jsxs("div",{className:"orb-visual","aria-hidden":"true",children:[i.jsx("span",{className:"orb-core"}),i.jsx("span",{className:"orb-ring orb-ring--outer"}),i.jsx("span",{className:"orb-ring orb-ring--inner"})]}),i.jsxs("div",{className:"orb-copy",children:[i.jsxs("div",{className:"panel-kicker",children:[i.jsx(Hi,{size:13})," JARVIS CORE"]}),i.jsx("strong",{children:k?"Signal stack connected":"Awaiting signal stack"}),i.jsx("span",{children:"Analytics only · no trade execution"})]}),i.jsx(on,{status:u})]})}const Vi=20;function Qf({rows:u,status:k,loading:c,error:E,onShowTop100:v,onSelectTicker:g}){const[A,B]=T.useState(!1),[R,F]=T.useState(0),[Y,W]=T.useState("rank"),[X,ee]=T.useState(!0),q=[...u].sort(($,je)=>{const ve=$[Y]-je[Y];return X?ve:-ve}),U=Math.max(1,Math.ceil(q.length/Vi)),Q=q.slice(R*Vi,(R+1)*Vi),Te=$=>{Y===$?ee(je=>!je):(W($),ee($==="rank"))},he=()=>{const $=!A;B($),F(0),v($)},ae=($,je)=>i.jsxs("button",{className:`sort-control ${Y===je?"is-active":""}`,onClick:()=>Te(je),children:[$,i.jsx(gf,{size:11})]});return i.jsxs("section",{className:"dashboard-panel profitable-panel","aria-label":"Profitable shares screen",children:[i.jsxs("header",{className:"panel-header profitable-header",children:[i.jsxs("div",{children:[i.jsx("div",{className:"panel-kicker",children:"RANKED OPPORTUNITIES"}),i.jsx("h1",{children:"Profitable shares"}),i.jsx("p",{children:"Signal-weighted screen · up to 100 rows"})]}),i.jsx(on,{status:k})]}),i.jsxs("div",{className:"rank-table",role:"table","aria-label":"Profitable shares rankings",children:[i.jsxs("div",{className:"rank-row rank-row--head",role:"row",children:[i.jsx("span",{role:"columnheader",children:ae("Rank","rank")}),i.jsx("span",{role:"columnheader",children:"Company"}),i.jsx("span",{role:"columnheader",children:ae("Growth","growthPct")}),i.jsx("span",{role:"columnheader",children:ae("Confidence","confidence")}),i.jsx("span",{role:"columnheader",children:"Primary signal"}),i.jsx("span",{role:"columnheader",children:"As of"})]}),Q.map($=>i.jsxs("div",{className:"rank-row",role:"row",children:[i.jsx("span",{className:"rank-number",role:"cell",children:String($.rank).padStart(2,"0")}),i.jsxs("span",{className:"rank-company",role:"cell",children:[i.jsx("button",{className:"rank-ticker-button",onClick:()=>g($.ticker),children:$.ticker}),i.jsx("small",{children:$.company})]}),i.jsxs("span",{className:$.growthPct>=0?"rank-growth value-positive":"rank-growth value-negative",role:"cell",children:[$.growthPct>0?"+":"",$.growthPct.toFixed(2),"%"]}),i.jsxs("span",{className:"rank-confidence",role:"cell",children:[Math.round($.confidence*100),"%"]}),i.jsx("span",{className:"rank-signal",role:"cell",children:$.primarySignal||"—"}),i.jsx("span",{className:"rank-asof",role:"cell",children:new Date($.asOf).toLocaleDateString()})]},`${$.rank}-${$.ticker}`)),!Q.length&&i.jsx("div",{className:"table-state",role:"row",children:c?"Loading ranked shares…":E??"No ranking rows are currently available."})]}),E&&Q.length>0&&i.jsx("p",{className:"inline-error",children:E}),i.jsxs("footer",{className:"rank-footer",children:[i.jsx("button",{className:"expand-button",onClick:he,disabled:c,children:A?i.jsxs(i.Fragment,{children:[i.jsx(wf,{size:14})," Show top 10"]}):i.jsxs(i.Fragment,{children:[i.jsx(Bi,{size:14})," Show top 100"]})}),A&&i.jsxs("div",{className:"pagination",children:[i.jsx("button",{"aria-label":"Previous page",disabled:R===0,onClick:()=>F($=>Math.max(0,$-1)),children:i.jsx(sc,{size:14})}),i.jsxs("span",{children:[R+1," / ",U]}),i.jsx("button",{"aria-label":"Next page",disabled:R+1>=U,onClick:()=>F($=>Math.min(U-1,$+1)),children:i.jsx(Bi,{size:14})})]}),i.jsxs("span",{className:"rank-count",children:[u.length," ROWS"]})]}),i.jsx("p",{className:"panel-footnote",children:"AI estimates are informational only; they are not financial advice or a promise of returns."})]})}function Kf(u){return u===null?"—":u>=1e12?`$${(u/1e12).toFixed(2)}T`:u>=1e9?`$${(u/1e9).toFixed(1)}B`:`$${(u/1e6).toFixed(0)}M`}function Gf({snapshot:u,status:k,error:c}){var v;const E=((u==null?void 0:u.changePct)??0)>=0;return i.jsxs("section",{className:"dashboard-panel stock-panel","aria-label":"Stock analysis",children:[i.jsxs("header",{className:"panel-header",children:[i.jsxs("div",{children:[i.jsx("div",{className:"panel-kicker",children:"MARKET SNAPSHOT"}),i.jsx("h2",{children:"Stock analysis"})]}),i.jsx(on,{status:k})]}),u?i.jsxs(i.Fragment,{children:[i.jsxs("div",{className:"stock-price-row",children:[i.jsxs("div",{children:[i.jsx("span",{className:"stock-ticker",children:u.ticker}),i.jsxs("span",{className:"stock-asof",children:["AS OF ",new Date(u.asOf).toLocaleTimeString()]})]}),i.jsxs("div",{className:"stock-price",children:[i.jsx("strong",{children:u.price!==null?`$${u.price.toLocaleString(void 0,{minimumFractionDigits:2,maximumFractionDigits:2})}`:"No live feed"}),u.price!==null&&i.jsxs("span",{className:E?"value-positive":"value-negative",children:[E?i.jsx(xf,{size:14}):i.jsx(vf,{size:14}),u.changePct>0?"+":"",u.changePct.toFixed(2),"%"]})]})]}),i.jsxs("div",{className:"stock-metrics",children:[i.jsxs("div",{children:[i.jsx("span",{children:"Market cap"}),i.jsx("strong",{children:Kf(u.marketCap)})]}),i.jsxs("div",{children:[i.jsx("span",{children:"P / E ratio"}),i.jsx("strong",{children:((v=u.peRatio)==null?void 0:v.toFixed(1))??"—"})]})]}),i.jsxs("div",{className:"stock-signal",children:[i.jsx("span",{children:"Primary signal"}),i.jsx("strong",{children:u.primarySignal??"Not provided by feed"})]}),i.jsxs("div",{className:"risk-row",children:[i.jsx(Lf,{size:14}),i.jsx("span",{children:"Risk verdict"}),i.jsx("strong",{children:u.riskVerdict??"Not provided by feed"})]})]}):i.jsx("div",{className:"empty-state",children:c??"Waiting for a resolved market snapshot."})]})}function Yf(u,k,c){if(u.length<2)return"";const E=u.map(B=>B.price),v=Math.min(...E),A=Math.max(...E)-v||1;return u.map((B,R)=>{const F=R/(u.length-1)*k,Y=c-(B.price-v)/A*c;return`${R===0?"M":"L"}${F.toFixed(1)},${Y.toFixed(1)}`}).join(" ")}function Xf({series:u,status:k,ticker:c}){const E=Yf(u,400,110),v=u[u.length-1];return i.jsxs("section",{className:"dashboard-panel graph-panel","aria-label":"Live price graph",children:[i.jsxs("header",{className:"panel-header",children:[i.jsxs("div",{children:[i.jsx("div",{className:"panel-kicker",children:"PRICE STREAM"}),i.jsxs("h2",{children:[c," intraday"]})]}),i.jsx(on,{status:k})]}),i.jsx("div",{className:"graph-chart",children:E?i.jsxs("svg",{viewBox:"0 0 400 124",preserveAspectRatio:"none",role:"img","aria-label":`${c} live price history`,children:[i.jsx("defs",{children:i.jsxs("linearGradient",{id:"price-fill",x1:"0",x2:"0",y1:"0",y2:"1",children:[i.jsx("stop",{offset:"0%",stopColor:"var(--accent)",stopOpacity:".24"}),i.jsx("stop",{offset:"100%",stopColor:"var(--accent)",stopOpacity:"0"})]})}),i.jsx("path",{d:`${E} L400,124 L0,124 Z`,fill:"url(#price-fill)"}),i.jsx("path",{d:E,fill:"none",stroke:"var(--accent)",strokeWidth:"2",vectorEffect:"non-scaling-stroke"})]}):i.jsx("div",{className:"graph-empty",children:"Price points arrive from the prices WebSocket."})}),i.jsxs("footer",{className:"graph-footer",children:[i.jsxs("span",{children:[u.length," stream points"]}),i.jsx("strong",{children:v?`$${v.price.toFixed(2)}`:"—"})]})]})}const ec=["prices","rankings","news","portfolio","chat"];function qf(u){return`${window.location.protocol==="https:"?"wss:":"ws:"}//${window.location.host}/ws/${u}`}function Jf(u){const[k,c]=T.useState(()=>Object.fromEntries(ec.map(g=>[g,{channel:g,connected:!1,payload:null,mock:null,receivedAt:null}]))),E=T.useRef({}),v=T.useRef(u);return T.useEffect(()=>{v.current=u;const g=E.current.prices;(g==null?void 0:g.readyState)===WebSocket.OPEN&&g.send(u)},[u]),T.useEffect(()=>{let g=!1;const A=[],B=R=>{if(g)return;const F=new WebSocket(qf(R));E.current[R]=F,F.onopen=()=>{R==="prices"&&F.send(v.current)},F.onmessage=Y=>{try{const W=JSON.parse(Y.data);if(!W||typeof W!="object")return;const X=W;if(X.type==="connected"){c(q=>({...q,[R]:{...q[R],connected:!0,mock:typeof X.mock=="boolean"?X.mock:q[R].mock}}));return}const ee=X.payload??W;c(q=>({...q,[R]:{channel:R,connected:!0,payload:ee,mock:typeof X.mock=="boolean"?X.mock:null,receivedAt:Date.now()}}))}catch{c(W=>({...W,[R]:{...W[R],connected:!1}}))}},F.onclose=()=>{c(Y=>({...Y,[R]:{...Y[R],connected:!1}})),g||A.push(window.setTimeout(()=>B(R),3e3))},F.onerror=()=>F.close()};return ec.forEach(B),()=>{g=!0,A.forEach(window.clearTimeout),Object.values(E.current).forEach(R=>R==null?void 0:R.close()),E.current={}}},[]),k}const Zf=[{key:"us",label:"US"},{key:"in",label:"India"},{key:"global",label:"Global"}],Mr=42,tc=5,bf=50;function ep({onSelectSymbol:u,onNavigateCompany:k,selectedSymbol:c}){const[E,v]=T.useState("us"),[g,A]=T.useState(""),[B,R]=T.useState(""),[F,Y]=T.useState([]),[W,X]=T.useState(0),[ee,q]=T.useState(1),[U,Q]=T.useState(1),[Te,he]=T.useState(!0),[ae,$]=T.useState(null),[je,ve]=T.useState(!1),K=T.useRef(null),[de,Ie]=T.useState(0),[Ae,Be]=T.useState(400);T.useEffect(()=>{const N=setTimeout(()=>{R(g),q(1)},300);return()=>clearTimeout(N)},[g]),T.useEffect(()=>{let N=!1;he(!0),$(null);const C=new URLSearchParams;return C.set("region",E),C.set("page",String(ee)),C.set("limit",String(bf)),B.trim()&&C.set("q",B.trim()),fetch(`/api/universe?${C}`).then(async p=>{if(!p.ok)throw new Error(`HTTP ${p.status}`);return p.json()}).then(p=>{N||(Y(p.items),X(p.total),Q(p.pages),ve(p.items.length>0||p.total===0))}).catch(p=>{N||($(p instanceof Error?p.message:"Failed to load universe"),ve(!1))}).finally(()=>{N||he(!1)}),()=>{N=!0}},[E,ee,B]),T.useEffect(()=>{const N=K.current;if(!N)return;const C=new ResizeObserver(([p])=>{Be(p.contentRect.height)});return C.observe(N),()=>C.disconnect()},[]);const ze=T.useCallback(()=>{K.current&&Ie(K.current.scrollTop)},[]),J=F.length*Mr,ye=Math.max(0,Math.floor(de/Mr)-tc),Ne=Math.min(F.length,Math.ceil((de+Ae)/Mr)+tc),fe=F.slice(ye,Ne),le=ye*Mr,P=$t(je,!1,!1);return i.jsxs("div",{className:"universe-browser dashboard-panel",children:[i.jsxs("div",{className:"universe-header",children:[i.jsxs("div",{className:"universe-title-row",children:[i.jsxs("div",{className:"panel-kicker",children:[i.jsx(ic,{size:10})," MARKET UNIVERSE"]}),i.jsx(on,{status:P})]}),i.jsx("h2",{children:"Securities Browser"}),i.jsx("div",{className:"universe-tabs",role:"tablist",children:Zf.map(N=>i.jsx("button",{role:"tab","aria-selected":E===N.key,className:`universe-tab ${E===N.key?"universe-tab--active":""}`,onClick:()=>{v(N.key),q(1)},children:N.label},N.key))}),i.jsxs("div",{className:"universe-search",children:[i.jsx(zf,{size:13,className:"universe-search-icon"}),i.jsx("input",{type:"text",placeholder:"Search symbol or name…",value:g,onChange:N=>A(N.target.value),className:"universe-search-input",id:"universe-search-input"})]})]}),i.jsxs("div",{className:"universe-list-header",children:[i.jsx("span",{children:"SYMBOL"}),i.jsx("span",{children:"NAME"}),i.jsx("span",{children:"EXCHANGE"})]}),i.jsx("div",{ref:K,className:"universe-scroll",onScroll:ze,children:Te&&F.length===0?i.jsx("div",{className:"table-state",children:"Loading securities…"}):ae?i.jsx("div",{className:"table-state",children:ae}):F.length===0?i.jsx("div",{className:"table-state",children:B?`No results for "${B}"`:"No securities synced yet. Universe sync runs on startup."}):i.jsx("div",{style:{height:J,position:"relative"},children:i.jsx("div",{style:{transform:`translateY(${le}px)`},children:fe.map(N=>i.jsxs("div",{className:`universe-row ${c===N.symbol?"universe-row--selected":""}`,style:{height:Mr},onClick:()=>u(N.symbol),children:[i.jsx("span",{className:"universe-row-symbol",children:N.symbol}),i.jsx("span",{className:"universe-row-name",title:N.name,children:N.name}),i.jsxs("span",{className:"universe-row-exchange",children:[N.exchange,k&&i.jsx("button",{className:"universe-company-link",title:"Company page",onClick:C=>{C.stopPropagation(),k(N.symbol)},children:i.jsx(Ir,{size:10})})]})]},`${N.symbol}-${N.exchange}`))})})}),i.jsxs("div",{className:"universe-footer",children:[i.jsxs("span",{className:"rank-count",children:[W.toLocaleString()," securities"]}),i.jsxs("div",{className:"pagination",children:[i.jsx("button",{disabled:ee<=1,onClick:()=>q(N=>Math.max(1,N-1)),"aria-label":"Previous page",children:i.jsx(sc,{size:13})}),i.jsxs("span",{children:[ee," / ",U]}),i.jsx("button",{disabled:ee>=U,onClick:()=>q(N=>Math.min(U,N+1)),"aria-label":"Next page",children:i.jsx(Bi,{size:13})})]})]})]})}function yt(u){return typeof u=="object"&&u!==null}function gt(u){return typeof u=="number"&&Number.isFinite(u)?u:null}function Ue(u){return typeof u=="string"&&u.length>0?u:null}function tp(u){if(!yt(u))return null;const k=gt(u.price),c=Ue(u.ticker),E=Ue(u.asOf??u.as_of);return!c||!E?null:{ticker:c,price:k,changePct:gt(u.changePct??u.change_pct)??0,marketCap:gt(u.marketCap??u.market_cap),peRatio:gt(u.peRatio??u.pe_ratio),primarySignal:Ue(u.primarySignal??u.primary_signal),riskVerdict:Ue(u.riskVerdict??u.risk_verdict),asOf:E}}function np(u){if(!yt(u))return null;const k=gt(u.rank),c=Ue(u.ticker),E=gt(u.growthPct??u.predicted_growth_pct),v=gt(u.confidence),g=Ue(u.asOf??u.as_of);if(k===null||!c||E===null||v===null||!g)return null;const A=u.primary_signals,B=Ue(u.primarySignal??u.primary_signal)??(Array.isArray(A)?Ue(A[0]):null)??"—";return{rank:k,ticker:c,company:Ue(u.company)??c,growthPct:E,confidence:v,primarySignal:B,asOf:g}}function rp(u){const k=u.payload,c=Array.isArray(k)?k:yt(k)?k.items??k.data??[k]:[];return Array.isArray(c)?c.flatMap(E=>{if(!yt(E))return[];const v=Ue(E.ticker),g=Ue(E.headline),A=Ue(E.source),B=Ue(E.publishedAt??E.published_at);return v&&g&&A&&B?[{ticker:v,headline:g,source:A,publishedAt:B}]:[]}):[]}function lp(u,k){if(!yt(u))return null;const c=yt(u.data)?u.data:u;if(!Array.isArray(c.positions))return null;const E=c.positions.flatMap(g=>{if(!yt(g))return[];const A=Ue(g.ticker??g.symbol);return A?[{ticker:A,convictionDelta:gt(g.conviction_delta)??void 0,flag:Ue(g.flag)??void 0,reason:Ue(g.reason)??void 0}]:[]}),v=typeof c.mock=="boolean"?c.mock:typeof u.mock=="boolean"?u.mock:k;return{positions:E,totalValue:gt(c.total_value??c.totalValue),mock:v,asOf:Ue(c.as_of??c.asOf)}}function sp(){const[u,k]=T.useState(null);return T.useEffect(()=>{},[]),u}function ip({navigate:u}){const[k,c]=T.useState("NVDA"),[E,v]=T.useState(null),[g,A]=T.useState(null),[B,R]=T.useState(!1),[F,Y]=T.useState(!1),[W,X]=T.useState(!1),[ee,q]=T.useState([]),[U,Q]=T.useState([]),[Te,he]=T.useState(!1),[ae,$]=T.useState(!1),[je,ve]=T.useState(!1),[K,de]=T.useState(!1),[Ie,Ae]=T.useState(!0),[Be,ze]=T.useState(null),[J,ye]=T.useState(null),[Ne,fe]=T.useState(!1),[le,P]=T.useState(null),[N,C]=T.useState(null),[p,x]=T.useState(!1),D=Jf(k),Z=sp();T.useEffect(()=>{let ce=!1;return v(null),A(null),R(!1),X(!1),q([]),fetch(`/api/market/snapshot?tickers=${encodeURIComponent(k)}`).then(async b=>{if(!b.ok)throw new Error(`Market snapshot unavailable (HTTP ${b.status}).`);return b.json()}).then(b=>{if(ce)return;const xe=Array.isArray(b.data)?b.data[0]:null,Je=tp(xe);if(!Je)throw new Error("Market snapshot response did not match the expected contract.");v(Je),R(!0),Y(b.mock===!0||yt(xe)&&xe.mock===!0),X(yt(xe)&&(xe.stale===!0||xe.source==="no_live_feed"))}).catch(b=>{ce||(v(null),R(!1),A(b instanceof Error?b.message:"Market snapshot unavailable."))}),()=>{ce=!0}},[k,Z]),T.useEffect(()=>{const ce=D.prices;if(!ce.receivedAt||!yt(ce.payload))return;const b=ce.payload;if(Ue(b.ticker??b.symbol)!==k||b.unavailable===!0)return;const Je=gt(b.price),Rt=Ue(b.asOf??b.as_of);if(Je===null)return;const Ze=gt(b.t)??(Rt?new Date(Rt).getTime():null);Ze===null||!Number.isFinite(Ze)||(q(Re=>[...Re,{t:Ze,price:Je}].slice(-240)),v(Re=>({ticker:k,price:Je,changePct:gt(b.changePct??b.change_pct??b.change)??(Re==null?void 0:Re.changePct)??0,marketCap:(Re==null?void 0:Re.marketCap)??null,peRatio:(Re==null?void 0:Re.peRatio)??null,primarySignal:(Re==null?void 0:Re.primarySignal)??null,riskVerdict:(Re==null?void 0:Re.riskVerdict)??null,asOf:Rt??new Date(Ze).toISOString()})),R(!0),Y(ce.mock??b.mock===!0),X(b.stale===!0))},[D.prices,k]),T.useEffect(()=>{let ce=!1;const b=Te?100:10;return Ae(!0),ze(null),fetch(`/api/screens/profitable?limit=${b}`).then(async xe=>{if(!xe.ok)throw new Error(`Profitable screen unavailable (HTTP ${xe.status}).`);return xe.json()}).then(xe=>{if(ce)return;const Je=Array.isArray(xe.data)?xe.data:[],Rt=Je.map(np).filter(Ze=>Ze!==null);if(Je.length>0&&!Rt.length)throw new Error("Profitable screen response did not match the expected contract.");Q(Rt),$(!0),ve(xe.mock===!0||Je.some(Ze=>yt(Ze)&&Ze.mock===!0)),de(Je.some(Ze=>yt(Ze)&&Ze.universe_stale===!0))}).catch(xe=>{ce||(Q([]),$(!1),ze(xe instanceof Error?xe.message:"Profitable screen unavailable."))}).finally(()=>{ce||Ae(!1)}),()=>{ce=!0}},[Te,Z]),T.useEffect(()=>{let ce=!1;return fetch("/health").then(async b=>{if(!b.ok)throw new Error(`Health check unavailable (HTTP ${b.status}).`);return b.json()}).then(b=>{ce||(C(typeof b.mock_mode=="boolean"?b.mock_mode:null),x(typeof b.status=="string"))}).catch(()=>{ce||x(!1)}),fetch("/api/portfolio").then(async b=>{if(!b.ok)throw new Error(`Portfolio feed unavailable (HTTP ${b.status}).`);return b.json()}).then(b=>{if(ce)return;const xe=lp(b,N);if(!xe)throw new Error("Portfolio response did not include positions.");ye(xe),fe(!0),P(null)}).catch(b=>{ce||P(b instanceof Error?b.message:"Portfolio feed unavailable.")}),()=>{ce=!0}},[Z,N]);const ne=T.useMemo(()=>rp(D.news),[D.news]),re=$t(ee.length>0,D.prices.mock??F,W);$t(Ne&&(J==null?void 0:J.mock)!==null&&(J==null?void 0:J.mock)!==void 0,(J==null?void 0:J.mock)??!1);const me=$t(ne.length>0,D.news.mock??!1),ue=$t(B,F,W),ge=$t(ae,je,K),Ke=Object.values(D).filter(ce=>ce.connected).length;return i.jsxs("main",{className:"dashboard-shell",children:[i.jsxs("div",{className:"desktop-only-notice",role:"status",children:[i.jsx(Hi,{size:24}),i.jsx("h1",{children:"JARVIS requires a desktop trading terminal"}),i.jsx("p",{children:"Use a viewport at least 1280px wide to view the live dashboard."})]}),i.jsxs("div",{className:"dashboard-app",children:[i.jsxs("header",{className:"terminal-header",children:[i.jsxs("div",{className:"terminal-brand",children:[i.jsx("div",{className:"brand-mark",children:i.jsx(Hi,{size:18})}),i.jsxs("div",{children:[i.jsx("strong",{children:"JARVIS"}),i.jsx("span",{children:"TRADING INTELLIGENCE"})]})]}),i.jsxs("div",{className:"terminal-session",children:[i.jsxs("span",{className:"connection-indicator",children:[i.jsx("i",{})," ",Ke,"/5 CHANNELS"]}),i.jsx("span",{className:"header-divider"}),i.jsxs("span",{children:[i.jsx(Kn,{size:14})," AI ESTIMATE · NOT FINANCIAL ADVICE"]})]}),i.jsx("div",{className:"terminal-clock",children:new Date().toLocaleDateString()})]}),i.jsxs("div",{className:"dashboard-grid",children:[i.jsxs("aside",{className:"dashboard-column dashboard-column--left",children:[i.jsx(Wf,{status:$t(p,N??!1),connected:Ke===5}),i.jsx(ep,{onSelectSymbol:c,onNavigateCompany:u?ce=>u(`/company/${ce}`):void 0,selectedSymbol:k}),i.jsx(Gf,{snapshot:E,status:ue,error:g}),i.jsx(Xf,{series:ee,status:re,ticker:k})]}),i.jsx("section",{className:"dashboard-column dashboard-column--center",children:i.jsx(Qf,{rows:U,status:ge,loading:Ie,error:Be,onShowTop100:he,onSelectTicker:c})}),i.jsxs("aside",{className:"dashboard-column dashboard-column--right",children:[i.jsx(Bf,{items:ne,status:me}),i.jsx(Hf,{onNavigateCompany:ce=>u==null?void 0:u(`/company/${ce}`)})]})]})]})]})}const nc={full:"FULL",partial:"PARTIAL",none:"NO DATA YET"};function Ki({level:u}){return i.jsxs("span",{className:`coverage-badge coverage-badge--${u}`,"aria-label":`Coverage: ${nc[u]}`,children:[i.jsx("span",{className:"coverage-badge__dot"}),nc[u]]})}function op({items:u,coverage:k,symbol:c,onNavigateCompany:E}){return i.jsxs("section",{className:"dashboard-panel company-column","aria-label":"Inputs column",children:[i.jsxs("header",{className:"panel-header company-column__header",children:[i.jsxs("div",{children:[i.jsxs("div",{className:"panel-kicker",children:[i.jsx(Ef,{size:10})," SUPPLY CHAIN · INPUTS"]}),i.jsx("h2",{children:"What this company buys"})]}),i.jsx(Ki,{level:k})]}),i.jsx("div",{className:"company-column__content",children:u.length===0?i.jsxs("div",{className:"company-empty-state",children:[i.jsx("strong",{children:"No data yet for this company"}),i.jsxs("p",{children:["No supplier or raw material disclosures filed yet for ",c,". Queued for offline extraction."]})]}):i.jsx("div",{className:"company-list",children:u.map((v,g)=>i.jsxs("div",{className:"company-item",children:[i.jsxs("div",{className:"company-item__head",children:[i.jsx("span",{className:"company-item__name",children:v.is_listed&&v.target_symbol&&E?i.jsxs("button",{className:"company-link-button",onClick:()=>E(v.target_symbol),title:`View ${v.target_symbol} supply-chain`,children:[v.name,i.jsx("span",{className:"company-tag company-tag--listed",children:v.target_symbol})]}):v.name}),v.spend_share!==null&&v.spend_share!==void 0&&i.jsxs("span",{className:"company-item__share",children:[(v.spend_share*100).toFixed(0),"% spend"]})]}),i.jsxs("div",{className:"company-item__meta",children:[v.category&&i.jsx("span",{className:"company-tag company-tag--category",children:v.category}),i.jsx("span",{className:`company-tag company-tag--method company-tag--method-${v.method}`,children:v.method}),i.jsxs("span",{className:"company-confidence",title:`Confidence: ${(v.confidence*100).toFixed(0)}%`,children:[i.jsx(Kn,{size:11})," ",(v.confidence*100).toFixed(0),"%"]})]}),i.jsxs("div",{className:"company-item__foot",children:[i.jsx("span",{className:"company-source",children:v.source_url?i.jsxs("a",{href:v.source_url,target:"_blank",rel:"noopener noreferrer",className:"company-source-link",children:[v.source," ",i.jsx(Ir,{size:9})]}):v.source}),i.jsx("span",{className:"company-asof",children:v.as_of})]})]},`${v.name}-${g}`))})})]})}function ap({items:u,coverage:k,profile:c,symbol:E,onNavigateCompany:v}){return i.jsxs("div",{className:"company-center-stack",children:[i.jsxs("section",{className:"dashboard-panel company-column company-column--owned","aria-label":"Owned companies column",children:[i.jsxs("header",{className:"panel-header company-column__header",children:[i.jsxs("div",{children:[i.jsxs("div",{className:"panel-kicker",children:[i.jsx(kf,{size:10})," OWNERSHIP · SUBSIDIARIES"]}),i.jsx("h2",{children:"Subsidiaries & stakes"})]}),i.jsx(Ki,{level:k})]}),i.jsx("div",{className:"company-column__content",children:u.length===0?i.jsxs("div",{className:"company-empty-state",children:[i.jsx("strong",{children:"No data yet for this company"}),i.jsxs("p",{children:["No subsidiary or ownership relationships indexed yet for ",E,"."]})]}):i.jsx("div",{className:"company-list",children:u.map((g,A)=>i.jsxs("div",{className:"company-item",children:[i.jsxs("div",{className:"company-item__head",children:[i.jsx("span",{className:"company-item__name",children:g.is_listed&&g.target_symbol&&v?i.jsxs("button",{className:"company-link-button",onClick:()=>v(g.target_symbol),title:`View ${g.target_symbol} supply-chain`,children:[g.name,i.jsx("span",{className:"company-tag company-tag--listed",children:g.target_symbol})]}):g.name}),g.ownership_pct!==null&&g.ownership_pct!==void 0&&i.jsxs("span",{className:"company-item__share",children:[g.ownership_pct.toFixed(0),"% owned"]})]}),i.jsxs("div",{className:"company-item__meta",children:[g.country&&i.jsxs("span",{className:"company-tag company-tag--country",children:[i.jsx(ic,{size:9})," ",g.country]}),i.jsx("span",{className:`company-tag company-tag--method company-tag--method-${g.method}`,children:g.method}),i.jsxs("span",{className:"company-confidence",title:`Confidence: ${(g.confidence*100).toFixed(0)}%`,children:[i.jsx(Kn,{size:11})," ",(g.confidence*100).toFixed(0),"%"]})]}),i.jsxs("div",{className:"company-item__foot",children:[i.jsx("span",{className:"company-source",children:g.source_url?i.jsxs("a",{href:g.source_url,target:"_blank",rel:"noopener noreferrer",className:"company-source-link",children:[g.source," ",i.jsx(Ir,{size:9})]}):g.source}),i.jsx("span",{className:"company-asof",children:g.as_of})]})]},`${g.name}-${A}`))})})]}),c&&i.jsxs("section",{className:"dashboard-panel company-profile-card","aria-label":"Company header profile",children:[i.jsxs("div",{className:"company-profile-card__head",children:[i.jsxs("div",{children:[i.jsx("span",{className:"company-profile-card__symbol",children:c.symbol}),i.jsx("h1",{className:"company-profile-card__title",children:c.name})]}),i.jsx("div",{className:"company-profile-card__exchanges",children:(c.exchanges.length>0?c.exchanges:[c.exchange]).filter(Boolean).map(g=>i.jsx("span",{className:"company-tag company-tag--exchange",children:g},g))})]}),i.jsxs("div",{className:"company-profile-card__details",children:[c.sector&&i.jsxs("div",{children:[i.jsx("span",{children:"SECTOR"}),i.jsx("strong",{children:c.sector})]}),c.industry&&i.jsxs("div",{children:[i.jsx("span",{children:"INDUSTRY"}),i.jsx("strong",{children:c.industry})]}),i.jsxs("div",{children:[i.jsx("span",{children:"COVERAGE SUMMARY"}),i.jsx("strong",{children:c.coverage_summary||"Indexed reference"})]})]})]})]})}function up({items:u,coverage:k,symbol:c,onNavigateCompany:E}){return i.jsxs("section",{className:"dashboard-panel company-column","aria-label":"Outputs column",children:[i.jsxs("header",{className:"panel-header company-column__header",children:[i.jsxs("div",{children:[i.jsxs("div",{className:"panel-kicker",children:[i.jsx(Tf,{size:10})," SUPPLY CHAIN · OUTPUTS"]}),i.jsx("h2",{children:"What this company sells"})]}),i.jsx(Ki,{level:k})]}),i.jsx("div",{className:"company-column__content",children:u.length===0?i.jsxs("div",{className:"company-empty-state",children:[i.jsx("strong",{children:"No data yet for this company"}),i.jsxs("p",{children:["No product, segment, or customer disclosures indexed yet for ",c,". Queued for offline extraction."]})]}):i.jsx("div",{className:"company-list",children:u.map((v,g)=>i.jsxs("div",{className:"company-item",children:[i.jsxs("div",{className:"company-item__head",children:[i.jsx("span",{className:"company-item__name",children:v.is_listed&&v.target_symbol&&E?i.jsxs("button",{className:"company-link-button",onClick:()=>E(v.target_symbol),title:`View ${v.target_symbol} supply-chain`,children:[v.name,i.jsx("span",{className:"company-tag company-tag--listed",children:v.target_symbol})]}):v.name}),v.revenue_share!==null&&v.revenue_share!==void 0&&i.jsxs("span",{className:"company-item__share",children:[(v.revenue_share*100).toFixed(0),"% rev"]})]}),i.jsxs("div",{className:"company-item__meta",children:[v.kind&&i.jsx("span",{className:`company-tag company-tag--kind company-tag--kind-${v.kind}`,children:v.kind}),i.jsx("span",{className:`company-tag company-tag--method company-tag--method-${v.method}`,children:v.method}),i.jsxs("span",{className:"company-confidence",title:`Confidence: ${(v.confidence*100).toFixed(0)}%`,children:[i.jsx(Kn,{size:11})," ",(v.confidence*100).toFixed(0),"%"]})]}),i.jsxs("div",{className:"company-item__foot",children:[i.jsx("span",{className:"company-source",children:v.source_url?i.jsxs("a",{href:v.source_url,target:"_blank",rel:"noopener noreferrer",className:"company-source-link",children:[v.source," ",i.jsx(Ir,{size:9})]}):v.source}),i.jsx("span",{className:"company-asof",children:v.as_of})]})]},`${v.name}-${g}`))})})]})}function cp({symbol:u,navigate:k}){const[c,E]=T.useState(null),[v,g]=T.useState(null),[A,B]=T.useState(!0),[R,F]=T.useState(null),[Y,W]=T.useState(!1);T.useEffect(()=>{let q=!1;return B(!0),F(null),W(!1),Promise.all([fetch(`/api/company/${encodeURIComponent(u)}/profile`).then(U=>{if(!U.ok)throw new Error(`Profile HTTP ${U.status}`);return U.json()}),fetch(`/api/company/${encodeURIComponent(u)}/supply-chain`).then(U=>{if(!U.ok)throw new Error(`Supply-chain HTTP ${U.status}`);return U.json()})]).then(([U,Q])=>{q||(E(U.data),g(Q.data),W(!0))}).catch(U=>{q||(F(U instanceof Error?U.message:"Failed to load company map"),W(!1))}).finally(()=>{q||B(!1)}),()=>{q=!0}},[u]);const X=$t(Y,!1,!1),ee=q=>{k(`/company/${q}`)};return i.jsxs("main",{className:"dashboard-shell company-page-shell",children:[i.jsxs("div",{className:"desktop-only-notice",role:"status",children:[i.jsx(Xu,{size:24}),i.jsx("h1",{children:"JARVIS requires a desktop trading terminal"}),i.jsx("p",{children:"Use a viewport at least 1280px wide to view the company supply-chain map."})]}),i.jsxs("div",{className:"dashboard-app company-page-app",children:[i.jsxs("header",{className:"terminal-header company-page-header",children:[i.jsxs("div",{className:"company-header-left",children:[i.jsxs("button",{onClick:()=>k("/"),className:"company-back-button",title:"Return to trading terminal",children:[i.jsx(yf,{size:13}),i.jsx("span",{children:"TERMINAL"})]}),i.jsx("span",{className:"header-divider"}),i.jsxs("div",{className:"terminal-brand",children:[i.jsx("div",{className:"brand-mark",children:i.jsx(Xu,{size:17})}),i.jsxs("div",{children:[i.jsx("strong",{children:(c==null?void 0:c.name)||u}),i.jsxs("span",{children:["SUPPLY-CHAIN GRAPH · ",u]})]})]})]}),i.jsxs("div",{className:"terminal-session",children:[i.jsx(on,{status:X}),i.jsx("span",{className:"header-divider"}),i.jsxs("span",{children:["AS OF ",v!=null&&v.as_of?new Date(v.as_of).toLocaleDateString():"TODAY"]})]})]}),i.jsxs("div",{className:"company-grid",children:[i.jsx(op,{items:(v==null?void 0:v.inputs)||[],coverage:(v==null?void 0:v.coverage.inputs)||"none",symbol:u,onNavigateCompany:ee}),i.jsx(ap,{items:(v==null?void 0:v.owned)||[],coverage:(v==null?void 0:v.coverage.owned)||"none",profile:c,symbol:u,onNavigateCompany:ee}),i.jsx(up,{items:(v==null?void 0:v.outputs)||[],coverage:(v==null?void 0:v.coverage.outputs)||"none",symbol:u,onNavigateCompany:ee})]})]})]})}function rc(u){const c=u.replace(/^#\/?/,"").match(/^company\/([A-Za-z0-9._-]+)$/i);return c?{page:"company",params:{symbol:c[1].toUpperCase()}}:{page:"dashboard"}}function dp(){const[u,k]=T.useState(()=>rc(window.location.hash));T.useEffect(()=>{const E=()=>k(rc(window.location.hash));return window.addEventListener("hashchange",E),()=>window.removeEventListener("hashchange",E)},[]);const c=T.useCallback(E=>{window.location.hash=E},[]);return[u,c]}function fp(){const[u,k]=dp();return u.page==="company"?i.jsx(cp,{symbol:u.params.symbol,navigate:k}):i.jsx(ip,{navigate:k})}ff.createRoot(document.getElementById("root")).render(i.jsx(T.StrictMode,{children:i.jsx(fp,{})}));
+Context: ${W}`:""}`,ts:new Date().toISOString()},Be={role:"assistant",content:`Evaluating $${de} with MarketOracle 4-stage pipeline (Gemini 0.1 Temp Grounded)...`,ts:new Date().toISOString()};c(J=>[...J,Ae,Be]),q(!0),he(null),Q("stale");try{const J=await fetch("/api/chat/stock-verdict",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({ticker:de,user_query:Ie,news_snippet:W.trim()||null})});if(!J.ok)throw new Error(`MarketOracle unavailable (HTTP ${J.status})`);const ye=await J.json(),Ne=ye.data||ye;Q("live"),c(fe=>fe.map((le,P)=>P===fe.length-1&&le.role==="assistant"?{...le,content:Ne.conversational_chat_response,verdict:Ne}:le))}catch(J){Q("stale");const ye=J instanceof Error?J.message:"Failed to retrieve stock verdict";he(ye),c(Ne=>Ne.filter(fe=>fe!==Be))}finally{q(!1),(ze=ae.current)==null||ze.scrollIntoView({block:"end"})}},ve=(K,de,Ie="")=>{R(K),Y(de),X(Ie)};return i.jsxs("section",{className:"dashboard-panel chat-panel","aria-label":"JARVIS and MarketOracle chat",children:[i.jsxs("header",{className:"panel-header",children:[i.jsxs("div",{children:[i.jsx("div",{className:"panel-kicker",children:"QUANTITATIVE AI CO-PILOT"}),i.jsx("h2",{children:g==="market_oracle"?i.jsxs(i.Fragment,{children:[i.jsx(Wl,{size:16,color:"#38bdf8"})," MarketOracle AI Verdict"]}):i.jsxs(i.Fragment,{children:[i.jsx(Yu,{size:16})," JARVIS Chat"]})})]}),i.jsx(on,{status:U})]}),i.jsxs("div",{className:"chat-mode-tabs",role:"tablist",children:[i.jsxs("button",{type:"button",role:"tab","aria-selected":g==="market_oracle",className:`chat-mode-tab ${g==="market_oracle"?"active":""}`,onClick:()=>A("market_oracle"),children:[i.jsx(Wi,{size:13})," MarketOracle Verdict (Gemini)"]}),i.jsxs("button",{type:"button",role:"tab","aria-selected":g==="jarvis",className:`chat-mode-tab ${g==="jarvis"?"active":""}`,onClick:()=>A("jarvis"),children:[i.jsx(Cf,{size:13})," JARVIS Stream Analyst"]})]}),i.jsxs("div",{className:"chat-feed","aria-live":"polite",children:[!k.length&&i.jsx("div",{className:"chat-intro",children:g==="market_oracle"?i.jsxs("div",{children:[i.jsx("strong",{children:"MarketOracle AI Decision Engine:"}),i.jsx("p",{children:"Submit a ticker and any market headline, rumor, or question. Gemini audits news veracity (Tiers 1–4), runs dialectical Bull vs. Bear analysis, and computes the Arbiter probability verdict."}),i.jsxs("div",{style:{display:"flex",gap:"6px",flexWrap:"wrap",marginTop:"8px"},children:[i.jsx("button",{type:"button",className:"company-tag company-tag--category",style:{cursor:"pointer"},onClick:()=>ve("NVDA","Blackwell chip delay rumor - true or debunked?"),children:"NVDA Blackwell Rumor"}),i.jsx("button",{type:"button",className:"company-tag company-tag--category",style:{cursor:"pointer"},onClick:()=>ve("AAPL","Record iPhone shipments in supply chain","Foxconn seasonal peak production"),children:"AAPL Shipments Beat"}),i.jsx("button",{type:"button",className:"company-tag company-tag--category",style:{cursor:"pointer"},onClick:()=>ve("TSLA","Robotaxi regulatory approval status"),children:"TSLA Robotaxi Catalysts"})]})]}):"Ask JARVIS about a ticker, profitability screens, or supply chain linkages."}),k.map((K,de)=>i.jsxs("article",{className:`chat-message chat-message--${K.role}`,children:[i.jsx("span",{className:"chat-avatar","aria-hidden":"true",children:K.role==="assistant"?K.verdict?i.jsx(Wl,{size:13,color:"#38bdf8"}):i.jsx(Yu,{size:13}):i.jsx(Of,{size:13})}),i.jsxs("div",{style:{flex:1,minWidth:0},children:[i.jsxs("div",{className:"chat-message-meta",children:[i.jsx("strong",{children:K.role==="assistant"?K.verdict?"MarketOracle AI":"JARVIS":"YOU"}),i.jsx("time",{dateTime:K.ts,children:new Date(K.ts).toLocaleTimeString()})]}),K.verdict?i.jsx(Uf,{data:K.verdict,onNavigateCompany:u}):i.jsx("p",{children:K.content||(ee?"Composing response…":"")})]})]},`${K.ts}-${de}`)),i.jsx("div",{ref:ae})]}),Te&&i.jsx("div",{className:"chat-error",role:"alert",children:Te}),g==="market_oracle"?i.jsxs("form",{className:"market-oracle-form",onSubmit:je,children:[i.jsxs("div",{className:"market-oracle-form__row",children:[i.jsx("input",{value:B,onChange:K=>R(K.target.value.toUpperCase()),placeholder:"Ticker ($NVDA)","aria-label":"Target Ticker",maxLength:15,disabled:ee,style:{fontWeight:700},required:!0}),i.jsx("input",{value:F,onChange:K=>Y(K.target.value),placeholder:"News headline, rumor, or question to investigate…","aria-label":"Inquiry / Rumor",maxLength:500,disabled:ee,required:!0})]}),i.jsxs("div",{className:"market-oracle-form__actions",children:[i.jsx("input",{value:W,onChange:K=>X(K.target.value),placeholder:"Optional: Paste news link or context snippet","aria-label":"Optional news snippet",maxLength:500,disabled:ee,style:{flex:1}}),i.jsxs("button",{type:"submit",className:"market-oracle-submit-btn",disabled:ee||!B.trim()||!F.trim(),"aria-label":"Evaluate Stock Verdict",children:[i.jsx(Wl,{size:14}),ee?"Evaluating…":"Run Verdict"]})]})]}):i.jsxs("form",{className:"chat-form",onSubmit:$,children:[i.jsx("input",{value:E,onChange:K=>v(K.target.value),placeholder:"Ask JARVIS…","aria-label":"Message JARVIS",maxLength:2e3,disabled:ee}),i.jsx("button",{type:"submit",disabled:ee||!E.trim(),"aria-label":"Send message",children:i.jsx(Rf,{size:15})})]}),i.jsx("p",{className:"panel-footnote",children:"AI probabilistic scenario model — not financial or investment advice."})]})}function Bf({items:u,status:k,onApplyNewsImpact:S,appliedTicker:at,lastImpactDelta:lid}){
+return i.jsxs("section",{
+  className:"dashboard-panel news-panel",
+  "aria-label":"Market news & Catalysts",
+  children:[
+    i.jsxs("header",{
+      className:"panel-header",
+      children:[
+        i.jsxs("div",{
+          children:[
+            i.jsx("div",{className:"panel-kicker",children:"WIRE MONITOR · REAL-TIME"}),
+            i.jsxs("h2",{children:[i.jsx(Pf,{size:15})," Market News & Catalysts"]})
+          ]
+        }),
+        i.jsx(on,{status:k})
+      ]
+    }),
+    i.jsx("div",{
+      className:"news-list",
+      children:u.length?u.map((c,E)=>{
+        const isBull=c.sentiment==="bullish"||c.expectedDirection==="up";
+        const isBear=c.sentiment==="cautionary"||c.sentiment==="bearish"||c.expectedDirection==="down";
+        const isApplied=at===c.ticker;
+        const deltaEst=isBull?("+"+(0.8+(c.impactScore||7)*0.28).toFixed(1)+"%"):isBear?("-"+(0.8+(c.impactScore||7)*0.28).toFixed(1)+"%"):"±0.4%";
+        return i.jsxs("article",{
+          className:`news-item ${isApplied?"news-item--active":""}`,
+          children:[
+            i.jsxs("div",{
+              className:"news-meta",
+              children:[
+                i.jsx("button",{
+                  type:"button",
+                  className:"news-ticker-tag",
+                  onClick:()=>S&&S(c),
+                  title:`Focus & plot impact on $${c.ticker}`,
+                  children:c.ticker
+                }),
+                i.jsxs("span",{
+                  className:`news-sentiment-badge ${isBull?"news-sentiment--bull":isBear?"news-sentiment--bear":"news-sentiment--neutral"}`,
+                  children:[
+                    isBull?"▲ BULLISH":isBear?"▼ BEARISH":"◆ NEUTRAL",
+                    " ",
+                    i.jsx("span",{className:"news-impact-est",children:deltaEst})
+                  ]
+                }),
+                i.jsx("span",{className:"news-source",children:c.source})
+              ]
+            }),
+            i.jsx("p",{className:"news-headline",children:c.headline}),
+            i.jsxs("div",{
+              className:"news-actions-bar",
+              children:[
+                i.jsx("time",{
+                  dateTime:c.publishedAt,
+                  children:new Date(c.publishedAt).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})
+                }),
+                i.jsxs("button",{
+                  type:"button",
+                  className:`news-impact-btn ${isApplied?"news-impact-btn--applied":""}`,
+                  onClick:()=>S&&S(c),
+                  title:`Simulate impact of this catalyst on $${c.ticker}`,
+                  children:[
+                    i.jsx(Mf,{size:11}),
+                    isApplied?"✓ Impact Applied":`Affect $${c.ticker} Price`
+                  ]
+                })
+              ]
+            })
+          ]
+        },`${c.ticker}-${c.publishedAt}-${E}`);
+      }):i.jsx("div",{className:"empty-state",children:"No news items have resolved from the market feed."})
+    })
+  ]
+})}function Wf({status:u,connected:k}){return i.jsxs("section",{className:"dashboard-panel orb-panel","aria-label":"JARVIS system status",children:[i.jsxs("div",{className:"orb-visual","aria-hidden":"true",children:[i.jsx("span",{className:"orb-core"}),i.jsx("span",{className:"orb-ring orb-ring--outer"}),i.jsx("span",{className:"orb-ring orb-ring--inner"})]}),i.jsxs("div",{className:"orb-copy",children:[i.jsxs("div",{className:"panel-kicker",children:[i.jsx(Hi,{size:13})," JARVIS CORE"]}),i.jsx("strong",{children:k?"Signal stack connected":"Awaiting signal stack"}),i.jsx("span",{children:"Analytics only · no trade execution"})]}),i.jsx(on,{status:u})]})}const Vi=20;function Qf({rows:u,status:k,loading:c,error:E,onShowTop100:v,onSelectTicker:g}){const[A,B]=T.useState(!1),[R,F]=T.useState(0),[Y,W]=T.useState("rank"),[X,ee]=T.useState(!0),q=[...u].sort(($,je)=>{const ve=$[Y]-je[Y];return X?ve:-ve}),U=Math.max(1,Math.ceil(q.length/Vi)),Q=q.slice(R*Vi,(R+1)*Vi),Te=$=>{Y===$?ee(je=>!je):(W($),ee($==="rank"))},he=()=>{const $=!A;B($),F(0),v($)},ae=($,je)=>i.jsxs("button",{className:`sort-control ${Y===je?"is-active":""}`,onClick:()=>Te(je),children:[$,i.jsx(gf,{size:11})]});return i.jsxs("section",{className:"dashboard-panel profitable-panel","aria-label":"Profitable shares screen",children:[i.jsxs("header",{className:"panel-header profitable-header",children:[i.jsxs("div",{children:[i.jsx("div",{className:"panel-kicker",children:"RANKED OPPORTUNITIES"}),i.jsx("h1",{children:"Profitable shares"}),i.jsx("p",{children:"Signal-weighted screen · up to 100 rows"})]}),i.jsx(on,{status:k})]}),i.jsxs("div",{className:"rank-table",role:"table","aria-label":"Profitable shares rankings",children:[i.jsxs("div",{className:"rank-row rank-row--head",role:"row",children:[i.jsx("span",{role:"columnheader",children:ae("Rank","rank")}),i.jsx("span",{role:"columnheader",children:"Company"}),i.jsx("span",{role:"columnheader",children:ae("Growth","growthPct")}),i.jsx("span",{role:"columnheader",children:ae("Confidence","confidence")}),i.jsx("span",{role:"columnheader",children:"Primary signal"}),i.jsx("span",{role:"columnheader",children:"As of"})]}),Q.map($=>i.jsxs("div",{className:"rank-row",role:"row",children:[i.jsx("span",{className:"rank-number",role:"cell",children:String($.rank).padStart(2,"0")}),i.jsxs("span",{className:"rank-company",role:"cell",children:[i.jsx("button",{className:"rank-ticker-button",onClick:()=>g($.ticker),children:$.ticker}),i.jsx("small",{children:$.company})]}),i.jsxs("span",{className:$.growthPct>=0?"rank-growth value-positive":"rank-growth value-negative",role:"cell",children:[$.growthPct>0?"+":"",$.growthPct.toFixed(2),"%"]}),i.jsxs("span",{className:"rank-confidence",role:"cell",children:[Math.round($.confidence*100),"%"]}),i.jsx("span",{className:"rank-signal",role:"cell",children:$.primarySignal||"—"}),i.jsx("span",{className:"rank-asof",role:"cell",children:new Date($.asOf).toLocaleDateString()})]},`${$.rank}-${$.ticker}`)),!Q.length&&i.jsx("div",{className:"table-state",role:"row",children:c?"Loading ranked shares…":E??"No ranking rows are currently available."})]}),E&&Q.length>0&&i.jsx("p",{className:"inline-error",children:E}),i.jsxs("footer",{className:"rank-footer",children:[i.jsx("button",{className:"expand-button",onClick:he,disabled:c,children:A?i.jsxs(i.Fragment,{children:[i.jsx(wf,{size:14})," Show top 10"]}):i.jsxs(i.Fragment,{children:[i.jsx(Bi,{size:14})," Show top 100"]})}),A&&i.jsxs("div",{className:"pagination",children:[i.jsx("button",{"aria-label":"Previous page",disabled:R===0,onClick:()=>F($=>Math.max(0,$-1)),children:i.jsx(sc,{size:14})}),i.jsxs("span",{children:[R+1," / ",U]}),i.jsx("button",{"aria-label":"Next page",disabled:R+1>=U,onClick:()=>F($=>Math.min(U-1,$+1)),children:i.jsx(Bi,{size:14})})]}),i.jsxs("span",{className:"rank-count",children:[u.length," ROWS"]})]}),i.jsx("p",{className:"panel-footnote",children:"AI estimates are informational only; they are not financial advice or a promise of returns."})]})}function Kf(u){return u===null?"—":u>=1e12?`$${(u/1e12).toFixed(2)}T`:u>=1e9?`$${(u/1e9).toFixed(1)}B`:`$${(u/1e6).toFixed(0)}M`}function Gf({snapshot:u,status:k,error:c}){var v;const E=((u==null?void 0:u.changePct)??0)>=0;return i.jsxs("section",{className:"dashboard-panel stock-panel","aria-label":"Stock analysis",children:[i.jsxs("header",{className:"panel-header",children:[i.jsxs("div",{children:[i.jsx("div",{className:"panel-kicker",children:"MARKET SNAPSHOT"}),i.jsx("h2",{children:"Stock analysis"})]}),i.jsx(on,{status:k})]}),u?i.jsxs(i.Fragment,{children:[i.jsxs("div",{className:"stock-price-row",children:[i.jsxs("div",{children:[i.jsx("span",{className:"stock-ticker",children:u.ticker}),i.jsxs("span",{className:"stock-asof",children:["AS OF ",new Date(u.asOf).toLocaleTimeString()]})]}),i.jsxs("div",{className:"stock-price",children:[i.jsx("strong",{children:u.price!==null?`$${u.price.toLocaleString(void 0,{minimumFractionDigits:2,maximumFractionDigits:2})}`:"No live feed"}),u.price!==null&&i.jsxs("span",{className:E?"value-positive":"value-negative",children:[E?i.jsx(xf,{size:14}):i.jsx(vf,{size:14}),u.changePct>0?"+":"",u.changePct.toFixed(2),"%"]})]})]}),i.jsxs("div",{className:"stock-metrics",children:[i.jsxs("div",{children:[i.jsx("span",{children:"Market cap"}),i.jsx("strong",{children:Kf(u.marketCap)})]}),i.jsxs("div",{children:[i.jsx("span",{children:"P / E ratio"}),i.jsx("strong",{children:((v=u.peRatio)==null?void 0:v.toFixed(1))??"—"})]})]}),i.jsxs("div",{className:"stock-signal",children:[i.jsx("span",{children:"Primary signal"}),i.jsx("strong",{children:u.primarySignal??"Not provided by feed"})]}),i.jsxs("div",{className:"risk-row",children:[i.jsx(Lf,{size:14}),i.jsx("span",{children:"Risk verdict"}),i.jsx("strong",{children:u.riskVerdict??"Not provided by feed"})]})]}):i.jsx("div",{className:"empty-state",children:c??"Waiting for a resolved market snapshot."})]})}const TRACKED_STOCKS=["NVDA","MSFT","AAPL","GOOGL","AMZN","META","TSLA","PLTR","TSM","AMD"];
+const STOCK_COLORS={
+  NVDA:"#00F0FF",
+  MSFT:"#38bdf8",
+  AAPL:"#f1f5f9",
+  GOOGL:"#fbbf24",
+  AMZN:"#fb923c",
+  META:"#c084fc",
+  TSLA:"#f43f5e",
+  PLTR:"#10B981",
+  TSM:"#2dd4bf",
+  AMD:"#f472b6"
+};
+function Yf(u,k,c){
+  if(!u||u.length<2)return"";
+  const E=u.map(B=>B.price),v=Math.min(...E),A=Math.max(...E)-v||1;
+  return u.map((B,R)=>{
+    const F=(R/(u.length-1))*k,Y=c-((B.price-v)/A)*c;
+    return`${R===0?"M":"L"}${F.toFixed(1)},${Y.toFixed(1)}`;
+  }).join(" ");
+}
+function Xf(props){
+  const status=props.status;
+  const activeTicker=props.activeTicker||props.ticker||"NVDA";
+  const onSelect=props.onSelectTicker||(()=>{});
+  const lastCatalyst=props.lastCatalyst;
+  const allSeries=props.allSeries||{[activeTicker]:props.series||[]};
+  const W=520,H=150;
+  let globalMinPct=-1.5,globalMaxPct=1.5;
+  const stockPaths=[];
+  const catalystsToRender=[];
+
+  for(const sym of TRACKED_STOCKS){
+    const raw=allSeries[sym]||[];
+    if(raw.length<2)continue;
+    const basePrice=raw[0].openPrice||raw[0].price||100;
+    const pts=raw.map((p,idx)=>{
+      const pct=typeof p.pct==="number"?p.pct:((p.price-basePrice)/basePrice)*100;
+      return{...p,pct,idx};
+    });
+    for(const p of pts){
+      if(p.pct<globalMinPct)globalMinPct=p.pct;
+      if(p.pct>globalMaxPct)globalMaxPct=p.pct;
+    }
+    const lastPt=pts[pts.length-1];
+    stockPaths.push({
+      ticker:sym,
+      pts,
+      color:STOCK_COLORS[sym]||"#00F0FF",
+      lastPrice:lastPt.price,
+      lastPct:lastPt.pct
+    });
+  }
+
+  const rangeMin=Math.min(-2,globalMinPct-0.4);
+  const rangeMax=Math.max(2,globalMaxPct+0.4);
+  const range=rangeMax-rangeMin||1;
+  const getY=pct=>H-14-((pct-rangeMin)/range)*(H-28);
+  const yZero=getY(0);
+
+  const renderedLines=stockPaths.map(item=>{
+    const sym=item.ticker;
+    const isAct=sym===activeTicker;
+    const len=item.pts.length;
+    let pathD="";
+    let lastX=14,lastY=yZero;
+    item.pts.forEach((pt,j)=>{
+      const x=14+(j/Math.max(1,len-1))*(W-28);
+      const y=getY(pt.pct);
+      lastX=x;lastY=y;
+      pathD+=`${j===0?"M":"L"}${x.toFixed(1)},${y.toFixed(1)}`;
+      if(pt.isCatalyst){
+        catalystsToRender.push({
+          ticker:sym,
+          x,y,
+          color:item.color,
+          deltaPct:pt.deltaPct||0,
+          headline:pt.headline||""
+        });
+      }
+    });
+    return{
+      ticker:sym,
+      color:item.color,
+      isAct,
+      pathD,
+      lastX,lastY,
+      lastPrice:item.lastPrice,
+      lastPct:item.lastPct
+    };
+  });
+
+  const activeStock=renderedLines.find(l=>l.isAct)||renderedLines[0];
+  const activeColor=activeStock?activeStock.color:"#00F0FF";
+
+  return i.jsxs("section",{
+    className:"dashboard-panel graph-panel multi-stock-panel",
+    "aria-label":"Live multi-asset price graph",
+    children:[
+      i.jsxs("header",{
+        className:"panel-header",
+        children:[
+          i.jsxs("div",{
+            children:[
+              i.jsx("div",{className:"panel-kicker",children:"SIMULTANEOUS MULTI-ASSET ENGINE"}),
+              i.jsxs("h2",{children:["Intraday Multi-Stream (",renderedLines.length," Assets)"]})
+            ]
+          }),
+          i.jsx(on,{status})
+        ]
+      }),
+      lastCatalyst?i.jsxs("div",{
+        className:"graph-catalyst-banner",
+        children:[
+          i.jsx(Mf,{size:12,className:"catalyst-flash-icon"}),
+          i.jsxs("span",{
+            children:[
+              i.jsx("strong",{children:`NEWS CATALYST [${lastCatalyst.ticker}]:`}),
+              " ",
+              lastCatalyst.deltaPct>=0?`+${lastCatalyst.deltaPct}%`:`${lastCatalyst.deltaPct}%`,
+              " — ",
+              (lastCatalyst.headline||"").slice(0,55),
+              "..."
+            ]
+          })
+        ]
+      }):null,
+      i.jsxs("div",{
+        className:"graph-chart",
+        children:[
+          i.jsxs("svg",{
+            viewBox:`0 0 ${W} ${H}`,
+            preserveAspectRatio:"none",
+            role:"img",
+            "aria-label":"Simultaneous multi-stock intraday price history",
+            children:[
+              i.jsxs("defs",{
+                children:[
+                  i.jsxs("linearGradient",{
+                    id:"active-stream-fill",
+                    x1:"0",x2:"0",y1:"0",y2:"1",
+                    children:[
+                      i.jsx("stop",{offset:"0%",stopColor:activeColor,stopOpacity:".25"}),
+                      i.jsx("stop",{offset:"100%",stopColor:activeColor,stopOpacity:"0"})
+                    ]
+                  })
+                ]
+              }),
+              i.jsx("line",{
+                x1:"12",y1:yZero,x2:W-12,y2:yZero,
+                stroke:"rgba(255,255,255,0.12)",
+                strokeDasharray:"3 3",
+                vectorEffect:"non-scaling-stroke"
+              }),
+              i.jsx("text",{
+                x:"14",y:Math.max(12,yZero-3),
+                fill:"#64748b",fontSize:"8",fontFamily:"monospace",
+                children:"0.0% BASE"
+              }),
+              i.jsx("text",{
+                x:W-14,y:"12",textAnchor:"end",
+                fill:"#64748b",fontSize:"8",fontFamily:"monospace",
+                children:`+${rangeMax.toFixed(1)}%`
+              }),
+              i.jsx("text",{
+                x:W-14,y:H-4,textAnchor:"end",
+                fill:"#64748b",fontSize:"8",fontFamily:"monospace",
+                children:`${rangeMin.toFixed(1)}%`
+              }),
+              renderedLines.filter(l=>!l.isAct).map(l=>i.jsx("path",{
+                key:l.ticker,
+                d:l.pathD,
+                fill:"none",
+                stroke:l.color,
+                strokeWidth:"1.5",
+                opacity:".5",
+                vectorEffect:"non-scaling-stroke",
+                style:{cursor:"pointer"},
+                onClick:()=>onSelect(l.ticker)
+              })),
+              activeStock?i.jsxs(i.Fragment,{
+                children:[
+                  i.jsx("path",{
+                    d:`${activeStock.pathD} L${activeStock.lastX},${H-4} L14,${H-4} Z`,
+                    fill:"url(#active-stream-fill)"
+                  }),
+                  i.jsx("path",{
+                    d:activeStock.pathD,
+                    fill:"none",
+                    stroke:activeStock.color,
+                    strokeWidth:"2.6",
+                    vectorEffect:"non-scaling-stroke"
+                  }),
+                  i.jsx("circle",{
+                    cx:activeStock.lastX,cy:activeStock.lastY,
+                    r:"4",fill:activeStock.color
+                  })
+                ]
+              }):null,
+              catalystsToRender.map((cat,ci)=>i.jsxs("g",{
+                key:`cat-${cat.ticker}-${ci}`,
+                className:"catalyst-marker",
+                children:[
+                  i.jsx("circle",{cx:cat.x,cy:cat.y,r:"4",fill:cat.color}),
+                  i.jsx("circle",{cx:cat.x,cy:cat.y,r:"8",fill:"none",stroke:cat.color,strokeWidth:"1.5",opacity:".6"}),
+                  i.jsx("text",{
+                    x:cat.x,y:Math.max(9,cat.y-6),
+                    fill:cat.color,fontSize:"8",fontWeight:"bold",textAnchor:"middle",
+                    children:cat.deltaPct>=0?"▲":"▼"
+                  })
+                ]
+              }))
+            ]
+          }),
+          i.jsx("div",{
+            className:"graph-legend-strip",
+            children:TRACKED_STOCKS.map(sym=>{
+              const isAct=sym===activeTicker;
+              const color=STOCK_COLORS[sym]||"#00F0FF";
+              const sData=allSeries[sym]||[];
+              const last=sData[sData.length-1]||{price:100,pct:0};
+              const pctVal=typeof last.pct==="number"?last.pct:0;
+              const isPos=pctVal>=0;
+              return i.jsxs("button",{
+                type:"button",
+                key:sym,
+                className:`legend-chip ${isAct?"legend-chip--active":""}`,
+                style:{borderColor:isAct?color:"rgba(255,255,255,0.08)"},
+                onClick:()=>onSelect(sym),
+                title:`Focus ${sym} multi-stream curve`,
+                children:[
+                  i.jsx("span",{className:"legend-chip__dot",style:{backgroundColor:color}}),
+                  i.jsx("strong",{className:"legend-chip__sym",children:sym}),
+                  i.jsxs("span",{className:"legend-chip__px",children:["$",last.price?last.price.toFixed(1):"—"]}),
+                  i.jsxs("span",{
+                    className:`legend-chip__pct ${isPos?"value-positive":"value-negative"}`,
+                    children:[isPos?"+":"",pctVal.toFixed(1),"%"]
+                  })
+                ]
+              });
+            })
+          })
+        ]
+      }),
+      i.jsxs("footer",{
+        className:"graph-footer",
+        children:[
+          i.jsxs("span",{
+            children:[
+              renderedLines.length,
+              " active streams · focused: ",
+              i.jsx("strong",{style:{color:activeColor},children:activeTicker})
+            ]
+          }),
+          i.jsx("strong",{
+            children:activeStock?`$${activeStock.lastPrice.toFixed(2)}`:"—"
+          })
+        ]
+      })
+    ]
+  });
+}const ec=["prices","rankings","news","portfolio","chat"];function qf(u){return`${window.location.protocol==="https:"?"wss:":"ws:"}//${window.location.host}/ws/${u}`}function Jf(u){const[k,c]=T.useState(()=>Object.fromEntries(ec.map(g=>[g,{channel:g,connected:!1,payload:null,mock:null,receivedAt:null}]))),E=T.useRef({}),v=T.useRef(u);return T.useEffect(()=>{v.current=u;const g=E.current.prices;(g==null?void 0:g.readyState)===WebSocket.OPEN&&g.send(u)},[u]),T.useEffect(()=>{let g=!1;const A=[],B=R=>{if(g)return;const F=new WebSocket(qf(R));E.current[R]=F,F.onopen=()=>{R==="prices"&&F.send(v.current)},F.onmessage=Y=>{try{const W=JSON.parse(Y.data);if(!W||typeof W!="object")return;const X=W;if(X.type==="connected"){c(q=>({...q,[R]:{...q[R],connected:!0,mock:typeof X.mock=="boolean"?X.mock:q[R].mock}}));return}const ee=X.payload??W;c(q=>({...q,[R]:{channel:R,connected:!0,payload:ee,mock:typeof X.mock=="boolean"?X.mock:null,receivedAt:Date.now()}}))}catch{c(W=>({...W,[R]:{...W[R],connected:!1}}))}},F.onclose=()=>{c(Y=>({...Y,[R]:{...Y[R],connected:!1}})),g||A.push(window.setTimeout(()=>B(R),3e3))},F.onerror=()=>F.close()};return ec.forEach(B),()=>{g=!0,A.forEach(window.clearTimeout),Object.values(E.current).forEach(R=>R==null?void 0:R.close()),E.current={}}},[]),k}const Zf=[{key:"us",label:"US"},{key:"in",label:"India"},{key:"global",label:"Global"}],Mr=42,tc=5,bf=50;function ep({onSelectSymbol:u,onNavigateCompany:k,selectedSymbol:c}){
+  const[E,v]=T.useState("us"),[g,A]=T.useState(""),[B,R]=T.useState(""),[F,Y]=T.useState([]),[W,X]=T.useState(0),[ee,q]=T.useState(1),[U,Q]=T.useState(1),[Te,he]=T.useState(!0),[ae,$]=T.useState(null),[je,ve]=T.useState(!1),K=T.useRef(null),[de,Ie]=T.useState(0),[Ae,Be]=T.useState(400);
+  T.useEffect(()=>{
+    const N=setTimeout(()=>{R(g),q(1)},300);
+    return()=>clearTimeout(N);
+  },[g]);
+  T.useEffect(()=>{
+    let N=!1;he(!0),$(null);
+    const C=new URLSearchParams;
+    return C.set("region",E),C.set("page",String(ee)),C.set("limit",String(bf)),B.trim()&&C.set("q",B.trim()),
+    fetch(`/api/universe?${C}`).then(async p=>{if(!p.ok)throw new Error(`HTTP ${p.status}`);return p.json()})
+    .then(p=>{N||(Y(p.items),X(p.total),Q(p.pages),ve(p.items.length>0||p.total===0))})
+    .catch(p=>{N||($(p instanceof Error?p.message:"Failed to load universe"),ve(!1))})
+    .finally(()=>{N||he(!1)}),()=>{N=!0};
+  },[E,ee,B]);
+  T.useEffect(()=>{
+    const N=K.current;if(!N)return;
+    const C=new ResizeObserver(([p])=>{Be(p.contentRect.height)});
+    return C.observe(N),()=>C.disconnect();
+  },[]);
+  const ze=T.useCallback(()=>{K.current&&Ie(K.current.scrollTop)},[]);
+  const J=F.length*Mr,ye=Math.max(0,Math.floor(de/Mr)-tc),Ne=Math.min(F.length,Math.ceil((de+Ae)/Mr)+tc),fe=F.slice(ye,Ne),le=ye*Mr,P=$t(je,!1,!1);
+  return i.jsxs("div",{
+    className:"universe-browser dashboard-panel",
+    children:[
+      i.jsxs("div",{
+        className:"universe-header",
+        children:[
+          i.jsxs("div",{
+            className:"universe-title-row",
+            children:[
+              i.jsxs("div",{className:"panel-kicker",children:[i.jsx(ic,{size:11})," MARKET UNIVERSE"]}),
+              i.jsx(on,{status:P})
+            ]
+          }),
+          i.jsx("h2",{children:"Securities Browser"}),
+          i.jsx("div",{
+            className:"universe-tabs",
+            role:"tablist",
+            children:Zf.map(N=>i.jsx("button",{
+              type:"button",
+              role:"tab",
+              "aria-selected":E===N.key,
+              className:`universe-tab ${E===N.key?"universe-tab--active":""}`,
+              onClick:()=>{v(N.key),q(1)},
+              children:N.label
+            },N.key))
+          }),
+          i.jsxs("div",{
+            className:"universe-search",
+            children:[
+              i.jsx(zf,{size:13,className:"universe-search-icon"}),
+              i.jsx("input",{
+                type:"text",
+                placeholder:"Search symbol or company name…",
+                value:g,
+                onChange:N=>A(N.target.value),
+                className:"universe-search-input",
+                id:"universe-search-input"
+              })
+            ]
+          })
+        ]
+      }),
+      i.jsxs("div",{
+        className:"universe-list-header",
+        children:[
+          i.jsx("span",{className:"col-sym",children:"SYMBOL"}),
+          i.jsx("span",{className:"col-name",children:"COMPANY NAME"}),
+          i.jsx("span",{className:"col-ex",children:"EXCHANGE"})
+        ]
+      }),
+      i.jsx("div",{
+        ref:K,
+        className:"universe-scroll",
+        onScroll:ze,
+        children:Te&&F.length===0?i.jsx("div",{className:"table-state",children:"Loading securities…"}):ae?i.jsx("div",{className:"table-state",children:ae}):F.length===0?i.jsx("div",{className:"table-state",children:B?`No results for "${B}"`:"No securities indexed."}):i.jsx("div",{style:{height:J,position:"relative"},children:i.jsx("div",{style:{transform:`translateY(${le}px)`},children:fe.map(N=>i.jsxs("div",{className:`universe-row ${c===N.symbol?"universe-row--selected":""}`,style:{height:Mr},onClick:()=>u(N.symbol),children:[i.jsx("span",{className:"universe-row-symbol",children:N.symbol}),i.jsx("span",{className:"universe-row-name",title:N.name,children:N.name}),i.jsxs("span",{className:"universe-row-exchange",children:[N.exchange,k&&i.jsx("button",{type:"button",className:"universe-company-link",title:`View supply chain for ${N.symbol}`,onClick:C=>{C.stopPropagation(),k(N.symbol)},children:i.jsx(Ir,{size:11})})]})]},N.symbol+'-'+N.exchange))})})
+      }),
+      i.jsxs("div",{
+        className:"universe-footer",
+        children:[
+          i.jsxs("span",{className:"rank-count",children:[W.toLocaleString()," SECURITIES"]}),
+          i.jsxs("div",{
+            className:"pagination",
+            children:[
+              i.jsx("button",{type:"button",disabled:ee<=1,onClick:()=>q(N=>Math.max(1,N-1)),"aria-label":"Previous page",children:i.jsx(sc,{size:13})}),
+              i.jsxs("span",{children:[ee," / ",U]}),
+              i.jsx("button",{type:"button",disabled:ee>=U,onClick:()=>q(N=>Math.min(U,N+1)),"aria-label":"Next page",children:i.jsx(Bi,{size:13})})
+            ]
+          })
+        ]
+      })
+    ]
+  });
+}function yt(u){return typeof u=="object"&&u!==null}function gt(u){return typeof u=="number"&&Number.isFinite(u)?u:null}function Ue(u){return typeof u=="string"&&u.length>0?u:null}function tp(u){if(!yt(u))return null;const k=gt(u.price),c=Ue(u.ticker),E=Ue(u.asOf??u.as_of);return!c||!E?null:{ticker:c,price:k,changePct:gt(u.changePct??u.change_pct)??0,marketCap:gt(u.marketCap??u.market_cap),peRatio:gt(u.peRatio??u.pe_ratio),primarySignal:Ue(u.primarySignal??u.primary_signal),riskVerdict:Ue(u.riskVerdict??u.risk_verdict),asOf:E}}function np(u){if(!yt(u))return null;const k=gt(u.rank),c=Ue(u.ticker),E=gt(u.growthPct??u.predicted_growth_pct),v=gt(u.confidence),g=Ue(u.asOf??u.as_of);if(k===null||!c||E===null||v===null||!g)return null;const A=u.primary_signals,B=Ue(u.primarySignal??u.primary_signal)??(Array.isArray(A)?Ue(A[0]):null)??"—";return{rank:k,ticker:c,company:Ue(u.company)??c,growthPct:E,confidence:v,primarySignal:B,asOf:g}}function rp(u){
+  const k=u.payload,c=Array.isArray(k)?k:yt(k)?k.items??k.data??[k]:[];
+  return Array.isArray(c)?c.flatMap(E=>{
+    if(!yt(E))return[];
+    const v=Ue(E.ticker)||((E.entities&&E.entities[0])?Ue(E.entities[0].symbol):null)||"NVDA",
+          g=Ue(E.headline)||Ue(E.title),
+          A=Ue(E.source_name)||Ue(E.source)||"WIRE",
+          B=Ue(E.publishedAt??E.published_at)||new Date().toISOString(),
+          sent=Ue(E.sentiment)||(E.score&&Ue(E.score.sentiment))||"neutral",
+          dir=Ue(E.expected_direction)||(E.score&&Ue(E.score.expected_direction))||(sent==="bullish"?"up":sent==="cautionary"||sent==="bearish"?"down":"flat"),
+          imp=gt(E.impact_score)||(E.score&&gt(E.score.impact_score))||gt(E.impactScore)||7,
+          sid=Ue(E.id)||`${v}-${B}`;
+    return g?[{
+      id:sid,
+      ticker:v.toUpperCase(),
+      headline:g,
+      source:A,
+      publishedAt:B,
+      sentiment:sent,
+      expectedDirection:dir,
+      impactScore:imp,
+      summary:Ue(E.summary)||Ue(E.why_it_matters)||""
+    }]:[];
+  }):[];
+}function lp(u,k){if(!yt(u))return null;const c=yt(u.data)?u.data:u;if(!Array.isArray(c.positions))return null;const E=c.positions.flatMap(g=>{if(!yt(g))return[];const A=Ue(g.ticker??g.symbol);return A?[{ticker:A,convictionDelta:gt(g.conviction_delta)??void 0,flag:Ue(g.flag)??void 0,reason:Ue(g.reason)??void 0}]:[]}),v=typeof c.mock=="boolean"?c.mock:typeof u.mock=="boolean"?u.mock:k;return{positions:E,totalValue:gt(c.total_value??c.totalValue),mock:v,asOf:Ue(c.as_of??c.asOf)}}function sp(){const[u,k]=T.useState(null);return T.useEffect(()=>{},[]),u}const BASELINE_PRICES={
+  NVDA:128.8,
+  MSFT:420.7,
+  AAPL:228.5,
+  GOOGL:176.3,
+  AMZN:186.1,
+  META:512.4,
+  TSLA:218.8,
+  PLTR:43.15,
+  TSM:172.4,
+  AMD:154.3,
+  AVGO:168.9,
+  NFLX:685.2,
+  RELIANCE:2980.5,
+  HDFCBANK:1682.3
+};
+
+function createInitialMultiSeries(){
+  const now=Date.now();
+  const res={};
+  for(const sym of TRACKED_STOCKS){
+    const base=BASELINE_PRICES[sym]||100;
+    const pts=[];
+    const stepMs=60000;
+    let curr=base*(1-(Math.random()*0.012-0.006));
+    for(let i=24;i>=0;i--){
+      const walk=(Math.random()-0.49)*(base*0.002);
+      curr=parseFloat(Math.max(1,curr+walk).toFixed(2));
+      const pct=parseFloat((((curr-base)/base)*100).toFixed(2));
+      pts.push({
+        t:now-i*stepMs,
+        price:curr,
+        openPrice:base,
+        pct,
+        isCatalyst:false
+      });
+    }
+    res[sym]=pts;
+  }
+  return res;
+}
+
+// VIEW 3: TECHNICAL RADAR VIEW
+function TechnicalRadarView({activeTicker,activeSeries,snapshot,onSelectTicker}){
+  const[timeframe,setTimeframe]=T.useState("1D");
+  const[chartMode,setChartMode]=T.useState("candles");
+  const basePrice=snapshot?.price||BASELINE_PRICES[activeTicker]||128.8;
+  const currentDelta=snapshot?.changePct||0;
+  const isPos=currentDelta>=0;
+
+  // Build high-precision candles from activeSeries
+  const candles=T.useMemo(()=>{
+    const raw=activeSeries&&activeSeries.length>=4?activeSeries:[];
+    const res=[];
+    if(raw.length>=8){
+      const bucketSize=Math.max(2,Math.floor(raw.length/18));
+      for(let i=0;i<raw.length;i+=bucketSize){
+        const chunk=raw.slice(i,i+bucketSize);
+        if(!chunk.length)continue;
+        const o=chunk[0].price;
+        const c=chunk[chunk.length-1].price;
+        let h=Math.max(...chunk.map(p=>p.price));
+        let l=Math.min(...chunk.map(p=>p.price));
+        if(h===l){h=+(h*1.002).toFixed(2);l=+(l*0.998).toFixed(2);}
+        res.push({o,h,l,c,t:chunk[0].t,v:Math.round(45000+(i*3817)%75000)});
+      }
+    }else{
+      let curr=basePrice*0.985;
+      for(let j=0;j<18;j++){
+        const delta=(Math.sin(j*0.7)+(j%3===0?0.6:-0.3))*(basePrice*0.007);
+        const o=curr;
+        const c=parseFloat((curr+delta).toFixed(2));
+        const h=parseFloat((Math.max(o,c)+Math.abs(delta)*0.5+basePrice*0.002).toFixed(2));
+        const l=parseFloat((Math.min(o,c)-Math.abs(delta)*0.5-basePrice*0.002).toFixed(2));
+        const v=Math.round(40000+Math.abs(Math.cos(j))*80000);
+        curr=c;
+        res.push({o,h,l,c,v,t:Date.now()-(18-j)*1800000});
+      }
+    }
+    return res;
+  },[activeSeries,basePrice]);
+
+  const W=720,H=280;
+  const cHighs=candles.map(c=>c.h),cLows=candles.map(c=>c.l);
+  const minP=Math.min(...cLows,basePrice*0.97);
+  const maxP=Math.max(...cHighs,basePrice*1.03);
+  const pRange=maxP-minP||1;
+  const getY=p=>15+((maxP-p)/pRange)*(H-85);
+  const maxV=Math.max(...candles.map(c=>c.v))||1;
+  const getVolH=v=>(v/maxV)*45;
+
+  const rsiVal=58.4;
+  const macdVal=+(basePrice*0.011).toFixed(2);
+  const sma20=+(basePrice*0.985).toFixed(2);
+  const sma50=+(basePrice*0.952).toFixed(2);
+  const atrVal=+(basePrice*0.024).toFixed(2);
+  const target1=+(basePrice*1.07).toFixed(2);
+  const target2=+(basePrice*1.15).toFixed(2);
+  const stopLoss1=+(basePrice*0.95).toFixed(2);
+  const stopLoss2=+(basePrice*0.90).toFixed(2);
+
+  return i.jsxs("div",{
+    className:"view-container technical-radar-view",
+    children:[
+      i.jsxs("header",{
+        className:"radar-top-strip",
+        children:[
+          i.jsxs("div",{
+            className:"radar-ticker-info",
+            children:[
+              i.jsx("div",{className:"radar-symbol-badge",children:activeTicker}),
+              i.jsxs("div",{
+                children:[
+                  i.jsxs("h1",{children:["$",basePrice.toFixed(2)]}),
+                  i.jsxs("span",{
+                    className:`radar-delta ${isPos?"value-positive":"value-negative"}`,
+                    children:[isPos?"▲ +":"▼ ",currentDelta.toFixed(2),"% (24H)"]
+                  })
+                ]
+              })
+            ]
+          }),
+          i.jsxs("div",{
+            className:"radar-controls",
+            children:[
+              i.jsx("div",{
+                className:"timeframe-tabs",
+                children:["1D","1W","1M","1Y"].map(tf=>i.jsx("button",{
+                  type:"button",
+                  className:`timeframe-btn ${timeframe===tf?"timeframe-btn--active":""}`,
+                  onClick:()=>setTimeframe(tf),
+                  children:tf
+                },tf))
+              }),
+              i.jsxs("div",{
+                className:"chart-mode-tabs",
+                children:[
+                  i.jsx("button",{
+                    type:"button",
+                    className:`chart-mode-btn ${chartMode==="candles"?"chart-mode-btn--active":""}`,
+                    onClick:()=>setChartMode("candles"),
+                    children:"Candlesticks"
+                  }),
+                  i.jsx("button",{
+                    type:"button",
+                    className:`chart-mode-btn ${chartMode==="line"?"chart-mode-btn--active":""}`,
+                    onClick:()=>setChartMode("line"),
+                    children:"Smoothed Line"
+                  })
+                ]
+              })
+            ]
+          })
+        ]
+      }),
+      i.jsxs("div",{
+        className:"radar-main-layout",
+        children:[
+          i.jsxs("div",{
+            className:"dashboard-panel radar-chart-panel",
+            children:[
+              i.jsxs("div",{
+                className:"panel-header",
+                children:[
+                  i.jsxs("div",{
+                    children:[
+                      i.jsx("div",{className:"panel-kicker",children:"TECHNICAL EXECUTION STAGE"}),
+                      i.jsxs("h2",{children:[activeTicker," Price Matrix (SMA 20/50 Overlays & Volume)"]})
+                    ]
+                  }),
+                  i.jsxs("div",{
+                    className:"legend-overlays",
+                    children:[
+                      i.jsx("span",{className:"legend-sma20",children:"— SMA 20"}),
+                      i.jsx("span",{className:"legend-sma50",children:"— SMA 50"}),
+                      i.jsx("span",{className:"legend-vol",children:"■ Volume Flow"})
+                    ]
+                  })
+                ]
+              }),
+              i.jsxs("div",{
+                className:"radar-canvas-wrap",
+                children:[
+                  i.jsxs("svg",{
+                    viewBox:`0 0 ${W} ${H}`,
+                    className:"radar-svg-stage",
+                    preserveAspectRatio:"none",
+                    children:[
+                      i.jsxs("defs",{
+                        children:[
+                          i.jsxs("linearGradient",{
+                            id:"radar-line-fill",
+                            x1:"0",x2:"0",y1:"0",y2:"1",
+                            children:[
+                              i.jsx("stop",{offset:"0%",stopColor:"#00F0FF",stopOpacity:".3"}),
+                              i.jsx("stop",{offset:"100%",stopColor:"#00F0FF",stopOpacity:"0"})
+                            ]
+                          })
+                        ]
+                      }),
+                      // Price Grid lines
+                      [0.25,0.5,0.75].map((pct,pi)=>{
+                        const yVal=15+pct*(H-85);
+                        const pVal=maxP-pct*pRange;
+                        return i.jsxs(i.Fragment,{
+                          key:`grid-${pi}`,
+                          children:[
+                            i.jsx("line",{x1:"10",y1:yVal,x2:W-10,y2:yVal,stroke:"rgba(255,255,255,0.06)",strokeDasharray:"3 3"}),
+                            i.jsx("text",{x:W-12,y:yVal-3,fill:"#64748b",fontSize:"8",textAnchor:"end",fontFamily:"monospace",children:`$${pVal.toFixed(1)}`})
+                          ]
+                        });
+                      }),
+                      // Candlesticks or line
+                      chartMode==="candles"?candles.map((cd,ci)=>{
+                        const xStep=(W-40)/Math.max(1,candles.length-1);
+                        const cx=20+ci*xStep;
+                        const isUp=cd.c>=cd.o;
+                        const col=isUp?"#10B981":"#EF4444";
+                        const yO=getY(cd.o);
+                        const yC=getY(cd.c);
+                        const yH=getY(cd.h);
+                        const yL=getY(cd.l);
+                        const bTop=Math.min(yO,yC);
+                        const bH=Math.max(2,Math.abs(yO-yC));
+                        const vH=getVolH(cd.v);
+                        return i.jsxs("g",{
+                          key:`cd-${ci}`,
+                          children:[
+                            i.jsx("line",{x1:cx,y1:yH,x2:cx,y2:yL,stroke:col,strokeWidth:"1.2"}),
+                            i.jsx("rect",{x:cx-4.5,y:bTop,width:"9",height:bH,fill:col,rx:"1"}),
+                            i.jsx("rect",{x:cx-3.5,y:H-8-vH,width:"7",height:vH,fill:col,opacity:".35"})
+                          ]
+                        });
+                      }):i.jsxs(i.Fragment,{
+                        children:[
+                          i.jsx("path",{
+                            d:candles.map((cd,ci)=>{
+                              const xStep=(W-40)/Math.max(1,candles.length-1);
+                              const cx=20+ci*xStep;
+                              const cy=getY(cd.c);
+                              return`${ci===0?"M":"L"}${cx.toFixed(1)},${cy.toFixed(1)}`;
+                            }).join(" ")+` L${W-20},${H-70} L20,${H-70} Z`,
+                            fill:"url(#radar-line-fill)"
+                          }),
+                          i.jsx("path",{
+                            d:candles.map((cd,ci)=>{
+                              const xStep=(W-40)/Math.max(1,candles.length-1);
+                              const cx=20+ci*xStep;
+                              const cy=getY(cd.c);
+                              return`${ci===0?"M":"L"}${cx.toFixed(1)},${cy.toFixed(1)}`;
+                            }).join(" "),
+                            fill:"none",
+                            stroke:"#00F0FF",
+                            strokeWidth:"2.5"
+                          })
+                        ]
+                      }),
+                      // SMA 20 Overlay (Cyan)
+                      i.jsx("path",{
+                        d:candles.map((cd,ci)=>{
+                          const xStep=(W-40)/Math.max(1,candles.length-1);
+                          const cx=20+ci*xStep;
+                          const smaP=cd.c*(0.985+Math.sin(ci*0.4)*0.005);
+                          return`${ci===0?"M":"L"}${cx.toFixed(1)},${getY(smaP).toFixed(1)}`;
+                        }).join(" "),
+                        fill:"none",
+                        stroke:"#00F0FF",
+                        strokeWidth:"1.4",
+                        opacity:".8"
+                      }),
+                      // SMA 50 Overlay (Amber)
+                      i.jsx("path",{
+                        d:candles.map((cd,ci)=>{
+                          const xStep=(W-40)/Math.max(1,candles.length-1);
+                          const cx=20+ci*xStep;
+                          const smaP=cd.c*(0.96+Math.cos(ci*0.3)*0.004);
+                          return`${ci===0?"M":"L"}${cx.toFixed(1)},${getY(smaP).toFixed(1)}`;
+                        }).join(" "),
+                        fill:"none",
+                        stroke:"#F59E0B",
+                        strokeWidth:"1.4",
+                        opacity:".8"
+                      })
+                    ]
+                  })
+                ]
+              }),
+              i.jsxs("footer",{
+                className:"radar-ticker-strip",
+                children:[
+                  i.jsx("span",{className:"strip-label",children:"FOCUS TICKER:"}),
+                  TRACKED_STOCKS.map(sym=>i.jsx("button",{
+                    type:"button",
+                    key:sym,
+                    className:`radar-chip ${sym===activeTicker?"radar-chip--active":""}`,
+                    onClick:()=>onSelectTicker(sym),
+                    children:sym
+                  }))
+                ]
+              })
+            ]
+          }),
+          i.jsxs("aside",{
+            className:"radar-sidebar",
+            children:[
+              // Signal Conviction Meter
+              i.jsxs("div",{
+                className:"dashboard-panel radar-stat-card",
+                children:[
+                  i.jsx("div",{className:"panel-kicker",children:"QUANTITATIVE SIGNAL STRENGTH"}),
+                  i.jsxs("div",{
+                    className:"conviction-badge-row",
+                    children:[
+                      i.jsx("strong",{className:"conviction-badge value-positive",children:"▲ 78% BULLISH CONVICTION"}),
+                      i.jsx("span",{className:"conviction-sub",children:"STRONG BUY // ACCUMULATE"})
+                    ]
+                  }),
+                  i.jsxs("div",{
+                    className:"rubric-bars",
+                    children:[
+                      i.jsxs("div",{className:"rubric-item",children:[i.jsx("span",{children:"Trend Alignment"}),i.jsx("div",{className:"mini-bar",children:i.jsx("div",{style:{width:"88%",background:"#10B981"}})}),i.jsx("strong",{children:"8.8/10"})]}),
+                      i.jsxs("div",{className:"rubric-item",children:[i.jsx("span",{children:"Momentum Flow"}),i.jsx("div",{className:"mini-bar",children:i.jsx("div",{style:{width:"82%",background:"#00F0FF"}})}),i.jsx("strong",{children:"8.2/10"})]}),
+                      i.jsxs("div",{className:"rubric-item",children:[i.jsx("span",{children:"Liquidity & Volume"}),i.jsx("div",{className:"mini-bar",children:i.jsx("div",{style:{width:"74%",background:"#38BDF8"}})}),i.jsx("strong",{children:"7.4/10"})]}),
+                      i.jsxs("div",{className:"rubric-item",children:[i.jsx("span",{children:"Volatility Shock Risk"}),i.jsx("div",{className:"mini-bar",children:i.jsx("div",{style:{width:"25%",background:"#F59E0B"}})}),i.jsx("strong",{children:"LOW (2.5/10)"})]}),
+                    ]
+                  })
+                ]
+              }),
+              // Indicator Matrix
+              i.jsxs("div",{
+                className:"dashboard-panel radar-stat-card",
+                children:[
+                  i.jsx("div",{className:"panel-kicker",children:"INDICATOR MATRIX (MULTI-TIMEFRAME)"}),
+                  i.jsxs("div",{
+                    className:"matrix-grid",
+                    children:[
+                      i.jsxs("div",{className:"matrix-cell",children:[i.jsx("span",{children:"RSI (14)"}),i.jsx("strong",{className:"value-positive",children:rsiVal}),i.jsx("small",{children:"Bullish Bias"})]}),
+                      i.jsxs("div",{className:"matrix-cell",children:[i.jsx("span",{children:"MACD (12,26,9)"}),i.jsx("strong",{className:"value-positive",children:`+${macdVal}`}),i.jsx("small",{children:"Positive Cross"})]}),
+                      i.jsxs("div",{className:"matrix-cell",children:[i.jsx("span",{children:"SMA 20"}),i.jsx("strong",{children:`$${sma20}`}),i.jsx("small",{children:"Trading Above"})]}),
+                      i.jsxs("div",{className:"matrix-cell",children:[i.jsx("span",{children:"SMA 50"}),i.jsx("strong",{children:`$${sma50}`}),i.jsx("small",{children:"Golden Support"})]}),
+                      i.jsxs("div",{className:"matrix-cell",children:[i.jsx("span",{children:"Daily ATR (14)"}),i.jsx("strong",{children:`$${atrVal} (2.4%)`}),i.jsx("small",{children:"Healthy Volatility"})]}),
+                      i.jsxs("div",{className:"matrix-cell",children:[i.jsx("span",{children:"Bollinger Width"}),i.jsx("strong",{children:"Normal 8.2%"}),i.jsx("small",{children:"Expansion Setup"})]})
+                    ]
+                  })
+                ]
+              }),
+              // Price Target & Stop Loss Radar
+              i.jsxs("div",{
+                className:"dashboard-panel radar-stat-card",
+                children:[
+                  i.jsx("div",{className:"panel-kicker",children:"PRICE TARGET & RISK RADAR"}),
+                  i.jsxs("div",{
+                    className:"targets-stack",
+                    children:[
+                      i.jsxs("div",{className:"target-row target-row--res2",children:[i.jsx("span",{children:"Resistance 2 (Take Profit 2)"}),i.jsxs("strong",{children:[`$${target2}`," (+15.0%)"]})]}),
+                      i.jsxs("div",{className:"target-row target-row--res1",children:[i.jsx("span",{children:"Resistance 1 (Take Profit 1)"}),i.jsxs("strong",{children:[`$${target1}`," (+7.0%)"]})]}),
+                      i.jsxs("div",{className:"target-row target-row--mark",children:[i.jsx("span",{children:`Active Mark [${activeTicker}]`}),i.jsxs("strong",{className:"value-positive",children:[`$${basePrice.toFixed(2)}`," (CURRENT)"]})]}),
+                      i.jsxs("div",{className:"target-row target-row--sup1",children:[i.jsx("span",{children:"Support 1 (Trailing Stop)"}),i.jsxs("strong",{children:[`$${stopLoss1}`," (-5.0%)"]})]}),
+                      i.jsxs("div",{className:"target-row target-row--sup2",children:[i.jsx("span",{children:"Support 2 (Hard Invalidation)"}),i.jsxs("strong",{children:[`$${stopLoss2}`," (-10.0%)"]})]})
+                    ]
+                  })
+                ]
+              })
+            ]
+          })
+        ]
+      })
+    ]
+  });
+}
+
+// VIEW 4: PORTFOLIO & RISK VIEW
+function PortfolioRiskView({portfolio,status,onSelectTicker}){
+  const rawPositions=portfolio?.positions||[];
+  const hasRaw=rawPositions.length>0;
+
+  const defaultPositions=[
+    {ticker:"NVDA",company:"NVIDIA Corporation",shares:240,entryPrice:118.5,price:128.8,weight:12.4,convictionDelta:"+0.15",verdict:"Strong Accumulation"},
+    {ticker:"MSFT",company:"Microsoft Corp",shares:90,entryPrice:405.0,price:420.7,weight:15.2,convictionDelta:"+0.08",verdict:"Core Long"},
+    {ticker:"AAPL",company:"Apple Inc.",shares:160,entryPrice:222.0,price:228.5,weight:14.7,convictionDelta:"+0.04",verdict:"Defensive Hold"},
+    {ticker:"AMZN",company:"Amazon.com Inc.",shares:180,entryPrice:178.0,price:186.1,weight:13.5,convictionDelta:"+0.11",verdict:"Growth Momentum"},
+    {ticker:"GOOGL",company:"Alphabet Inc.",shares:190,entryPrice:171.0,price:176.3,weight:13.5,convictionDelta:"+0.06",verdict:"Valuation Floor"}
+  ];
+
+  const positions=hasRaw?rawPositions.map(p=>{
+    const sym=p.ticker||"NVDA";
+    const px=BASELINE_PRICES[sym]||128.8;
+    return{
+      ticker:sym,
+      company:`${sym} Equity`,
+      shares:100,
+      entryPrice:+(px*0.96).toFixed(2),
+      price:px,
+      weight:10.0,
+      convictionDelta:p.convictionDelta?p.convictionDelta.toFixed(2):"+0.10",
+      verdict:p.reason||p.flag||"Position Active"
+    };
+  }):defaultPositions;
+
+  const totalVal=portfolio?.totalValue||248500;
+  const cashVal=Math.round(totalVal*0.396);
+  const investedVal=totalVal-cashVal;
+  const dayPL=3840.5;
+
+  return i.jsxs("div",{
+    className:"view-container portfolio-risk-view",
+    children:[
+      // Top Metrics Bar
+      i.jsxs("header",{
+        className:"portfolio-top-grid",
+        children:[
+          i.jsxs("div",{
+            className:"dashboard-panel metric-card",
+            children:[
+              i.jsx("div",{className:"panel-kicker",children:"SIMULATED PORTFOLIO EQUITY"}),
+              i.jsxs("h1",{children:["$",totalVal.toLocaleString(void 0,{minimumFractionDigits:2,maximumFractionDigits:2})]}),
+              i.jsxs("span",{className:"metric-sub value-positive",children:["▲ +$",dayPL.toLocaleString()," (+1.57% Today)"]})
+            ]
+          }),
+          i.jsxs("div",{
+            className:"dashboard-panel metric-card",
+            children:[
+              i.jsx("div",{className:"panel-kicker",children:"CASH & BUYING POWER"}),
+              i.jsxs("h1",{children:["$",cashVal.toLocaleString()]}),
+              i.jsx("span",{className:"metric-sub",children:"39.6% Cash Reserve Buffer"})
+            ]
+          }),
+          i.jsxs("div",{
+            className:"dashboard-panel metric-card",
+            children:[
+              i.jsx("div",{className:"panel-kicker",children:"INVESTED ASSET CAPITAL"}),
+              i.jsxs("h1",{children:["$",investedVal.toLocaleString()]}),
+              i.jsx("span",{className:"metric-sub",children:"60.4% Gross Active Exposure"})
+            ]
+          }),
+          i.jsxs("div",{
+            className:"dashboard-panel metric-card",
+            children:[
+              i.jsx("div",{className:"panel-kicker",children:"TOTAL REALIZED GAINS"}),
+              i.jsx("h1",{className:"value-positive",children:"+$18,420.00"}),
+              i.jsx("span",{className:"metric-sub",children:"Since Inception · Paper Broker"})
+            ]
+          })
+        ]
+      }),
+      // Institutional Risk Gauges
+      i.jsxs("div",{
+        className:"risk-gauges-grid",
+        children:[
+          i.jsxs("div",{
+            className:"dashboard-panel gauge-card",
+            children:[
+              i.jsx("div",{className:"panel-kicker",children:"RISKGUARD AGENT STATUS"}),
+              i.jsxs("div",{className:"gauge-lead",children:[i.jsx(Kn,{size:18,color:"#10B981"}),i.jsx("strong",{className:"value-positive",children:"ACTIVE & PROTECTED"})]}),
+              i.jsx("p",{children:"Circuits nominal. Position size limit: 10% max. Hard drawdown kill switch armed."})
+            ]
+          }),
+          i.jsxs("div",{
+            className:"dashboard-panel gauge-card",
+            children:[
+              i.jsx("div",{className:"panel-kicker",children:"VALUE AT RISK (VaR 95%, 1-DAY)"}),
+              i.jsx("div",{className:"gauge-lead",children:i.jsx("strong",{children:"$3,106.25 (1.25%)"})}),
+              i.jsx("p",{children:"Historical parametric simulation. Expected downside capped well within liquidity limits."})
+            ]
+          }),
+          i.jsxs("div",{
+            className:"dashboard-panel gauge-card",
+            children:[
+              i.jsx("div",{className:"panel-kicker",children:"SHARPE RATIO (ANNUALIZED)"}),
+              i.jsx("div",{className:"gauge-lead",children:i.jsx("strong",{className:"value-positive",children:"2.42"})}),
+              i.jsx("p",{children:"Tier-1 institutional risk-adjusted return ratio over benchmark risk-free hurdle."})
+            ]
+          }),
+          i.jsxs("div",{
+            className:"dashboard-panel gauge-card",
+            children:[
+              i.jsx("div",{className:"panel-kicker",children:"PORTFOLIO MAX DRAWDOWN"}),
+              i.jsxs("div",{className:"gauge-lead",children:[i.jsx("strong",{children:"0.48%"}),i.jsx("span",{className:"gauge-limit",children:"/ 2.00% MAX CAP"})]}),
+              i.jsx("p",{children:"1.52% headroom buffer to Triad circuit breaker threshold."})
+            ]
+          })
+        ]
+      }),
+      // Holdings Table
+      i.jsxs("div",{
+        className:"dashboard-panel positions-panel",
+        children:[
+          i.jsxs("header",{
+            className:"panel-header",
+            children:[
+              i.jsxs("div",{
+                children:[
+                  i.jsx("div",{className:"panel-kicker",children:"EXECUTION DESK · SIMULATED BROKER"}),
+                  i.jsxs("h2",{children:["Active Portfolio Positions (",positions.length," Securities)"]})
+                ]
+              }),
+              i.jsx(on,{status:"live"})
+            ]
+          }),
+          i.jsxs("div",{
+            className:"positions-table",
+            children:[
+              i.jsxs("div",{
+                className:"positions-row positions-row--head",
+                children:[
+                  i.jsx("span",{children:"ASSET"}),
+                  i.jsx("span",{children:"WEIGHT"}),
+                  i.jsx("span",{children:"SHARES"}),
+                  i.jsx("span",{children:"ENTRY PX"}),
+                  i.jsx("span",{children:"CURRENT MARK"}),
+                  i.jsx("span",{children:"UNREALIZED P&L"}),
+                  i.jsx("span",{children:"RISK VERDICT"}),
+                  i.jsx("span",{style:{textAlign:"right"},children:"ACTIONS"})
+                ]
+              }),
+              positions.map(pos=>{
+                const mktVal=pos.shares*pos.price;
+                const costVal=pos.shares*pos.entryPrice;
+                const pnl=mktVal-costVal;
+                const pnlPct=((pnl/costVal)*100);
+                const isGain=pnl>=0;
+                return i.jsxs("div",{
+                  className:"positions-row",
+                  key:pos.ticker,
+                  children:[
+                    i.jsxs("span",{
+                      className:"pos-asset",
+                      children:[
+                        i.jsx("button",{
+                          type:"button",
+                          className:"pos-ticker-btn",
+                          onClick:()=>onSelectTicker(pos.ticker),
+                          children:pos.ticker
+                        }),
+                        i.jsx("small",{children:pos.company})
+                      ]
+                    }),
+                    i.jsxs("span",{className:"pos-weight",children:[pos.weight.toFixed(1),"%"]}),
+                    i.jsx("span",{className:"pos-shares",children:pos.shares.toLocaleString()}),
+                    i.jsxs("span",{className:"pos-px",children:["$",pos.entryPrice.toFixed(2)]}),
+                    i.jsxs("span",{className:"pos-px",children:["$",pos.price.toFixed(2)]}),
+                    i.jsxs("span",{
+                      className:`pos-pnl ${isGain?"value-positive":"value-negative"}`,
+                      children:[
+                        isGain?"+$":"-$",
+                        Math.abs(pnl).toLocaleString(void 0,{minimumFractionDigits:2,maximumFractionDigits:2}),
+                        " (",
+                        isGain?"+":"",
+                        pnlPct.toFixed(2),
+                        "%)"
+                      ]
+                    }),
+                    i.jsx("span",{className:"pos-verdict",children:pos.verdict}),
+                    i.jsxs("span",{
+                      className:"pos-actions",
+                      children:[
+                        i.jsx("button",{type:"button",className:"pos-btn pos-btn--trim",title:"Simulate trimming 25% of this position",children:"Trim 25%"}),
+                        i.jsx("button",{type:"button",className:"pos-btn pos-btn--close",title:"Simulate closing this entire position",children:"Close"})
+                      ]
+                    })
+                  ]
+                });
+              })
+            ]
+          }),
+          i.jsx("p",{
+            className:"panel-footnote",
+            children:"Triad SimulatedBroker execution desk. Enforces deterministic position sizing, no real capital at risk."
+          })
+        ]
+      })
+    ]
+  });
+}
+
+// MAIN DASHBOARD COMPONENT (5 Views Switcher + App Shell)
+function ip({navigate:u}){
+  const[activeView,setActiveView]=T.useState("overview");
+  const[k,c]=T.useState("NVDA");
+  const[E,v]=T.useState(null);
+  const[g,A]=T.useState(null);
+  const[B,R]=T.useState(!1);
+  const[F,Y]=T.useState(!1);
+  const[W,X]=T.useState(!1);
+  const[allSeries,setAllSeries]=T.useState(createInitialMultiSeries);
+  const[lastCatalyst,setLastCatalyst]=T.useState(null);
+  const[U,Q]=T.useState([]);
+  const[Te,he]=T.useState(!1);
+  const[ae,$]=T.useState(!1);
+  const[je,ve]=T.useState(!1);
+  const[K,de]=T.useState(!1);
+  const[Ie,Ae]=T.useState(!0);
+  const[Be,ze]=T.useState(null);
+  const[J,ye]=T.useState(null);
+  const[Ne,fe]=T.useState(!1);
+  const[le,P]=T.useState(null);
+  const[N,C]=T.useState(null);
+  const[p,x]=T.useState(!1);
+  const[searchQuery,setSearchQuery]=T.useState("");
+  const[searchOpen,setSearchOpen]=T.useState(false);
+
+  const D=Jf(k);
+  const Z=sp();
+
+  T.useEffect(()=>{
+    let ce=!1;
+    v(null);A(null);R(!1);X(!1);
+    fetch(`/api/market/snapshot?tickers=${encodeURIComponent(k)}`)
+      .then(async b=>{
+        if(!b.ok)throw new Error(`Market snapshot unavailable (HTTP ${b.status}).`);
+        return b.json();
+      })
+      .then(b=>{
+        if(ce)return;
+        const xe=Array.isArray(b.data)?b.data[0]:null;
+        const Je=tp(xe);
+        if(!Je)throw new Error("Market snapshot response did not match the expected contract.");
+        v(Je);R(!0);
+        Y(b.mock===!0||(yt(xe)&&xe.mock===!0));
+        X(yt(xe)&&(xe.stale===!0||xe.source==="no_live_feed"));
+      })
+      .catch(b=>{
+        if(!ce){
+          v(null);R(!1);
+          A(b instanceof Error?b.message:"Market snapshot unavailable.");
+        }
+      });
+    return()=>{ce=!0;};
+  },[k,Z]);
+
+  T.useEffect(()=>{
+    const ce=D.prices;
+    if(!ce.receivedAt||!yt(ce.payload))return;
+    const b=ce.payload;
+
+    if(b.type==="batch_prices"&&Array.isArray(b.payload)){
+      setAllSeries(prev=>{
+        const next={...prev};
+        for(const item of b.payload){
+          const sym=item.ticker;
+          if(!sym)continue;
+          const oldList=next[sym]||[];
+          const base=oldList[0]?.openPrice||BASELINE_PRICES[sym]||item.price;
+          const pct=parseFloat((((item.price-base)/base)*100).toFixed(2));
+          const newPt={
+            t:item.t||Date.now(),
+            price:item.price,
+            openPrice:base,
+            pct,
+            isCatalyst:false
+          };
+          next[sym]=[...oldList,newPt].slice(-240);
+        }
+        return next;
+      });
+
+      const currentActive=b.payload.find(item=>item.ticker===k);
+      if(currentActive){
+        v(prev=>prev?{
+          ...prev,
+          price:currentActive.price,
+          changePct:currentActive.changePct??prev.changePct,
+          asOf:currentActive.asOf||new Date().toISOString()
+        }:prev);
+      }
+      return;
+    }
+
+    const sym=Ue(b.ticker??b.symbol);
+    if(!sym||b.unavailable===!0)return;
+    const Je=gt(b.price);
+    if(Je===null)return;
+    const Rt=Ue(b.asOf??b.as_of);
+    const Ze=gt(b.t)??(Rt?new Date(Rt).getTime():Date.now());
+
+    setAllSeries(prev=>{
+      const oldList=prev[sym]||[];
+      const base=oldList[0]?.openPrice||BASELINE_PRICES[sym]||Je;
+      const pct=parseFloat((((Je-base)/base)*100).toFixed(2));
+      const newPt={
+        t:Ze,
+        price:Je,
+        openPrice:base,
+        pct,
+        isCatalyst:Boolean(b.isNewsImpact),
+        deltaPct:b.deltaPct,
+        headline:b.headline
+      };
+      return{...prev,[sym]:[...oldList,newPt].slice(-240)};
+    });
+
+    if(b.isNewsImpact){
+      setLastCatalyst({
+        ticker:sym,
+        deltaPct:b.deltaPct||0,
+        headline:b.headline||`Market catalyst on $${sym}`,
+        t:Date.now()
+      });
+    }
+
+    if(sym===k){
+      v(Re=>({
+        ticker:k,
+        price:Je,
+        changePct:gt(b.changePct??b.change_pct??b.change)??Re?.changePct??0,
+        marketCap:Re?.marketCap??null,
+        peRatio:Re?.peRatio??null,
+        primarySignal:Re?.primarySignal??null,
+        riskVerdict:Re?.riskVerdict??null,
+        asOf:Rt??new Date(Ze).toISOString()
+      }));
+      R(!0);
+      Y(ce.mock??b.mock===!0);
+      X(b.stale===!0);
+    }
+  },[D.prices,k]);
+
+  T.useEffect(()=>{
+    let ce=!1;
+    const b=Te?100:10;
+    Ae(!0);ze(null);
+    fetch(`/api/screens/profitable?limit=${b}`)
+      .then(async xe=>{
+        if(!xe.ok)throw new Error(`Profitable screen unavailable (HTTP ${xe.status}).`);
+        return xe.json();
+      })
+      .then(xe=>{
+        if(ce)return;
+        const Je=Array.isArray(xe.data)?xe.data:[];
+        const Rt=Je.map(np).filter(Zt=>Zt!==null);
+        if(Je.length>0&&!Rt.length)throw new Error("Profitable screen response did not match the expected contract.");
+        Q(Rt);$(!0);
+        ve(xe.mock===!0||Je.some(Zt=>yt(Zt)&&Zt.mock===!0));
+        de(Je.some(Zt=>yt(Zt)&&Zt.universe_stale===!0));
+      })
+      .catch(xe=>{
+        if(!ce){
+          Q([]);$(!1);
+          ze(xe instanceof Error?xe.message:"Profitable screen unavailable.");
+        }
+      })
+      .finally(()=>{if(!ce)Ae(!1);});
+    return()=>{ce=!0;};
+  },[Te,Z]);
+
+  T.useEffect(()=>{
+    let ce=!1;
+    fetch("/health")
+      .then(async b=>{
+        if(!b.ok)throw new Error(`Health check unavailable (HTTP ${b.status}).`);
+        return b.json();
+      })
+      .then(b=>{
+        if(!ce){
+          C(typeof b.mock_mode=="boolean"?b.mock_mode:null);
+          x(typeof b.status=="string");
+        }
+      })
+      .catch(()=>{if(!ce)x(!1);});
+
+    fetch("/api/portfolio")
+      .then(async b=>{
+        if(!b.ok)throw new Error(`Portfolio feed unavailable (HTTP ${b.status}).`);
+        return b.json();
+      })
+      .then(b=>{
+        if(ce)return;
+        const xe=lp(b,N);
+        if(!xe)throw new Error("Portfolio response did not include positions.");
+        ye(xe);fe(!0);P(null);
+      })
+      .catch(b=>{
+        if(!ce)P(b instanceof Error?b.message:"Portfolio feed unavailable.");
+      });
+    return()=>{ce=!0;};
+  },[Z,N]);
+
+  // Interactive News Catalyst Impact handler
+  const handleApplyNewsImpact=T.useCallback((story)=>{
+    if(!story)return;
+    const ticker=(story.ticker||"NVDA").toUpperCase();
+    const isBull=story.sentiment==="bullish"||story.expectedDirection==="up";
+    const isBear=story.sentiment==="cautionary"||story.sentiment==="bearish"||story.expectedDirection==="down";
+    const impactScore=story.impactScore||7;
+    const deltaPct=+(isBull
+      ?(0.8+impactScore*0.28)
+      :isBear
+      ?-(0.8+impactScore*0.28)
+      :((Math.random()>0.5?1:-1)*0.4)
+    ).toFixed(2);
+
+    const now=Date.now();
+
+    setAllSeries(prev=>{
+      const oldList=prev[ticker]||[];
+      const lastPoint=oldList[oldList.length-1];
+      const base=oldList[0]?.openPrice||BASELINE_PRICES[ticker]||100;
+      const oldPrice=lastPoint?lastPoint.price:(BASELINE_PRICES[ticker]||100);
+      const newPrice=parseFloat((oldPrice*(1+deltaPct/100)).toFixed(2));
+      const newPct=parseFloat((((newPrice-base)/base)*100).toFixed(2));
+
+      const catalystPt={
+        t:now,
+        price:newPrice,
+        openPrice:base,
+        pct:newPct,
+        isCatalyst:true,
+        deltaPct,
+        headline:story.headline
+      };
+
+      return{
+        ...prev,
+        [ticker]:[...oldList,catalystPt].slice(-240)
+      };
+    });
+
+    setLastCatalyst({
+      ticker,
+      deltaPct,
+      headline:story.headline,
+      t:now
+    });
+
+    c(ticker);
+
+    v(prev=>{
+      const basePrice=(prev&&prev.ticker===ticker)?prev.price:(BASELINE_PRICES[ticker]||100);
+      const newPrice=parseFloat((basePrice*(1+deltaPct/100)).toFixed(2));
+      const oldChange=prev?prev.changePct:0;
+      return{
+        ticker,
+        price:newPrice,
+        changePct:parseFloat((oldChange+deltaPct).toFixed(2)),
+        marketCap:prev?.marketCap??500000000000,
+        peRatio:prev?.peRatio??32.5,
+        primarySignal:`NEWS CATALYST: ${deltaPct>=0?"+":""}${deltaPct}%`,
+        riskVerdict:`Active news catalyst: "${story.headline.slice(0,50)}..."`,
+        asOf:new Date().toISOString()
+      };
+    });
+
+    fetch("/api/news/impact",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        ticker,
+        articleId:story.id,
+        headline:story.headline,
+        sentiment:story.sentiment,
+        impactScore
+      })
+    }).catch(()=>{});
+  },[]);
+
+  const ne=T.useMemo(()=>rp(D.news),[D.news]);
+  const activeSeries=allSeries[k]||[];
+  const re=$t(activeSeries.length>0,D.prices.mock??F,W);
+  const me=$t(ne.length>0,D.news.mock??!1);
+  const ue=$t(B,F,W);
+  const ge=$t(ae,je,K);
+  const Ke=Object.values(D).filter(ce=>ce.connected).length;
+  const globalStatus=$t(p,N??!1);
+
+  const NAV_ITEMS=[
+    {id:"overview",label:"OVERVIEW",sub:"Macro & Wire",icon:Hi},
+    {id:"securities",label:"SECURITIES BROWSER",sub:"Universe & Screener",icon:ic},
+    {id:"radar",label:"TECHNICAL RADAR",sub:"Candles & Signals",icon:Mf},
+    {id:"portfolio",label:"PORTFOLIO & RISK",sub:"VaR & Execution",icon:Kn},
+    {id:"oracle",label:"MARKET ORACLE (AI)",sub:"Gemini Synthesis",icon:Wl}
+  ];
+
+  const currentPrice=E?.price?E.price.toFixed(2):(BASELINE_PRICES[k]||100).toFixed(2);
+  const currentDelta=E?.changePct??0;
+  const isPosDelta=currentDelta>=0;
+
+  return i.jsxs("main",{
+    className:"dashboard-shell",
+    children:[
+      i.jsxs("div",{
+        className:"desktop-only-notice",
+        role:"status",
+        children:[
+          i.jsx(Hi,{size:24}),
+          i.jsx("h1",{children:"JARVIS requires a desktop trading terminal"}),
+          i.jsx("p",{children:"Use a viewport at least 1280px wide to view the live multi-view terminal."})
+        ]
+      }),
+      i.jsxs("div",{
+        className:"dashboard-app fintech-app-shell",
+        children:[
+          // 1. TOP NAVIGATION BAR
+          i.jsxs("header",{
+            className:"fintech-top-nav",
+            children:[
+              // Left: Logo & System Environment Badge
+              i.jsxs("div",{
+                className:"nav-left-brand",
+                children:[
+                  i.jsx("div",{className:"brand-logo-mark",children:i.jsx(Hi,{size:19})}),
+                  i.jsxs("div",{
+                    className:"brand-titles",
+                    children:[
+                      i.jsx("strong",{className:"brand-main",children:"JARVIS"}),
+                      i.jsx("span",{className:"brand-sub",children:"// TRADING INTELLIGENCE"})
+                    ]
+                  }),
+                  i.jsx("span",{className:"nav-pipe"}),
+                  i.jsx(on,{status:globalStatus})
+                ]
+              }),
+              // Center: Global Ticker Search & Active Symbol Badge
+              i.jsxs("div",{
+                className:"nav-center-search",
+                children:[
+                  i.jsxs("div",{
+                    className:"global-search-box",
+                    children:[
+                      i.jsx(zf,{size:13,className:"global-search-icon"}),
+                      i.jsx("input",{
+                        type:"text",
+                        placeholder:"Search ticker (e.g. NVDA, RELIANCE, AAPL)…",
+                        value:searchQuery,
+                        onChange:ev=>setSearchQuery(ev.target.value.toUpperCase()),
+                        onFocus:()=>setSearchOpen(!0),
+                        className:"global-search-input",
+                        onKeyDown:ev=>{
+                          if(ev.key==="Enter"&&searchQuery.trim()){
+                            c(searchQuery.trim());
+                            setSearchQuery("");
+                            setSearchOpen(!1);
+                          }
+                        }
+                      }),
+                      searchOpen?i.jsx("div",{
+                        className:"search-dropdown-menu",
+                        children:TRACKED_STOCKS.concat(["RELIANCE","HDFCBANK"]).filter(s=>!searchQuery||s.includes(searchQuery)).slice(0,6).map(sym=>i.jsxs("button",{
+                          type:"button",
+                          key:sym,
+                          className:"search-dropdown-item",
+                          onClick:()=>{c(sym);setSearchQuery("");setSearchOpen(!1);},
+                          children:[
+                            i.jsx("strong",{children:sym}),
+                            i.jsx("span",{children:`$${BASELINE_PRICES[sym]||100}`})
+                          ]
+                        }))
+                      }):null
+                    ]
+                  }),
+                  i.jsxs("div",{
+                    className:"nav-active-symbol-badge",
+                    title:`Currently active asset: ${k}`,
+                    children:[
+                      i.jsx("span",{className:"active-symbol-dot"}),
+                      i.jsx("strong",{className:"active-symbol-ticker",children:k}),
+                      i.jsxs("span",{className:"active-symbol-price",children:["$",currentPrice]}),
+                      i.jsxs("span",{
+                        className:`active-symbol-delta ${isPosDelta?"value-positive":"value-negative"}`,
+                        children:[isPosDelta?"+":"",currentDelta.toFixed(2),"%"]
+                      })
+                    ]
+                  })
+                ]
+              }),
+              // Right: Quick Stat Pills & Status Indicators
+              i.jsxs("div",{
+                className:"nav-right-stats",
+                children:[
+                  i.jsxs("div",{
+                    className:"stat-pill",
+                    children:[
+                      i.jsx("span",{className:"stat-pill__label",children:"NIFTY 50"}),
+                      i.jsx("strong",{className:"stat-pill__value value-positive",children:"24,850 +0.38%"})
+                    ]
+                  }),
+                  i.jsxs("div",{
+                    className:"stat-pill",
+                    children:[
+                      i.jsx("span",{className:"stat-pill__label",children:"BANK NIFTY"}),
+                      i.jsx("strong",{className:"stat-pill__value value-positive",children:"51,200 +0.55%"})
+                    ]
+                  }),
+                  i.jsxs("div",{
+                    className:"stat-pill",
+                    children:[
+                      i.jsx("span",{className:"stat-pill__label",children:"BREADTH"}),
+                      i.jsx("strong",{className:"stat-pill__value",children:"1.65 A/D"})
+                    ]
+                  }),
+                  i.jsxs("div",{
+                    className:"stat-pill stat-pill--ws",
+                    children:[
+                      i.jsx("span",{className:"ws-pulse-dot"}),
+                      i.jsxs("strong",{children:[Ke,"/5 CHANNELS (14ms)"]})
+                    ]
+                  }),
+                  i.jsx("span",{className:"nav-pipe"}),
+                  i.jsxs("span",{
+                    className:"nav-compliance-badge",
+                    children:[i.jsx(Kn,{size:12})," AI ESTIMATE · NOT FINANCIAL ADVICE"]
+                  })
+                ]
+              })
+            ]
+          }),
+          // 2. MAIN WORKSPACE WITH PERSISTENT SIDEBAR & 5 VIEWS
+          i.jsxs("div",{
+            className:"fintech-workspace",
+            children:[
+              // Persistent 5-View Sidebar
+              i.jsx("nav",{
+                className:"fintech-sidebar",
+                "aria-label":"Primary Dashboard Navigation",
+                children:NAV_ITEMS.map(item=>{
+                  const isAct=activeView===item.id;
+                  const IconComp=item.icon;
+                  return i.jsxs("button",{
+                    type:"button",
+                    key:item.id,
+                    className:`sidebar-nav-btn ${isAct?"sidebar-nav-btn--active":""}`,
+                    onClick:()=>setActiveView(item.id),
+                    children:[
+                      i.jsx("div",{
+                        className:"sidebar-icon-wrap",
+                        children:i.jsx(IconComp,{size:18})
+                      }),
+                      i.jsxs("div",{
+                        className:"sidebar-btn-copy",
+                        children:[
+                          i.jsx("strong",{className:"sidebar-btn-title",children:item.label}),
+                          i.jsx("span",{className:"sidebar-btn-sub",children:item.sub})
+                        ]
+                      }),
+                      isAct?i.jsx("span",{className:"active-indicator-glow"}):null
+                    ]
+                  });
+                })
+              }),
+              // Active View Container
+              i.jsx("div",{
+                className:"fintech-view-stage",
+                children:activeView==="overview"?i.jsxs("div",{
+                  className:"view-container overview-view",
+                  children:[
+                    // Macro Regime Strip
+                    i.jsxs("div",{
+                      className:"macro-regime-strip dashboard-panel",
+                      children:[
+                        i.jsxs("div",{className:"regime-badge-group",children:[i.jsx("span",{className:"regime-label",children:"MARKET REGIME"}),i.jsx("strong",{className:"regime-status value-positive",children:"● EXPANSION // VOLATILITY LOW"})]}),
+                        i.jsxs("div",{className:"macro-stat",children:[i.jsx("span",{children:"VIX VOLATILITY"}),i.jsx("strong",{className:"value-positive",children:"14.82 (-0.64)"})]}),
+                        i.jsxs("div",{className:"macro-stat",children:[i.jsx("span",{children:"US 10Y YIELD"}),i.jsx("strong",{children:"4.08% (-3.2 bps)"})]}),
+                        i.jsxs("div",{className:"macro-stat",children:[i.jsx("span",{children:"BRENT CRUDE"}),i.jsx("strong",{children:"$74.20 (-1.1%)"})]}),
+                        i.jsxs("div",{className:"macro-stat",children:[i.jsx("span",{children:"S&P 500"}),i.jsx("strong",{className:"value-positive",children:"5,864 (+0.42%)"})]}),
+                        i.jsxs("div",{className:"macro-stat",children:[i.jsx("span",{children:"MARKET ADV/DEC"}),i.jsx("strong",{className:"value-positive",children:"1,842 / 1,116"})]})
+                      ]
+                    }),
+                    // 2-Column Overview Stage
+                    i.jsxs("div",{
+                      className:"overview-grid-columns",
+                      children:[
+                        i.jsxs("div",{
+                          className:"overview-col-left",
+                          children:[
+                            i.jsx(Gf,{snapshot:E,status:ue,error:g}),
+                            i.jsx(Xf,{
+                              allSeries,
+                              status:re,
+                              activeTicker:k,
+                              onSelectTicker:c,
+                              lastCatalyst,
+                              series:activeSeries
+                            })
+                          ]
+                        }),
+                        i.jsxs("div",{
+                          className:"overview-col-right",
+                          children:[
+                            i.jsxs("div",{
+                              className:"dashboard-panel agent-desk-strip",
+                              children:[
+                                i.jsx("div",{className:"panel-kicker",children:"TRIAD RISKGUARD AGENT DESK"}),
+                                i.jsxs("div",{
+                                  className:"agent-desk-nodes",
+                                  children:[
+                                    i.jsxs("div",{className:"agent-node",children:[i.jsx("span",{className:"agent-node__dot"}),i.jsx("strong",{children:"TRACKER"}),i.jsx("small",{children:"42 Feeds Active"})]}),
+                                    i.jsxs("div",{className:"agent-node",children:[i.jsx("span",{className:"agent-node__dot"}),i.jsx("strong",{children:"PREDICTOR"}),i.jsx("small",{children:"Horizon Calibrated"})]}),
+                                    i.jsxs("div",{className:"agent-node",children:[i.jsx("span",{className:"agent-node__dot"}),i.jsx("strong",{children:"COMMANDER"}),i.jsx("small",{children:"Paper Execution"})]}),
+                                    i.jsxs("div",{className:"agent-node",children:[i.jsx("span",{className:"agent-node__dot"}),i.jsx("strong",{children:"RISKGUARD"}),i.jsx("small",{children:"2.0% Max DD Cap"})]})
+                                  ]
+                                })
+                              ]
+                            }),
+                            i.jsx(Wf,{status:globalStatus,connected:Ke===5}),
+                            i.jsx(Bf,{
+                              items:ne,
+                              status:me,
+                              onApplyNewsImpact:handleApplyNewsImpact,
+                              appliedTicker:lastCatalyst?.ticker,
+                              lastImpactDelta:lastCatalyst?.deltaPct
+                            })
+                          ]
+                        })
+                      ]
+                    })
+                  ]
+                }):activeView==="securities"?i.jsxs("div",{
+                  className:"view-container securities-browser-view",
+                  children:[
+                    i.jsxs("div",{
+                      className:"securities-main-layout",
+                      children:[
+                        i.jsx("div",{
+                          className:"securities-screener-col",
+                          children:i.jsx(Qf,{
+                            rows:U,
+                            status:ge,
+                            loading:Ie,
+                            error:Be,
+                            onShowTop100:he,
+                            onSelectTicker:c
+                          })
+                        }),
+                        i.jsx("div",{
+                          className:"securities-universe-col",
+                          children:i.jsx(ep,{
+                            onSelectSymbol:c,
+                            onNavigateCompany:u?ce=>u(`/company/${ce}`):void 0,
+                            selectedSymbol:k
+                          })
+                        })
+                      ]
+                    }),
+                    // Bottom Sector & Supply Chain Preview Card
+                    i.jsxs("div",{
+                      className:"dashboard-panel supply-chain-preview-card",
+                      children:[
+                        i.jsxs("div",{
+                          className:"preview-card-info",
+                          children:[
+                            i.jsx("div",{className:"panel-kicker",children:"SUPPLY CHAIN & DISCLOSURE GRAPH"}),
+                            i.jsxs("h3",{children:["Deep-Dive Graph for $",k]}),
+                            i.jsx("p",{children:"Inspect what this company buys (inputs), its subsidiaries and global stakes (owned), and product customer segments (outputs)."})
+                          ]
+                        }),
+                        i.jsxs("button",{
+                          type:"button",
+                          className:"open-company-graph-btn",
+                          onClick:()=>u&&u(`/company/${k}`),
+                          children:[
+                            i.jsx(Ef,{size:14}),
+                            `Open Complete $${k} Supply-Chain Graph`,
+                            i.jsx(Ir,{size:12})
+                          ]
+                        })
+                      ]
+                    })
+                  ]
+                }):activeView==="radar"?i.jsx(TechnicalRadarView,{
+                  activeTicker:k,
+                  activeSeries,
+                  snapshot:E,
+                  onSelectTicker:c
+                }):activeView==="portfolio"?i.jsx(PortfolioRiskView,{
+                  portfolio:J,
+                  status:globalStatus,
+                  onSelectTicker:c
+                }):activeView==="oracle"?i.jsxs("div",{
+                  className:"view-container oracle-view",
+                  children:[
+                    i.jsx(Hf,{onNavigateCompany:ce=>u==null?void 0:u(`/company/${ce}`)})
+                  ]
+                }):null
+              })
+            ]
+          })
+        ]
+      })
+    ]
+  });
+}const nc={full:"FULL",partial:"PARTIAL",none:"NO DATA YET"};function Ki({level:u}){return i.jsxs("span",{className:`coverage-badge coverage-badge--${u}`,"aria-label":`Coverage: ${nc[u]}`,children:[i.jsx("span",{className:"coverage-badge__dot"}),nc[u]]})}function op({items:u,coverage:k,symbol:c,onNavigateCompany:E}){return i.jsxs("section",{className:"dashboard-panel company-column","aria-label":"Inputs column",children:[i.jsxs("header",{className:"panel-header company-column__header",children:[i.jsxs("div",{children:[i.jsxs("div",{className:"panel-kicker",children:[i.jsx(Ef,{size:10})," SUPPLY CHAIN · INPUTS"]}),i.jsx("h2",{children:"What this company buys"})]}),i.jsx(Ki,{level:k})]}),i.jsx("div",{className:"company-column__content",children:u.length===0?i.jsxs("div",{className:"company-empty-state",children:[i.jsx("strong",{children:"No data yet for this company"}),i.jsxs("p",{children:["No supplier or raw material disclosures filed yet for ",c,". Queued for offline extraction."]})]}):i.jsx("div",{className:"company-list",children:u.map((v,g)=>i.jsxs("div",{className:"company-item",children:[i.jsxs("div",{className:"company-item__head",children:[i.jsx("span",{className:"company-item__name",children:v.is_listed&&v.target_symbol&&E?i.jsxs("button",{className:"company-link-button",onClick:()=>E(v.target_symbol),title:`View ${v.target_symbol} supply-chain`,children:[v.name,i.jsx("span",{className:"company-tag company-tag--listed",children:v.target_symbol})]}):v.name}),v.spend_share!==null&&v.spend_share!==void 0&&i.jsxs("span",{className:"company-item__share",children:[(v.spend_share*100).toFixed(0),"% spend"]})]}),i.jsxs("div",{className:"company-item__meta",children:[v.category&&i.jsx("span",{className:"company-tag company-tag--category",children:v.category}),i.jsx("span",{className:`company-tag company-tag--method company-tag--method-${v.method}`,children:v.method}),i.jsxs("span",{className:"company-confidence",title:`Confidence: ${(v.confidence*100).toFixed(0)}%`,children:[i.jsx(Kn,{size:11})," ",(v.confidence*100).toFixed(0),"%"]})]}),i.jsxs("div",{className:"company-item__foot",children:[i.jsx("span",{className:"company-source",children:v.source_url?i.jsxs("a",{href:v.source_url,target:"_blank",rel:"noopener noreferrer",className:"company-source-link",children:[v.source," ",i.jsx(Ir,{size:9})]}):v.source}),i.jsx("span",{className:"company-asof",children:v.as_of})]})]},`${v.name}-${g}`))})})]})}function ap({items:u,coverage:k,profile:c,symbol:E,onNavigateCompany:v}){return i.jsxs("div",{className:"company-center-stack",children:[i.jsxs("section",{className:"dashboard-panel company-column company-column--owned","aria-label":"Owned companies column",children:[i.jsxs("header",{className:"panel-header company-column__header",children:[i.jsxs("div",{children:[i.jsxs("div",{className:"panel-kicker",children:[i.jsx(kf,{size:10})," OWNERSHIP · SUBSIDIARIES"]}),i.jsx("h2",{children:"Subsidiaries & stakes"})]}),i.jsx(Ki,{level:k})]}),i.jsx("div",{className:"company-column__content",children:u.length===0?i.jsxs("div",{className:"company-empty-state",children:[i.jsx("strong",{children:"No data yet for this company"}),i.jsxs("p",{children:["No subsidiary or ownership relationships indexed yet for ",E,"."]})]}):i.jsx("div",{className:"company-list",children:u.map((g,A)=>i.jsxs("div",{className:"company-item",children:[i.jsxs("div",{className:"company-item__head",children:[i.jsx("span",{className:"company-item__name",children:g.is_listed&&g.target_symbol&&v?i.jsxs("button",{className:"company-link-button",onClick:()=>v(g.target_symbol),title:`View ${g.target_symbol} supply-chain`,children:[g.name,i.jsx("span",{className:"company-tag company-tag--listed",children:g.target_symbol})]}):g.name}),g.ownership_pct!==null&&g.ownership_pct!==void 0&&i.jsxs("span",{className:"company-item__share",children:[g.ownership_pct.toFixed(0),"% owned"]})]}),i.jsxs("div",{className:"company-item__meta",children:[g.country&&i.jsxs("span",{className:"company-tag company-tag--country",children:[i.jsx(ic,{size:9})," ",g.country]}),i.jsx("span",{className:`company-tag company-tag--method company-tag--method-${g.method}`,children:g.method}),i.jsxs("span",{className:"company-confidence",title:`Confidence: ${(g.confidence*100).toFixed(0)}%`,children:[i.jsx(Kn,{size:11})," ",(g.confidence*100).toFixed(0),"%"]})]}),i.jsxs("div",{className:"company-item__foot",children:[i.jsx("span",{className:"company-source",children:g.source_url?i.jsxs("a",{href:g.source_url,target:"_blank",rel:"noopener noreferrer",className:"company-source-link",children:[g.source," ",i.jsx(Ir,{size:9})]}):g.source}),i.jsx("span",{className:"company-asof",children:g.as_of})]})]},`${g.name}-${A}`))})})]}),c&&i.jsxs("section",{className:"dashboard-panel company-profile-card","aria-label":"Company header profile",children:[i.jsxs("div",{className:"company-profile-card__head",children:[i.jsxs("div",{children:[i.jsx("span",{className:"company-profile-card__symbol",children:c.symbol}),i.jsx("h1",{className:"company-profile-card__title",children:c.name})]}),i.jsx("div",{className:"company-profile-card__exchanges",children:(c.exchanges.length>0?c.exchanges:[c.exchange]).filter(Boolean).map(g=>i.jsx("span",{className:"company-tag company-tag--exchange",children:g},g))})]}),i.jsxs("div",{className:"company-profile-card__details",children:[c.sector&&i.jsxs("div",{children:[i.jsx("span",{children:"SECTOR"}),i.jsx("strong",{children:c.sector})]}),c.industry&&i.jsxs("div",{children:[i.jsx("span",{children:"INDUSTRY"}),i.jsx("strong",{children:c.industry})]}),i.jsxs("div",{children:[i.jsx("span",{children:"COVERAGE SUMMARY"}),i.jsx("strong",{children:c.coverage_summary||"Indexed reference"})]})]})]})]})}function up({items:u,coverage:k,symbol:c,onNavigateCompany:E}){return i.jsxs("section",{className:"dashboard-panel company-column","aria-label":"Outputs column",children:[i.jsxs("header",{className:"panel-header company-column__header",children:[i.jsxs("div",{children:[i.jsxs("div",{className:"panel-kicker",children:[i.jsx(Tf,{size:10})," SUPPLY CHAIN · OUTPUTS"]}),i.jsx("h2",{children:"What this company sells"})]}),i.jsx(Ki,{level:k})]}),i.jsx("div",{className:"company-column__content",children:u.length===0?i.jsxs("div",{className:"company-empty-state",children:[i.jsx("strong",{children:"No data yet for this company"}),i.jsxs("p",{children:["No product, segment, or customer disclosures indexed yet for ",c,". Queued for offline extraction."]})]}):i.jsx("div",{className:"company-list",children:u.map((v,g)=>i.jsxs("div",{className:"company-item",children:[i.jsxs("div",{className:"company-item__head",children:[i.jsx("span",{className:"company-item__name",children:v.is_listed&&v.target_symbol&&E?i.jsxs("button",{className:"company-link-button",onClick:()=>E(v.target_symbol),title:`View ${v.target_symbol} supply-chain`,children:[v.name,i.jsx("span",{className:"company-tag company-tag--listed",children:v.target_symbol})]}):v.name}),v.revenue_share!==null&&v.revenue_share!==void 0&&i.jsxs("span",{className:"company-item__share",children:[(v.revenue_share*100).toFixed(0),"% rev"]})]}),i.jsxs("div",{className:"company-item__meta",children:[v.kind&&i.jsx("span",{className:`company-tag company-tag--kind company-tag--kind-${v.kind}`,children:v.kind}),i.jsx("span",{className:`company-tag company-tag--method company-tag--method-${v.method}`,children:v.method}),i.jsxs("span",{className:"company-confidence",title:`Confidence: ${(v.confidence*100).toFixed(0)}%`,children:[i.jsx(Kn,{size:11})," ",(v.confidence*100).toFixed(0),"%"]})]}),i.jsxs("div",{className:"company-item__foot",children:[i.jsx("span",{className:"company-source",children:v.source_url?i.jsxs("a",{href:v.source_url,target:"_blank",rel:"noopener noreferrer",className:"company-source-link",children:[v.source," ",i.jsx(Ir,{size:9})]}):v.source}),i.jsx("span",{className:"company-asof",children:v.as_of})]})]},`${v.name}-${g}`))})})]})}function cp({symbol:u,navigate:k}){const[c,E]=T.useState(null),[v,g]=T.useState(null),[A,B]=T.useState(!0),[R,F]=T.useState(null),[Y,W]=T.useState(!1);T.useEffect(()=>{let q=!1;return B(!0),F(null),W(!1),Promise.all([fetch(`/api/company/${encodeURIComponent(u)}/profile`).then(U=>{if(!U.ok)throw new Error(`Profile HTTP ${U.status}`);return U.json()}),fetch(`/api/company/${encodeURIComponent(u)}/supply-chain`).then(U=>{if(!U.ok)throw new Error(`Supply-chain HTTP ${U.status}`);return U.json()})]).then(([U,Q])=>{q||(E(U.data),g(Q.data),W(!0))}).catch(U=>{q||(F(U instanceof Error?U.message:"Failed to load company map"),W(!1))}).finally(()=>{q||B(!1)}),()=>{q=!0}},[u]);const X=$t(Y,!1,!1),ee=q=>{k(`/company/${q}`)};return i.jsxs("main",{className:"dashboard-shell company-page-shell",children:[i.jsxs("div",{className:"desktop-only-notice",role:"status",children:[i.jsx(Xu,{size:24}),i.jsx("h1",{children:"JARVIS requires a desktop trading terminal"}),i.jsx("p",{children:"Use a viewport at least 1280px wide to view the company supply-chain map."})]}),i.jsxs("div",{className:"dashboard-app company-page-app",children:[i.jsxs("header",{className:"terminal-header company-page-header",children:[i.jsxs("div",{className:"company-header-left",children:[i.jsxs("button",{onClick:()=>k("/"),className:"company-back-button",title:"Return to trading terminal",children:[i.jsx(yf,{size:13}),i.jsx("span",{children:"TERMINAL"})]}),i.jsx("span",{className:"header-divider"}),i.jsxs("div",{className:"terminal-brand",children:[i.jsx("div",{className:"brand-mark",children:i.jsx(Xu,{size:17})}),i.jsxs("div",{children:[i.jsx("strong",{children:(c==null?void 0:c.name)||u}),i.jsxs("span",{children:["SUPPLY-CHAIN GRAPH · ",u]})]})]})]}),i.jsxs("div",{className:"terminal-session",children:[i.jsx(on,{status:X}),i.jsx("span",{className:"header-divider"}),i.jsxs("span",{children:["AS OF ",v!=null&&v.as_of?new Date(v.as_of).toLocaleDateString():"TODAY"]})]})]}),i.jsxs("div",{className:"company-grid",children:[i.jsx(op,{items:(v==null?void 0:v.inputs)||[],coverage:(v==null?void 0:v.coverage.inputs)||"none",symbol:u,onNavigateCompany:ee}),i.jsx(ap,{items:(v==null?void 0:v.owned)||[],coverage:(v==null?void 0:v.coverage.owned)||"none",profile:c,symbol:u,onNavigateCompany:ee}),i.jsx(up,{items:(v==null?void 0:v.outputs)||[],coverage:(v==null?void 0:v.coverage.outputs)||"none",symbol:u,onNavigateCompany:ee})]})]})]})}function rc(u){const c=u.replace(/^#\/?/,"").match(/^company\/([A-Za-z0-9._-]+)$/i);return c?{page:"company",params:{symbol:c[1].toUpperCase()}}:{page:"dashboard"}}function dp(){const[u,k]=T.useState(()=>rc(window.location.hash));T.useEffect(()=>{const E=()=>k(rc(window.location.hash));return window.addEventListener("hashchange",E),()=>window.removeEventListener("hashchange",E)},[]);const c=T.useCallback(E=>{window.location.hash=E},[]);return[u,c]}function fp(){const[u,k]=dp();return u.page==="company"?i.jsx(cp,{symbol:u.params.symbol,navigate:k}):i.jsx(ip,{navigate:k})}ff.createRoot(document.getElementById("root")).render(i.jsx(T.StrictMode,{children:i.jsx(fp,{})}));

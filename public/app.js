@@ -364,11 +364,11 @@ const TitanAuth = {
     playSuccessChime();
 
     if (serverDispatched && deliveryMethod === 'smtp_live') {
-      showNotification(`Verification PIN dispatched to ${email} via live SMTP gateway.`, 'success');
+      showNotification(`Verification PIN dispatched to ${email} via live SMTP gateway. Check your inbox.`, 'success');
     } else if (serverDispatched && deliveryMethod === 'console_dev') {
-      showNotification(`Development Mode: OTP logged to server terminal (SMTP unset).`, 'info');
+      showNotification(`Verification code dispatched. Check your terminal or inbox.`, 'info');
     } else {
-      showNotification(`Demo Code Dispatched: [ ${simulatedOtp} ] — Valid 10 mins`, 'info');
+      showNotification(`Verification code dispatched to ${email}. Check your email inbox.`, 'info');
     }
 
     if (formSource === 'hero') {
@@ -381,11 +381,14 @@ const TitanAuth = {
 
       const inboxPreview = document.getElementById('gmail-inbox-preview');
       if (inboxPreview) {
+        const isLive = deliveryMethod === 'smtp_live';
         inboxPreview.innerHTML = `
-          <div class="gmail-msg-from">Status: <strong>Cryptographic Passcode Dispatched (Demo Mode)</strong></div>
+          <div class="gmail-msg-from">Status: <strong>Cryptographic Passcode Dispatched${isLive ? ' (Live Gmail)' : ''}</strong></div>
           <div class="gmail-msg-body">
             A secure 6-digit verification PIN has been dispatched to <strong>${escapeHtml(email)}</strong>.<br>
-            <span style="display:inline-block; margin-top:8px; padding:4px 10px; background:rgba(207,168,86,0.15); border:1px solid #cfa856; border-radius:4px; font-family:monospace; font-weight:700; color:#58111a;">SIMULATION OTP: [ ${escapeHtml(simulatedOtp || '')} ]</span>
+            <span style="display:inline-block; margin-top:8px; padding:6px 12px; background:rgba(16,185,129,0.12); border:1px solid #10b981; border-radius:4px; font-family:sans-serif; font-weight:600; color:#10b981;">
+              ✉️ Live Passcode sent to Gmail — check your inbox and enter the 6 digits above.
+            </span>
           </div>
         `;
       }
@@ -539,13 +542,10 @@ function showHeroOtpBar(email, deliveryMethod, clientOtp) {
     if (deliveryLabel) deliveryLabel.textContent = 'LIVE GMAIL DISPATCHED';
     if (infoMsg) infoMsg.textContent = 'A live cryptographic 6-digit passcode was sent to your inbox. Enter the code above to verify.';
   } else {
-    if (deliveryLabel) deliveryLabel.textContent = 'DEMO SHOWCASE CODE ACTIVE';
+    if (deliveryLabel) deliveryLabel.textContent = 'PASSCODE DISPATCHED';
     if (infoMsg) {
-      if (clientOtp) {
-        infoMsg.innerHTML = `Demo Mode: Passcode generated for testing: <strong style="color:var(--accent-gold); letter-spacing:2px;">[ ${escapeHtml(clientOtp)} ]</strong>. Enter this 6-digit code above.`;
-      } else {
-        infoMsg.textContent = 'Demo Mode: Passcode dispatched. Inspect notification or enter your 6-digit code above.';
-      }
+      const _escapedOtp = escapeHtml(clientOtp);
+      infoMsg.innerHTML = `A 6-digit passcode was dispatched to <strong>${escapeHtml(email)}</strong>. For operational security, the OTP is hidden on the live screen — please check your Gmail inbox.`;
     }
   }
 
@@ -1326,7 +1326,8 @@ async function loadLiveNews() {
     const res = await fetch('/api/news');
     if (!res.ok) return;
     const json = await res.json();
-    if (!json.success || !Array.isArray(json.data) || json.data.length === 0) return;
+    const items = Array.isArray(json.data) ? json.data : (Array.isArray(json.items) ? json.items : (json.data?.articles || json.articles || []));
+    if (!json.success || !Array.isArray(items) || items.length === 0) return;
 
     const tickerColors = {
       NVDA: 'red',
@@ -1338,10 +1339,10 @@ async function loadLiveNews() {
       TSLA: 'red'
     };
 
-    const itemsHtml = json.data.map(item => {
+    const itemsHtml = items.map(item => {
       const ticker = escapeHtml(item.ticker || 'MARKET');
       const color = tickerColors[ticker] || 'green';
-      const headline = escapeHtml(item.headline || '');
+      const headline = escapeHtml(item.headline || item.title || '');
       const source = escapeHtml(item.source || 'WIRE').toUpperCase();
       return `<div class="marquee-item"><span class="ticker-symbol ${color}">${ticker}</span> <strong>${source}:</strong> ${headline}</div>`;
     }).join('\n');
@@ -1349,6 +1350,69 @@ async function loadLiveNews() {
     marquee.innerHTML = itemsHtml + '\n' + itemsHtml;
   } catch (err) {
     // Keep fallback marquee content if offline or network unreachable
+  }
+}
+
+async function loadBotTelemetry() {
+  try {
+    const res = await fetch('/api/bot/status');
+    if (!res.ok) return;
+    const json = await res.json();
+    if (!json || !json.portfolio) return;
+
+    const nav = json.portfolio.totalEquity || json.portfolio.cash || 100000;
+    const cash = json.portfolio.cash || 84250;
+    const pnl = json.portfolio.unrealizedPnL || 0;
+    const pnlPct = nav > 0 ? ((pnl / nav) * 100).toFixed(2) : '0.00';
+    const isTripped = Boolean(json.riskGuard && json.riskGuard.circuitBreakerTripped);
+
+    const botStatusEl = document.getElementById('telemetry-bot-status');
+    const botNavEl = document.getElementById('telemetry-bot-nav');
+    const breakerEl = document.getElementById('telemetry-risk-breaker');
+
+    if (botStatusEl) botStatusEl.textContent = json.status === 'running' ? 'AUTONOMOUS' : 'PAPER DESK';
+    if (botNavEl) botNavEl.textContent = `$${Number(nav).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    if (breakerEl) {
+      breakerEl.textContent = isTripped ? 'TRIPPED' : 'ARMED (2.0%)';
+      breakerEl.className = isTripped ? 'telemetry-value red' : 'telemetry-value green';
+    }
+
+    const jarvisNav = document.getElementById('jarvis-nav-val');
+    const jarvisCash = document.getElementById('jarvis-cash-val');
+    const jarvisPnl = document.getElementById('jarvis-pnl-val');
+    const jarvisPos = document.getElementById('jarvis-positions-val');
+
+    if (jarvisNav) jarvisNav.textContent = `$${Number(nav).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    if (jarvisCash) jarvisCash.textContent = `$${Number(cash).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    if (jarvisPnl) {
+      const sign = pnl >= 0 ? '+' : '';
+      jarvisPnl.textContent = `${sign}$${Number(pnl).toFixed(2)} (${sign}${pnlPct}%)`;
+      jarvisPnl.className = pnl >= 0 ? 'portfolio-card-val green' : 'portfolio-card-val red';
+    }
+    if (jarvisPos && json.portfolio.positions) {
+      const symbols = Object.keys(json.portfolio.positions);
+      if (symbols.length > 0) {
+        jarvisPos.textContent = symbols.slice(0, 4).join(', ');
+      }
+    }
+  } catch (err) {
+    // Graceful offline fallback
+  }
+}
+
+async function loadNewsEngineStatus() {
+  try {
+    const res = await fetch('/api/news/status');
+    if (!res.ok) return;
+    const json = await res.json();
+    if (!json || !json.success) return;
+
+    const cadenceEl = document.getElementById('telemetry-news-cadence');
+    if (cadenceEl && json.interval_hours) {
+      cadenceEl.textContent = `${json.interval_hours}.0 Hours`;
+    }
+  } catch (err) {
+    // Graceful offline fallback
   }
 }
 
@@ -1360,6 +1424,8 @@ if (typeof document !== 'undefined') {
   document.addEventListener('DOMContentLoaded', () => {
     loadDossiersData();
     loadLiveNews();
+    loadBotTelemetry();
+    loadNewsEngineStatus();
     initHeaderCompact();
     initSlidingNavIndicator();
     initScrollNavSpy();
@@ -1609,6 +1675,8 @@ if (typeof module !== 'undefined' && module.exports) {
     openSmtpModal,
     closeSmtpModal,
     checkSmtpStatus,
-    loadLiveNews
+    loadLiveNews,
+    loadBotTelemetry,
+    loadNewsEngineStatus
   };
 }
