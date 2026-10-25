@@ -41,3 +41,6 @@ Thumbs.db
 .idea/
 *.swp
 *.swo
+
+# Google App Engine generated folder
+appengine-generated/
