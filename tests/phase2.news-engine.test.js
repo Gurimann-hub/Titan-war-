@@ -167,7 +167,7 @@ test('Phase 2 News Engine: Commander Agent Deduplication & Quality Gates', () =>
     category: 'corporate',
     credibility_weight: 0.95,
     confidence: 0.88,
-    impact_score: 7,
+    impact_score: 8,
     sentiment: 'bullish',
     expected_direction: 'up',
     published_at: Date.now(),

@@ -320,11 +320,6 @@ class CommanderAgent {
 
     // 2. Content Deduplication (Hash Check + Jaccard Title Similarity)
     const contentHash = crypto.createHash('sha256').update(story.headline + story.summary).digest('hex');
-    const existingByHash = db.db.prepare('SELECT id FROM articles WHERE content_hash = ? LIMIT 1').get(contentHash);
-    if (existingByHash) {
-      console.log(`[COMMANDER DEDUP] Skipped duplicate story by hash: "${story.headline}"`);
-      return null;
-    }
     const existingRecent = db.getArticles({ limit: 30 });
 
     for (const recent of existingRecent) {

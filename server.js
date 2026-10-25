@@ -28,6 +28,11 @@ if (fs.existsSync(envPath)) {
   }
 }
 
+const TITAN_DATA_DIR = process.env.TITAN_DATA_DIR ? path.resolve(process.env.TITAN_DATA_DIR) : path.join(__dirname, 'data');
+if (!fs.existsSync(TITAN_DATA_DIR)) {
+  fs.mkdirSync(TITAN_DATA_DIR, { recursive: true });
+}
+
 const {
   HOST_USER,
   getAllMaterials,
@@ -85,7 +90,7 @@ async function triggerNewsFetchAndPublish(triggerReason = 'scheduled_6hr') {
     // Synchronize published articles into data/news.json
     try {
       const latestArticles = db.getArticles({ limit: 50 });
-      const newsJsonPath = path.join(__dirname, 'data', 'news.json');
+      const newsJsonPath = path.join(TITAN_DATA_DIR, 'news.json');
       fs.writeFileSync(newsJsonPath, JSON.stringify({
         lastUpdated: new Date().toISOString(),
         interval: `${NEWS_FETCH_INTERVAL_HOURS}h`,
@@ -3734,7 +3739,7 @@ process.on('unhandledRejection', (reason, promise) => {
 server.listen(PORT, async () => {
   try {
     await userRepository.init();
-    console.log('[USER REPOSITORY] Excel User Store active: data/users.xlsx');
+    console.log(`[USER REPOSITORY] Excel User Store active: ${path.join(TITAN_DATA_DIR, 'users.xlsx')}`);
   } catch (err) {
     console.error('[USER REPOSITORY FATAL] Could not initialize users.xlsx:', err.message);
   }
@@ -3743,6 +3748,7 @@ server.listen(PORT, async () => {
   console.log(` TITAN WAR - BIG TECH BATTLEFIELD INTELLIGENCE`);
   console.log(` Security Hardened Server Running: http://localhost:${PORT}`);
   console.log(` Environment: ${IS_PROD ? 'PRODUCTION' : 'DEVELOPMENT'}`);
+  console.log(` TITAN_DATA_DIR: ${TITAN_DATA_DIR}`);
   console.log(` Static Directory Isolated: ${PUBLIC_DIR}`);
   console.log(` SMTP Gateway Configured: ${Boolean((SMTP_HOST || SMTP_USER) && SMTP_PASS)}`);
   console.log(` Turnstile Bot Protection: ${Boolean(TURNSTILE_SECRET_KEY && TURNSTILE_SITE_KEY)}`);

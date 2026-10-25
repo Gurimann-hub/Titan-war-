@@ -109,8 +109,9 @@ test('Phase 5 Watchdog: Self-Healing Playbooks Execution & Incident Recording', 
   assert.ok(hasWalIncident, 'Watchdog self-healing playbook must record incident in SQLite');
 
   // Verify incident appended to incidents.log on disk
-  const logPath = path.join(__dirname, '..', 'data', 'incidents.log');
-  assert.ok(fs.existsSync(logPath), 'data/incidents.log file must exist');
+  const dataDir = process.env.TITAN_DATA_DIR ? path.resolve(process.env.TITAN_DATA_DIR) : path.join(__dirname, '..', 'data');
+  const logPath = path.join(dataDir, 'incidents.log');
+  assert.ok(fs.existsSync(logPath), 'incidents.log file must exist');
   const logContent = fs.readFileSync(logPath, 'utf8');
   assert.ok(logContent.includes('WAL_CHECKPOINT_TRUNCATE'), 'Log file must record WAL_CHECKPOINT_TRUNCATE');
 });
